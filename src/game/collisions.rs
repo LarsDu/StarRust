@@ -36,7 +36,7 @@ pub fn check_ship_collision(
         for (ship_b_entity, mut ship_b_health, ship_b_transform) in
             &mut ship_b_query
         {
-            if(ship_a_entity.id() == ship_b_entity.id()){
+            if ship_a_entity.id() == ship_b_entity.id(){
                 continue;
             }
             let collision = collide(
@@ -79,7 +79,7 @@ pub fn check_bullet_collision(
                 //println!("Contact!");
                 commands.entity(bullet_entity).despawn();
                 ship_health.hp = max(ship_health.hp - bullet_collider.damage, 0);
-                if (ship_health.hp == 0) {
+                if ship_health.hp == 0 {
                     // TODO kill the ship
                     println!("Despawn entity {}!", ship_entity.id());
                     commands.entity(ship_entity).despawn_recursive();

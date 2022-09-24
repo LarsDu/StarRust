@@ -27,7 +27,7 @@ impl Plugin for EnemyPlugin {
 // SYSTEMS
 
 pub fn spawn(time: Res<Time>, commands: Commands, asset_server: Res<AssetServer>) {
-    spawn_at(Vec2::new(-15.0, 2.0), commands, asset_server);
+    spawn_at(Vec2::new(25.0, 2.0), commands, asset_server);
 }
 
 // Enemy spawner system
@@ -40,7 +40,7 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
             scene: asset_server.load("models/basic_enemy.glb#Scene0"),
             transform: Transform::from_xyz(position.x, position.y, 0.0)
                 .with_scale(Vec3::splat(0.95))
-                .with_rotation(Quat::from_rotation_y( 1.5 *PI)),
+                .with_rotation(Quat::from_rotation_y( 0.5*PI)),
             ..Default::default()
         })
         .insert(DEFAULT_ENEMY.clone())
@@ -68,8 +68,8 @@ pub fn fire_controller(
         if (fuse_timer.timer.finished()){
             let event = BulletFiredEvent {
                 translation: Vec2::new(
-                    transform.translation.x + ship.gun_offset.x,
-                    transform.translation.y + ship.gun_offset.y,
+                    transform.translation.x + ship.gun_offset.x * transform.forward().x,
+                    transform.translation.y + ship.gun_offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
                 hitmask: 1,

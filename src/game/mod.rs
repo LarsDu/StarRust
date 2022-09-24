@@ -1,4 +1,6 @@
-// Game Plugin module
+use bevy::prelude::*;
+
+// Game Plugin modules
 mod constants;
 pub use constants::*;
 
@@ -22,13 +24,20 @@ pub use components::Player;
 
 mod ships;
 pub use ships::*;
-use bevy::prelude::*;
+
+mod background;
+pub use background::*;
+
+mod walls;
+pub use walls::*;
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(PlayerPlugin)
+        app.add_plugin(BackgroundPlugin)
+            .add_plugin(WallPlugin)
+            .add_plugin(PlayerPlugin)
             .add_plugin(EnemyPlugin)
             .add_plugin(BulletPlugin)
             .add_plugin(CollisionPlugin);

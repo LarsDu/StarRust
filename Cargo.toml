@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.8.1"
+bevy_hanabi = "0.3"
 
 
 [workspace]

@@ -33,9 +33,9 @@ pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn_bundle(SceneBundle {
             scene: scene_model,
-            transform: Transform::from_xyz(10.0, 0.0, 0.0)
+            transform: Transform::from_xyz(-20.0, 0.0, 0.0)
                 .with_scale(Vec3::splat(0.95))
-                .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
+                .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
             ..Default::default()
         })
         .insert(PLAYER_SHIP.clone())
@@ -54,7 +54,7 @@ fn player_controller(
         let mut direction_y = 0.0;
 
         if keyboard_input.pressed(KeyCode::Down) {
-            direction_y -= ship.speed.x;
+            direction_y -= ship.speed.y;
         }
 
         if keyboard_input.pressed(KeyCode::Up) {
@@ -62,11 +62,11 @@ fn player_controller(
         }
 
         if keyboard_input.pressed(KeyCode::Left) {
-            direction_x += ship.speed.x;
+            direction_x -= ship.speed.x;
         }
 
         if keyboard_input.pressed(KeyCode::Right) {
-            direction_x -= ship.speed.x;
+            direction_x += ship.speed.x;
         }
 
         // Calculate the new horizontal paddle position based on player input
@@ -84,8 +84,8 @@ pub fn fire_controller(
         for (transform, ship) in &query {
             let event = BulletFiredEvent {
                 translation: Vec2::new(
-                    transform.translation.x + ship.gun_offset.x,
-                    transform.translation.y + ship.gun_offset.y,
+                    transform.translation.x + ship.gun_offset.x * transform.forward().x,
+                    transform.translation.y + ship.gun_offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
                 hitmask: 2,
