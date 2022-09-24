@@ -11,5 +11,5 @@ pub const PLAYER_SHIP: Ship  = Ship{
 pub const DEFAULT_ENEMY: Ship = Ship{
     size:  Vec2::new(5.0,5.0),
     speed: Vec2::new(0.2, 0.2),
-    gun_offset: Vec2::new(-1.0, -0.32)
+    gun_offset: Vec2::new(1.0, 0.0)
 };

@@ -9,7 +9,7 @@ use super::constants::BULLET_SPEED;
 
 pub struct BulletFiredEvent {
     pub translation: Vec2,
-    pub direction: Vec2,
+    pub rotation: Quat,
     pub hitmask: u8,
 }
 
@@ -54,10 +54,10 @@ fn spawn_bullet(
                 0.0,
             )
             .with_scale(Vec3 {
-                x: 0.6,
+                x: 0.12,
                 y: 0.12,
-                z: 0.12,
-            }),
+                z: 0.6,
+            }).with_rotation(bullet_data.rotation),
             ..default()
         })
         .insert(Collider{ damage: 1, hitmask: bullet_data.hitmask})
@@ -66,9 +66,9 @@ fn spawn_bullet(
 
 // BULLET SYSTEMS
 fn move_bullets(mut query: Query<&mut Transform, With<Bullet>>) {
-    for mut bullet_transform in &mut query {
-        bullet_transform.translation.x -= BULLET_SPEED;
+    for mut bullet_transform in &mut query{
+    
+        bullet_transform.translation = bullet_transform.translation + BULLET_SPEED*bullet_transform.forward();
     }
 }
 
-fn check_collisions(mut commands: Commands) {}

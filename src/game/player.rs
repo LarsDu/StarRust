@@ -87,7 +87,7 @@ pub fn fire_controller(
                     transform.translation.x + ship.gun_offset.x,
                     transform.translation.y + ship.gun_offset.y,
                 ),
-                direction: transform.forward().truncate(),
+                rotation: transform.rotation,
                 hitmask: 2,
             };
             bullet_fired_event.send(event);

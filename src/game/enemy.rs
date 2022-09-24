@@ -4,7 +4,7 @@ use super::collisions::CollisionEvent;
 use super::components::{Collider, Enemy, FuseTime, Health, Ship};
 use super::ships::DEFAULT_ENEMY;
 use super::constants::*;
-use bevy::{prelude::*, time::*, asset};
+use bevy::{prelude::*, time::*, utils::Duration};
 use std::f32::consts::PI;
 
 pub struct EnemyPlugin;
@@ -18,7 +18,8 @@ impl Plugin for EnemyPlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
-                    .with_system(enemy_controller), //.with_system(fire_controller)
+                    .with_system(enemy_controller)
+                    .with_system(fire_controller)
             );
     }
 }
@@ -39,12 +40,13 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
             scene: asset_server.load("models/basic_enemy.glb#Scene0"),
             transform: Transform::from_xyz(position.x, position.y, 0.0)
                 .with_scale(Vec3::splat(0.95))
-                .with_rotation(Quat::from_rotation_y(1.5 * PI)),
+                .with_rotation(Quat::from_rotation_y( 1.5 *PI)),
             ..Default::default()
         })
         .insert(DEFAULT_ENEMY.clone())
         .insert(Collider{ damage:1, hitmask:1})
         .insert(Health { hp: 2 })
+        .insert(FuseTime{timer: Timer::new(Duration::from_secs(1),true)})
         .insert(Enemy);
 }
 
@@ -58,20 +60,21 @@ fn enemy_controller(time: Res<Time>, mut query: Query<(&mut Transform, &Enemy), 
 pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<BulletFiredEvent>,
-    query: Query<(&Transform, &Ship, &mut FuseTime), With<Enemy>>,
+    mut query: Query<(&Transform, &Ship, &mut FuseTime), With<Enemy>>,
 ) {
-    for (transform, ship, fuse_timer) in &query {
-        /*fuse_timer.timer.tick(time.delta());
+    for (transform, ship, mut fuse_timer) in &mut query {
+        // ref: https://bevy-cheatbook.github.io/features/time.html
+        fuse_timer.timer.tick(time.delta());
         if (fuse_timer.timer.finished()){
             let event = BulletFiredEvent {
                 translation: Vec2::new(
                     transform.translation.x + ship.gun_offset.x,
                     transform.translation.y + ship.gun_offset.y,
                 ),
-                direction: transform.forward().truncate(),
+                rotation: transform.rotation,
                 hitmask: 1,
             };
             bullet_fired_event.send(event);
-        }*/
+        }
     }
 }
