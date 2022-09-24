@@ -1,4 +1,7 @@
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    render::camera::*,
+};
 mod game;
 use game::GamePlugin;
 
@@ -17,9 +20,7 @@ fn main() {
         .run();
 }
 
-fn setup_demo_scene(
-    mut commands: Commands,
-) {
+fn setup_demo_scene(mut commands: Commands) {
     /*
     // plane
     commands.spawn_bundle(PbrBundle {
@@ -38,19 +39,18 @@ fn setup_demo_scene(
     commands.spawn_bundle(PointLightBundle {
         point_light: PointLight {
             intensity: 400000.0,
-	        radius: 10000.0,
+            radius: 15000.0,
             shadows_enabled: true,
             ..default()
         },
-        transform: Transform::from_xyz(0.0, 5.0, -10.0).looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_xyz(0.0, 5.0, -12.0).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     });
-    
 
     // Directional Light
     commands.spawn_bundle(DirectionalLightBundle {
         directional_light: DirectionalLight {
-            illuminance: 5000.0,
+            illuminance: 16000.0,
             color: Color::WHITE,
             ..default()
         },
@@ -58,8 +58,13 @@ fn setup_demo_scene(
         ..default()
     });
     // camera
+
     commands.spawn_bundle(Camera3dBundle {
-        transform: Transform::from_xyz(-2.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),
+       projection: Projection::Orthographic(OrthographicProjection{scale: 0.05, ..default()}),
+       transform: Transform::from_xyz(0.0, 0.0, -1.0).looking_at(Vec3::ZERO, Vec3::Y),
+        /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
         ..default()
     });
+
+
 }
