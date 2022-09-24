@@ -38,8 +38,8 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
     commands
         .spawn_bundle(SceneBundle {
             scene: asset_server.load("models/basic_enemy.glb#Scene0"),
-            transform: Transform::from_xyz(position.x, position.y, 0.0)
-                .with_scale(Vec3::splat(0.95))
+            transform: Transform::from_xyz(position.x, position.y, 2.0)
+                .with_scale(Vec3::splat(1.0))
                 .with_rotation(Quat::from_rotation_y( 0.5*PI)),
             ..Default::default()
         })

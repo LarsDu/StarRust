@@ -33,8 +33,8 @@ pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn_bundle(SceneBundle {
             scene: scene_model,
-            transform: Transform::from_xyz(-20.0, 0.0, 0.0)
-                .with_scale(Vec3::splat(0.95))
+            transform: Transform::from_xyz(-20.0, 0.0, 2.0)
+                .with_scale(Vec3::splat(1.0))
                 .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
             ..Default::default()
         })

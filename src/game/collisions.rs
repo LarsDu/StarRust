@@ -1,6 +1,6 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
-use super::components::{Bullet, Collider, Health, Ship};
+use super::components::{Bullet, Player, Collider, Health, Ship, Wall};
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -21,7 +21,8 @@ impl Plugin for CollisionPlugin {
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(check_ship_collision)
-                    .with_system(check_bullet_collision),
+                    .with_system(check_bullet_collision)
+                    .with_system(check_player_ship_wall_collision)
             );
     }
 }
@@ -86,6 +87,33 @@ pub fn check_bullet_collision(
                 }
 
                 collision_event.send_default();
+            }
+        }
+    }
+}
+pub fn check_player_ship_wall_collision(
+    mut commands: Commands,
+    mut wall_query: Query<(&Wall, &Transform), With<Wall>>,
+    mut ship_query: Query<(&Transform), With<Player>>,
+){
+    for (wall, wall_transform) in &wall_query{
+        for (ship_transform) in &ship_query{
+            let collision = collide(
+                wall_transform.translation,
+                wall_transform.scale.truncate(), //FIXME!
+                ship_transform.translation,
+                ship_transform.scale.truncate(), //FIXME
+            );
+        
+            if let Some(collision) = collision {
+                //match collision {
+                    //Collision::Left => reflect_x = ball_velocity.x > 0.0,
+                    //Collision::Right => reflect_x = ball_velocity.x < 0.0,
+                    //Collision::Top => reflect_y = ball_velocity.y < 0.0,
+                    //Collision::Bottom => reflect_y = ball_velocity.y > 0.0,
+                    //Collision::Inside => { /* do nothing */ }
+                //}
+    
             }
         }
     }

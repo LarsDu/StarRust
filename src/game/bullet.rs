@@ -54,9 +54,9 @@ fn spawn_bullet(
                 0.0,
             )
             .with_scale(Vec3 {
-                x: 0.12,
-                y: 0.12,
-                z: 0.6,
+                x: 0.2,
+                y: 0.2,
+                z: 0.8,
             }).with_rotation(bullet_data.rotation),
             ..default()
         })

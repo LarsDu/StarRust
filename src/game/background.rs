@@ -44,10 +44,10 @@ pub fn setup_lights(mut commands: Commands){
 }
 
 pub fn setup_camera(mut commands: Commands){
-    commands.spawn_bundle(Camera2dBundle{
+    /*commands.spawn_bundle(Camera2dBundle{
         ..default()
     }
-    );
+    );*/
 
     // Bevy 2d camera is at Z=999.9
     commands.spawn_bundle(Camera3dBundle {
@@ -58,6 +58,6 @@ pub fn setup_camera(mut commands: Commands){
     });
 }
 
-pub fn setup_starfield(mut commands: Commands){
+pub fn setup_starfield(commands: Commands){
 
 }

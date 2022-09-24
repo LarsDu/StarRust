@@ -1,9 +1,10 @@
 // Ripped straight from the breakout example https://bevyengine.org/examples/games/breakout/
 
 use bevy::prelude::*;
+
 use super::super::AppState;
 use super::constants::*;
-use super::components::Collider;
+use super::components::{Collider, Wall};
 pub struct WallPlugin;
 
 impl Plugin for WallPlugin{
@@ -14,12 +15,15 @@ impl Plugin for WallPlugin{
 
 }
 
-fn setup_walls(mut commands: Commands){
-    println!("Spawning walls");
-    commands.spawn_bundle(WallBundle::new(WallLocation::Left));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Right));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Bottom));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Top));
+fn setup_walls(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+){
+    commands.spawn_bundle(WallBundle::new(WallLocation::Left, &mut meshes, &mut materials));
+    commands.spawn_bundle(WallBundle::new(WallLocation::Right, &mut meshes, &mut materials));
+    commands.spawn_bundle(WallBundle::new(WallLocation::Bottom, &mut meshes, &mut materials));
+    commands.spawn_bundle(WallBundle::new(WallLocation::Top, &mut meshes, &mut materials));
 }
 
 // This bundle is a collection of the components that define a "wall" in our game
@@ -27,15 +31,23 @@ fn setup_walls(mut commands: Commands){
 struct WallBundle {
     // You can nest bundles inside of other bundles like this
     // Allowing you to compose their functionality
+    //#[bundle]
+    //sprite_bundle: SpriteBundle,
     #[bundle]
-    sprite_bundle: SpriteBundle,
+    pbr_bundle: PbrBundle,
     collider: Collider,
+    wall: Wall,
 }
 impl WallBundle {
     // This "builder method" allows us to reuse logic across our wall entities,
     // making our code easier to read and less prone to bugs when we change the logic
-    fn new(location: WallLocation) -> WallBundle {
+    fn new(
+        location: WallLocation,
+        meshes: &mut ResMut<Assets<Mesh>>,
+        materials: &mut ResMut<Assets<StandardMaterial>>,
+    ) -> WallBundle {
         WallBundle {
+            /*
             sprite_bundle: SpriteBundle {
                 transform: Transform {
                     // We need to convert our Vec2 into a Vec3, by giving it a z-coordinate
@@ -52,11 +64,18 @@ impl WallBundle {
                     ..default()
                 },
                 ..default()
+            },*/
+            pbr_bundle: PbrBundle {
+                mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
+                material: materials.add(WALL_COLOR.into()),
+                transform: Transform::from_translation(location.position().extend(1.0)).with_scale(location.size().extend(1.0)),
+                ..default()
             },
             collider: Collider{
                 damage: 0,
                 hitmask: 0,
             },
+            wall: Wall
         }
     }
 }

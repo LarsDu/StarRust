@@ -34,3 +34,6 @@ pub struct FuseTime {
     /// track when the bomb should explode (non-repeating timer)
     pub timer: Timer,
 }
+
+#[derive(Component)]
+pub struct Wall;
