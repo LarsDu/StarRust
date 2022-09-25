@@ -1,6 +1,6 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
-use super::components::{Bullet, Player, Collider, Health, Ship, Wall};
+use super::components::{Bullet, Collider, Health, Player, Ship, Wall};
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -21,8 +21,7 @@ impl Plugin for CollisionPlugin {
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(check_ship_collision)
-                    .with_system(check_bullet_collision)
-                    //.with_system(check_player_ship_wall_collision)
+                    .with_system(check_bullet_collision), //.with_system(check_player_ship_wall_collision)
             );
     }
 }
@@ -31,27 +30,33 @@ pub fn check_ship_collision(
     mut commands: Commands,
     mut collision_event: EventWriter<CollisionEvent>,
     ship_a_query: Query<(Entity, &Transform, &Collider), With<Ship>>,
-    mut ship_b_query: Query<(Entity, &mut Health, &Transform), With<Ship>>,
+    mut ship_b_query: Query<(Entity, &mut Health, &Transform, &Collider), With<Ship>>,
 ) {
+    // TODO: Use quadtrees for more efficient collision resolution
     for (ship_a_entity, ship_a_transform, ship_a_collider) in &ship_a_query {
-        for (ship_b_entity, mut ship_b_health, ship_b_transform) in
+        for (ship_b_entity, mut ship_b_health, ship_b_transform, ship_b_collider) in
             &mut ship_b_query
         {
-            if ship_a_entity.id() == ship_b_entity.id(){
+            // Skip self-collisions
+            if ship_a_entity.id() == ship_b_entity.id() {
                 continue;
             }
             let collision = collide(
                 ship_a_transform.translation,
-                ship_a_transform.scale.truncate(), //FIXME!
+                ship_a_collider.rect,
                 ship_b_transform.translation,
-                ship_b_transform.scale.truncate(), //FIXME!
+                ship_b_collider.rect,
             );
             if collision.is_some() {
-                
                 ship_b_health.hp = max(ship_b_health.hp - ship_a_collider.damage, 0);
-                println!("ship A({}) hit ship B({}) which has hp {}", ship_a_entity.id(), ship_b_entity.id(), ship_b_health.hp);
-                if (ship_b_health.hp == 0) {
-                    // TODO kill the ship
+                /*println!(
+                    "ship A({}) hit ship B({}) which has hp {}",
+                    ship_a_entity.id(),
+                    ship_b_entity.id(),
+                    ship_b_health.hp
+                );
+                */
+                if ship_b_health.hp == 0 {
                     commands.entity(ship_b_entity).despawn_recursive();
                 }
 
@@ -72,11 +77,11 @@ pub fn check_bullet_collision(
         for (ship_entity, ship_collider, mut ship_health, ship_transform) in &mut ship_query {
             let collision = collide(
                 bullet_transform.translation,
-                bullet_transform.scale.truncate(), //FIXME!
+                bullet_collider.rect,
                 ship_transform.translation,
-                Vec2::new(1.0, 1.0), //FIXME!
+                ship_collider.rect,
             );
-            if collision.is_some() {
+            if collision.is_some() && ((bullet_collider.hitmask & ship_collider.hitmask) > 0){
                 //println!("Contact!");
                 commands.entity(bullet_entity).despawn();
                 ship_health.hp = max(ship_health.hp - bullet_collider.damage, 0);
@@ -91,34 +96,3 @@ pub fn check_bullet_collision(
         }
     }
 }
-
-
-/*pub fn check_player_ship_wall_collision(
-    mut commands: Commands,
-    mut wall_query: Query<(&Wall, &Transform), With<Wall>>,
-    mut ship_query: Query<(&Transform), With<Player>>,
-){
-    for (wall, wall_transform) in &wall_query{
-        for (ship_transform) in &ship_query{
-            let collision = collide(
-                wall_transform.translation,
-                wall_transform.scale.truncate(), //FIXME!
-                ship_transform.translation,
-                ship_transform.scale.truncate(), //FIXME
-            );
-            
-            if let Some(collision) = collision {
-                //match collision {
-                    //Collision::Left => reflect_x = ball_velocity.x > 0.0,
-                    //Collision::Right => reflect_x = ball_velocity.x < 0.0,
-                    //Collision::Top => reflect_y = ball_velocity.y < 0.0,
-                    //Collision::Bottom => reflect_y = ball_velocity.y > 0.0,
-                    //Collision::Inside => { /* do nothing */ }
-                //}
-    
-            }
-        }
-    }
-    
-}
-*/

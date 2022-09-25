@@ -1,13 +1,14 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
-use super::components::{Collider, Enemy, FuseTime, Health, Ship};
-use super::ships::DEFAULT_ENEMY;
+use super::components::{Enemy, FuseTime, Health, Ship};
 use super::constants::*;
+use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*, utils::Duration};
 use std::f32::consts::PI;
 
 pub struct EnemyPlugin;
+
 
 // Plugin definition
 impl Plugin for EnemyPlugin {
@@ -19,7 +20,7 @@ impl Plugin for EnemyPlugin {
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(enemy_controller)
-                    .with_system(fire_controller)
+                    .with_system(fire_controller),
             );
     }
 }
@@ -33,28 +34,16 @@ pub fn spawn(time: Res<Time>, commands: Commands, asset_server: Res<AssetServer>
 // Enemy spawner system
 pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
-    
-
     commands
-        .spawn_bundle(SceneBundle {
-            scene: asset_server.load("models/basic_enemy.glb#Scene0"),
-            transform: Transform::from_xyz(position.x, position.y, 2.0)
-                .with_scale(Vec3::splat(1.0))
-                .with_rotation(Quat::from_rotation_y( 0.5*PI)),
-            ..Default::default()
-        })
-        .insert(DEFAULT_ENEMY.clone())
-        .insert(Collider{ damage:1, hitmask:1})
-        .insert(Health { hp: 2 })
-        .insert(FuseTime{timer: Timer::new(Duration::from_secs(1),true)})
+        .spawn_bundle(
+            default_enemy_ship_bundle(position, asset_server)
+        )    
         .insert(Enemy);
+        
 }
 
 // Enemy controller system
-fn enemy_controller(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {
-
-
-}
+fn enemy_controller(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {}
 
 // Fire controller system
 pub fn fire_controller(
@@ -65,14 +54,14 @@ pub fn fire_controller(
     for (transform, ship, mut fuse_timer) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
         fuse_timer.timer.tick(time.delta());
-        if (fuse_timer.timer.finished()){
+        if fuse_timer.timer.finished() {
             let event = BulletFiredEvent {
                 translation: Vec2::new(
                     transform.translation.x + ship.gun_offset.x * transform.forward().x,
                     transform.translation.y + ship.gun_offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
-                hitmask: 1,
+                hitmask: ALLY_HITMASK, // Hurt player only
             };
             bullet_fired_event.send(event);
         }

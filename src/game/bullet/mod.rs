@@ -1,7 +1,6 @@
-use bevy::{
-    prelude::*,
-    time::FixedTimestep,
-};
+use bevy::{prelude::*, time::FixedTimestep};
+pub mod variants;
+use variants::*;
 
 use super::super::AppState;
 use super::components::{Bullet, Collider};
@@ -27,6 +26,14 @@ impl Plugin for BulletPlugin {
     }
 }
 
+#[derive(Bundle)]
+pub struct BulletBundle{
+    #[bundle]
+    pbr_bundle: PbrBundle,
+    collider: Collider,
+    bullet: Bullet,
+}
+
 pub fn on_bullet_fired(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -45,30 +52,13 @@ fn spawn_bullet(
     bullet_data: &BulletFiredEvent,
 ) {
     commands
-        .spawn_bundle(PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
-            material: materials.add(Color::TEAL.into()),
-            transform: Transform::from_xyz(
-                bullet_data.translation.x,
-                bullet_data.translation.y,
-                0.0,
-            )
-            .with_scale(Vec3 {
-                x: 0.2,
-                y: 0.2,
-                z: 0.8,
-            }).with_rotation(bullet_data.rotation),
-            ..default()
-        })
-        .insert(Collider{ damage: 1, hitmask: bullet_data.hitmask})
-        .insert(Bullet);
+        .spawn_bundle(standard_bullet(meshes, materials, bullet_data));
 }
 
 // BULLET SYSTEMS
 fn move_bullets(mut query: Query<&mut Transform, With<Bullet>>) {
-    for mut bullet_transform in &mut query{
-    
-        bullet_transform.translation = bullet_transform.translation + BULLET_SPEED*bullet_transform.forward();
+    for mut bullet_transform in &mut query {
+        bullet_transform.translation =
+            bullet_transform.translation + BULLET_SPEED * bullet_transform.forward();
     }
 }
-

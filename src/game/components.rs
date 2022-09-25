@@ -11,7 +11,6 @@ pub struct Enemy;
 
 #[derive(Component, Clone)]
 pub struct Ship {
-    pub size: Vec2,
     pub speed: Vec2,
     pub gun_offset: Vec2,
 }
@@ -25,8 +24,9 @@ pub struct Bullet;
 
 #[derive(Component)]
 pub struct Collider {
+    pub rect: Vec2,
     pub damage: u8,
-    pub hitmask: u8
+    pub hitmask: u8, // Not implemented yet
 }
 
 #[derive(Component)]
@@ -34,6 +34,7 @@ pub struct FuseTime {
     /// track when the bomb should explode (non-repeating timer)
     pub timer: Timer,
 }
+
 
 #[derive(Component)]
 pub struct Wall;

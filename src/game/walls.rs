@@ -3,27 +3,41 @@
 use bevy::prelude::*;
 
 use super::super::AppState;
-use super::constants::*;
 use super::components::{Collider, Wall};
+use super::constants::*;
 pub struct WallPlugin;
 
-impl Plugin for WallPlugin{
-    fn build(&self, app: &mut App){
+impl Plugin for WallPlugin {
+    fn build(&self, app: &mut App) {
         app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_walls));
-
     }
-
 }
 
 fn setup_walls(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-){
-    commands.spawn_bundle(WallBundle::new(WallLocation::Left, &mut meshes, &mut materials));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Right, &mut meshes, &mut materials));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Bottom, &mut meshes, &mut materials));
-    commands.spawn_bundle(WallBundle::new(WallLocation::Top, &mut meshes, &mut materials));
+) {
+    commands.spawn_bundle(WallBundle::new(
+        WallLocation::Left,
+        &mut meshes,
+        &mut materials,
+    ));
+    commands.spawn_bundle(WallBundle::new(
+        WallLocation::Right,
+        &mut meshes,
+        &mut materials,
+    ));
+    commands.spawn_bundle(WallBundle::new(
+        WallLocation::Bottom,
+        &mut meshes,
+        &mut materials,
+    ));
+    commands.spawn_bundle(WallBundle::new(
+        WallLocation::Top,
+        &mut meshes,
+        &mut materials,
+    ));
 }
 
 // This bundle is a collection of the components that define a "wall" in our game
@@ -68,18 +82,19 @@ impl WallBundle {
             pbr_bundle: PbrBundle {
                 mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
                 material: materials.add(WALL_COLOR.into()),
-                transform: Transform::from_translation(location.position().extend(1.0)).with_scale(location.size().extend(1.0)),
+                transform: Transform::from_translation(location.position().extend(1.0))
+                    .with_scale(location.size().extend(1.0)),
                 ..default()
             },
-            collider: Collider{
+            collider: Collider {
+                rect: location.size(),
                 damage: 0,
                 hitmask: 0,
             },
-            wall: Wall
+            wall: Wall,
         }
     }
 }
-
 
 /// Which side of the arena is this wall located on?
 enum WallLocation {
@@ -116,4 +131,3 @@ impl WallLocation {
         }
     }
 }
-

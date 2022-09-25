@@ -22,8 +22,8 @@ pub use health::*;
 mod components;
 pub use components::Player;
 
-mod ships;
-pub use ships::*;
+mod ship;
+pub use ship::*;
 
 mod background;
 pub use background::*;

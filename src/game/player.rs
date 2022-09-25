@@ -3,12 +3,13 @@ use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::*;
-use super::ships::PLAYER_SHIP;
+use super::ship::yard::player_ship_bundle;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
     time::FixedTimestep,
 };
+
 
 pub struct PlayerPlugin;
 
@@ -33,22 +34,8 @@ impl Plugin for PlayerPlugin {
 // Player spawner system
 pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
-    let scene_model = asset_server.load("models/basic_hero.glb#Scene0");
-
     commands
-        .spawn_bundle(SceneBundle {
-            scene: scene_model,
-            transform: Transform::from_xyz(-20.0, 0.0, 2.0)
-                .with_scale(Vec3::splat(1.0))
-                .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
-            ..Default::default()
-        })
-        .insert(PLAYER_SHIP.clone())
-        .insert(Collider {
-            damage: 1,
-            hitmask: 1,
-        })
-        .insert(Health { hp: 5 })
+        .spawn_bundle(player_ship_bundle(Vec2::new(-20.0, 0.0), asset_server))
         .insert(Player);
 }
 
@@ -84,10 +71,10 @@ fn player_controller(
 }
 
 pub fn reflect_from_wall(
-    mut ship_query: Query<(&mut Transform, &Ship), With<Player>>,
-    wall_query: Query<&Transform, (With<Wall>, Without<Player>)>
+    mut ship_query: Query<(&mut Transform, &Collider, &Ship), With<Player>>,
+    wall_query: Query<&Transform, (With<Wall>, Without<Player>)>,
 ) {
-    for (mut ship_transform, ship) in &mut ship_query {
+    for (mut ship_transform, ship_collider, ship) in &mut ship_query {
         // Bounce back on wall collision
         for wall_transform in &wall_query {
             let mut direction_x: f32 = 0.0;
@@ -95,9 +82,9 @@ pub fn reflect_from_wall(
 
             let collision = collide(
                 wall_transform.translation,
-                wall_transform.scale.truncate(), //FIXME!
+                wall_transform.scale.truncate(),
                 ship_transform.translation,
-                ship_transform.scale.truncate(), //FIXME
+                ship_collider.rect,
             );
 
             if let Some(collision) = collision {
@@ -130,7 +117,7 @@ pub fn fire_controller(
                     transform.translation.y + ship.gun_offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
-                hitmask: 2,
+                hitmask: ENEMY_HITMASK, //Hurt enemies only
             };
             bullet_fired_event.send(event);
         }

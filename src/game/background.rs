@@ -1,20 +1,18 @@
-
-
-use bevy::prelude::*;
 use super::super::AppState;
+use bevy::prelude::*;
 pub struct BackgroundPlugin;
 
 impl Plugin for BackgroundPlugin {
-    fn build(&self, app: &mut App){
+    fn build(&self, app: &mut App) {
         app.add_system_set(
             SystemSet::on_enter(AppState::InGame)
                 .with_system(setup_lights)
-                .with_system(setup_starfield)
+                .with_system(setup_starfield),
         );
     }
 }
 
-pub fn setup_lights(mut commands: Commands){
+pub fn setup_lights(mut commands: Commands) {
     // Point light
     commands.spawn_bundle(PointLightBundle {
         point_light: PointLight {
@@ -39,6 +37,4 @@ pub fn setup_lights(mut commands: Commands){
     });
 }
 
-pub fn setup_starfield(commands: Commands){
-
-}
+pub fn setup_starfield(commands: Commands) {}

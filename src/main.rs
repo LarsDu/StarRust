@@ -1,4 +1,4 @@
-use bevy::{prelude::*,render::camera::*};
+use bevy::{prelude::*, render::camera::*};
 
 mod menus;
 use menus::MenuPlugin;
@@ -6,11 +6,10 @@ use menus::MenuPlugin;
 mod game;
 use game::GamePlugin;
 
-
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 enum AppState {
     InGame,
-    Menu
+    Menu,
 }
 fn main() {
     App::new()
@@ -29,14 +28,17 @@ fn main() {
         .run();
 }
 
-pub fn setup_camera(mut commands: Commands){
+pub fn setup_camera(mut commands: Commands) {
     /*commands.spawn_bundle(Camera2dBundle{
         ..default()
     }
     );*/
     // Bevy 2d camera is at Z=999.9
     commands.spawn_bundle(Camera3dBundle {
-        projection: Projection::Orthographic(OrthographicProjection{scale: 0.05, ..default()}),
+        projection: Projection::Orthographic(OrthographicProjection {
+            scale: 0.05,
+            ..default()
+        }),
         transform: Transform::from_xyz(0.0, 0.0, 999.0).looking_at(Vec3::ZERO, Vec3::Y),
         /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
         ..default()

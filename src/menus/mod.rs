@@ -5,7 +5,7 @@ use super::AppState;
 
 pub struct MenuPlugin;
 #[derive(Component)]
-    struct OnMainMenuScreen;
+struct OnMainMenuScreen;
 
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
@@ -14,8 +14,7 @@ impl Plugin for MenuPlugin {
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
             .add_state(MenuState::Main)
             .add_system_set(
-                SystemSet::on_exit(MenuState::Main)
-                    .with_system(despawn_screen::<OnMainMenuScreen>),
+                SystemSet::on_exit(MenuState::Main).with_system(despawn_screen::<OnMainMenuScreen>),
             )
             .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
             .add_system_set(
@@ -82,7 +81,6 @@ fn menu_action(
                     menu_state.set(MenuState::Disabled).unwrap();
                     game_state.set(AppState::InGame).unwrap();
                 }
-             
             }
         }
     }
@@ -118,73 +116,71 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     };
 
     commands
-    .spawn_bundle(NodeBundle {
-        style: Style {
-            margin: UiRect::all(Val::Auto),
-            flex_direction: FlexDirection::ColumnReverse,
-            align_items: AlignItems::Center,
+        .spawn_bundle(NodeBundle {
+            style: Style {
+                margin: UiRect::all(Val::Auto),
+                flex_direction: FlexDirection::ColumnReverse,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            color: Color::CRIMSON.into(),
             ..default()
-        },
-        color: Color::CRIMSON.into(),
-        ..default()
-    })
-    .insert(OnMainMenuScreen)
-    .with_children(|parent| {
-        // Display the game name
-        parent.spawn_bundle(
-            TextBundle::from_section(
-                "Star Rust",
-                TextStyle {
-                    font: font.clone(),
-                    font_size: 80.0,
-                    color: TEXT_COLOR,
-                },
-            )
-            .with_style(Style {
-                margin: UiRect::all(Val::Px(50.0)),
-                ..default()
-            }),
-        );
+        })
+        .insert(OnMainMenuScreen)
+        .with_children(|parent| {
+            // Display the game name
+            parent.spawn_bundle(
+                TextBundle::from_section(
+                    "Star Rust",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 80.0,
+                        color: TEXT_COLOR,
+                    },
+                )
+                .with_style(Style {
+                    margin: UiRect::all(Val::Px(50.0)),
+                    ..default()
+                }),
+            );
 
-        // Display 
-        // - Play
-        // - quit
-        parent
-            .spawn_bundle(ButtonBundle {
-                style: button_style.clone(),
-                color: NORMAL_BUTTON.into(),
-                ..default()
-            })
-            .insert(MenuButtonAction::Play)
-            .with_children(|parent| {
-                let icon = asset_server.load("textures/Game Icons/right.png");
-                parent.spawn_bundle(ImageBundle {
-                    style: button_icon_style.clone(),
-                    image: UiImage(icon),
+            // Display
+            // - Play
+            // - quit
+            parent
+                .spawn_bundle(ButtonBundle {
+                    style: button_style.clone(),
+                    color: NORMAL_BUTTON.into(),
                     ..default()
+                })
+                .insert(MenuButtonAction::Play)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/right.png");
+                    parent.spawn_bundle(ImageBundle {
+                        style: button_icon_style.clone(),
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent
+                        .spawn_bundle(TextBundle::from_section("Play", button_text_style.clone()));
                 });
-                parent.spawn_bundle(TextBundle::from_section(
-                    "Play",
-                    button_text_style.clone(),
-                ));
-            });
-        parent
-            .spawn_bundle(ButtonBundle {
-                style: button_style,
-                color: NORMAL_BUTTON.into(),
-                ..default()
-            })
-            .insert(MenuButtonAction::Quit)
-            .with_children(|parent| {
-                let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                parent.spawn_bundle(ImageBundle {
-                    style: button_icon_style,
-                    image: UiImage(icon),
+            parent
+                .spawn_bundle(ButtonBundle {
+                    style: button_style,
+                    color: NORMAL_BUTTON.into(),
                     ..default()
+                })
+                .insert(MenuButtonAction::Quit)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    parent.spawn_bundle(ImageBundle {
+                        style: button_icon_style,
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn_bundle(TextBundle::from_section("Quit", button_text_style));
                 });
-                parent.spawn_bundle(TextBundle::from_section("Quit", button_text_style));
-            });
-    });
+        });
 }
 
 fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
