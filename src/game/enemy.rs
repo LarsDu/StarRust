@@ -51,7 +51,7 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
 }
 
 // Enemy controller system
-fn enemy_controller(time: Res<Time>, mut query: Query<(&mut Transform, &Enemy), With<Enemy>>) {
+fn enemy_controller(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {
 
 
 }

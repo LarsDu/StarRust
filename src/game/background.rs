@@ -1,9 +1,6 @@
 
 
-use bevy::{
-    prelude::*,
-    render::camera::*,
-};
+use bevy::prelude::*;
 use super::super::AppState;
 pub struct BackgroundPlugin;
 
@@ -12,7 +9,6 @@ impl Plugin for BackgroundPlugin {
         app.add_system_set(
             SystemSet::on_enter(AppState::InGame)
                 .with_system(setup_lights)
-                .with_system(setup_camera)
                 .with_system(setup_starfield)
         );
     }
@@ -39,21 +35,6 @@ pub fn setup_lights(mut commands: Commands){
             ..default()
         },
         transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    });
-}
-
-pub fn setup_camera(mut commands: Commands){
-    /*commands.spawn_bundle(Camera2dBundle{
-        ..default()
-    }
-    );*/
-
-    // Bevy 2d camera is at Z=999.9
-    commands.spawn_bundle(Camera3dBundle {
-        projection: Projection::Orthographic(OrthographicProjection{scale: 0.05, ..default()}),
-        transform: Transform::from_xyz(0.0, 0.0, 999.0).looking_at(Vec3::ZERO, Vec3::Y),
-        /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
         ..default()
     });
 }

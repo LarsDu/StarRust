@@ -22,7 +22,7 @@ impl Plugin for CollisionPlugin {
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(check_ship_collision)
                     .with_system(check_bullet_collision)
-                    .with_system(check_player_ship_wall_collision)
+                    //.with_system(check_player_ship_wall_collision)
             );
     }
 }
@@ -91,7 +91,9 @@ pub fn check_bullet_collision(
         }
     }
 }
-pub fn check_player_ship_wall_collision(
+
+
+/*pub fn check_player_ship_wall_collision(
     mut commands: Commands,
     mut wall_query: Query<(&Wall, &Transform), With<Wall>>,
     mut ship_query: Query<(&Transform), With<Player>>,
@@ -104,7 +106,7 @@ pub fn check_player_ship_wall_collision(
                 ship_transform.translation,
                 ship_transform.scale.truncate(), //FIXME
             );
-        
+            
             if let Some(collision) = collision {
                 //match collision {
                     //Collision::Left => reflect_x = ball_velocity.x > 0.0,
@@ -117,4 +119,6 @@ pub fn check_player_ship_wall_collision(
             }
         }
     }
+    
 }
+*/

@@ -1,10 +1,14 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
-use super::components::{Collider, Health, Player, Ship};
-use super::ships::PLAYER_SHIP;
+use super::components::*;
 use super::constants::*;
-use bevy::{prelude::*, time::FixedTimestep};
+use super::ships::PLAYER_SHIP;
+use bevy::{
+    prelude::*,
+    sprite::collide_aabb::{collide, Collision},
+    time::FixedTimestep,
+};
 
 pub struct PlayerPlugin;
 
@@ -18,7 +22,8 @@ impl Plugin for PlayerPlugin {
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(player_controller)
-                    .with_system(fire_controller),
+                    .with_system(fire_controller)
+                    .with_system(reflect_from_wall),
             );
     }
 }
@@ -39,7 +44,10 @@ pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..Default::default()
         })
         .insert(PLAYER_SHIP.clone())
-        .insert(Collider{ damage:1, hitmask:1 })
+        .insert(Collider {
+            damage: 1,
+            hitmask: 1,
+        })
         .insert(Health { hp: 5 })
         .insert(Player);
 }
@@ -47,9 +55,9 @@ pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
 // Player controller system
 fn player_controller(
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<(&mut Transform, &Ship), With<Player>>,
+    mut ship_query: Query<(&mut Transform, &Ship), With<Player>>,
 ) {
-    for (mut transform, ship) in &mut query {
+    for (mut ship_transform, ship) in &mut ship_query {
         let mut direction_x: f32 = 0.0;
         let mut direction_y = 0.0;
 
@@ -69,11 +77,45 @@ fn player_controller(
             direction_x += ship.speed.x;
         }
 
-        // Calculate the new horizontal paddle position based on player input
-        transform.translation.y = transform.translation.y + direction_y;
-        transform.translation.x = transform.translation.x + direction_x;
+        // Calculate the newosition based on player input
+        ship_transform.translation.y = ship_transform.translation.y + direction_y;
+        ship_transform.translation.x = ship_transform.translation.x + direction_x;
     }
 }
+
+pub fn reflect_from_wall(
+    mut ship_query: Query<(&mut Transform, &Ship), With<Player>>,
+    wall_query: Query<&Transform, (With<Wall>, Without<Player>)>
+) {
+    for (mut ship_transform, ship) in &mut ship_query {
+        // Bounce back on wall collision
+        for wall_transform in &wall_query {
+            let mut direction_x: f32 = 0.0;
+            let mut direction_y = 0.0;
+
+            let collision = collide(
+                wall_transform.translation,
+                wall_transform.scale.truncate(), //FIXME!
+                ship_transform.translation,
+                ship_transform.scale.truncate(), //FIXME
+            );
+
+            if let Some(collision) = collision {
+                match collision {
+                    Collision::Left => direction_x += ship.speed.x,
+                    Collision::Right => direction_x -= ship.speed.x,
+                    Collision::Top => direction_y -= ship.speed.y,
+                    Collision::Bottom => direction_y += ship.speed.y,
+                    Collision::Inside => { /* do nothing */ }
+                }
+            }
+            // Calculate the new horizontal paddle position based on wall reflection
+            ship_transform.translation.y = ship_transform.translation.y + direction_y;
+            ship_transform.translation.x = ship_transform.translation.x + direction_x;
+        }
+    }
+}
+
 // Fire controller system
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
