@@ -18,3 +18,7 @@ opt-level = 1
 
 [profile.dev.package."*"]
 opt-level = 3
+
+[[example]]
+name = "pong"
+path = "src/pong.rs"
