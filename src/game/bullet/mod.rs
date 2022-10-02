@@ -28,7 +28,6 @@ impl Plugin for BulletPlugin {
 
 #[derive(Bundle)]
 pub struct BulletBundle{
-    #[bundle]
     pbr_bundle: PbrBundle,
     collider: Collider,
     bullet: Bullet,
@@ -52,7 +51,7 @@ fn spawn_bullet(
     bullet_data: &BulletFiredEvent,
 ) {
     commands
-        .spawn_bundle(standard_bullet(meshes, materials, bullet_data));
+        .spawn(standard_bullet(meshes, materials, bullet_data));
 }
 
 // BULLET SYSTEMS

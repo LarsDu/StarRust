@@ -29,12 +29,12 @@ fn main() {
 }
 
 pub fn setup_camera(mut commands: Commands) {
-    /*commands.spawn_bundle(Camera2dBundle{
+    /*commands.spawn(Camera2dBundle{
         ..default()
     }
     );*/
     // Bevy 2d camera is at Z=999.9
-    commands.spawn_bundle(Camera3dBundle {
+    commands.spawn(Camera3dBundle {
         projection: Projection::Orthographic(OrthographicProjection {
             scale: 0.05,
             ..default()
