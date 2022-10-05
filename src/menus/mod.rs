@@ -50,7 +50,7 @@ enum MenuButtonAction {
 // This system handles changing all buttons color based on mouse interaction
 fn button_system(
     mut interaction_query: Query<
-        (&Interaction, &mut UiColor, Option<&SelectedOption>),
+        (&Interaction, &mut BackgroundColor, Option<&SelectedOption>),
         (Changed<Interaction>, With<Button>),
     >,
 ) {
@@ -116,20 +116,19 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     };
 
     commands
-        .spawn_bundle(NodeBundle {
+        .spawn(NodeBundle {
             style: Style {
                 margin: UiRect::all(Val::Auto),
                 flex_direction: FlexDirection::ColumnReverse,
                 align_items: AlignItems::Center,
                 ..default()
             },
-            color: Color::CRIMSON.into(),
             ..default()
         })
         .insert(OnMainMenuScreen)
         .with_children(|parent| {
             // Display the game name
-            parent.spawn_bundle(
+            parent.spawn(
                 TextBundle::from_section(
                     "Star Rust",
                     TextStyle {
@@ -148,37 +147,35 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             // - Play
             // - quit
             parent
-                .spawn_bundle(ButtonBundle {
+                .spawn(ButtonBundle {
                     style: button_style.clone(),
-                    color: NORMAL_BUTTON.into(),
                     ..default()
                 })
                 .insert(MenuButtonAction::Play)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/right.png");
-                    parent.spawn_bundle(ImageBundle {
+                    parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
                         image: UiImage(icon),
                         ..default()
                     });
                     parent
-                        .spawn_bundle(TextBundle::from_section("Play", button_text_style.clone()));
+                        .spawn(TextBundle::from_section("Play", button_text_style.clone()));
                 });
             parent
-                .spawn_bundle(ButtonBundle {
+                .spawn(ButtonBundle {
                     style: button_style,
-                    color: NORMAL_BUTTON.into(),
                     ..default()
                 })
                 .insert(MenuButtonAction::Quit)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn_bundle(ImageBundle {
+                    parent.spawn(ImageBundle {
                         style: button_icon_style,
                         image: UiImage(icon),
                         ..default()
                     });
-                    parent.spawn_bundle(TextBundle::from_section("Quit", button_text_style));
+                    parent.spawn(TextBundle::from_section("Quit", button_text_style));
                 });
         });
 }

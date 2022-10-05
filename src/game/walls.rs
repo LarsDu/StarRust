@@ -18,22 +18,22 @@ fn setup_walls(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn_bundle(WallBundle::new(
+    commands.spawn(WallBundle::new(
         WallLocation::Left,
         &mut meshes,
         &mut materials,
     ));
-    commands.spawn_bundle(WallBundle::new(
+    commands.spawn(WallBundle::new(
         WallLocation::Right,
         &mut meshes,
         &mut materials,
     ));
-    commands.spawn_bundle(WallBundle::new(
+    commands.spawn(WallBundle::new(
         WallLocation::Bottom,
         &mut meshes,
         &mut materials,
     ));
-    commands.spawn_bundle(WallBundle::new(
+    commands.spawn(WallBundle::new(
         WallLocation::Top,
         &mut meshes,
         &mut materials,
@@ -47,7 +47,6 @@ struct WallBundle {
     // Allowing you to compose their functionality
     //#[bundle]
     //sprite_bundle: SpriteBundle,
-    #[bundle]
     pbr_bundle: PbrBundle,
     collider: Collider,
     wall: Wall,

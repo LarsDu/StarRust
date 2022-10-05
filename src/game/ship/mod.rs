@@ -6,7 +6,6 @@ use bevy::{prelude::*, time::Timer};
 #[derive(Bundle)]
 pub struct ShipBundle {
     ship: Ship,
-    #[bundle]
     scene_bundle: SceneBundle,
     collider: Collider,
     health: Health,
@@ -32,7 +31,6 @@ impl ShipBundle {
 
 #[derive(Bundle)]
 pub struct AiShipBundle {
-    #[bundle]
     ship_bundle: ShipBundle,
     fuse_timer: FuseTime,
 }

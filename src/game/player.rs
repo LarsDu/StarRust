@@ -35,7 +35,7 @@ impl Plugin for PlayerPlugin {
 pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
     commands
-        .spawn_bundle(player_ship_bundle(Vec2::new(-20.0, 0.0), asset_server))
+        .spawn(player_ship_bundle(Vec2::new(-20.0, 0.0), asset_server))
         .insert(Player);
 }
 
