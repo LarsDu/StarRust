@@ -63,8 +63,8 @@ fn player_controller(
         if keyboard_input.pressed(KeyCode::Right) {
             direction_x += ship.speed.x;
         }
-
-        // Calculate the newosition based on player input
+        
+        // Calculate the new position based on player input
         ship_transform.translation.y = ship_transform.translation.y + direction_y;
         ship_transform.translation.x = ship_transform.translation.x + direction_x;
     }
@@ -75,6 +75,7 @@ pub fn reflect_from_wall(
     wall_query: Query<&Transform, (With<Wall>, Without<Player>)>,
 ) {
     for (mut ship_transform, ship_collider, ship) in &mut ship_query {
+        // FIXME: Call this from player_controller to eliminate redundant transform query
         // Bounce back on wall collision
         for wall_transform in &wall_query {
             let mut direction_x: f32 = 0.0;

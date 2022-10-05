@@ -31,6 +31,12 @@ pub use background::*;
 mod walls;
 pub use walls::*;
 
+mod spawner;
+pub use spawner::*;
+
+mod weapon;
+pub use weapon::*;
+
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
@@ -40,6 +46,8 @@ impl Plugin for GamePlugin {
             .add_plugin(PlayerPlugin)
             .add_plugin(EnemyPlugin)
             .add_plugin(BulletPlugin)
-            .add_plugin(CollisionPlugin);
+            .add_plugin(CollisionPlugin)
+            .add_plugin(WeaponPlugin)
+            .add_plugin(SpawnerPlugin);
     }
 }

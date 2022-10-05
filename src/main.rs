@@ -6,6 +6,9 @@ use menus::MenuPlugin;
 mod game;
 use game::GamePlugin;
 
+mod constants;
+use constants::{SCREEN_HEIGHT,SCREEN_WIDTH};
+
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 enum AppState {
     InGame,
@@ -14,13 +17,14 @@ enum AppState {
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
-        .add_plugins(DefaultPlugins)
         .insert_resource(WindowDescriptor {
-            title: "Platformer!".to_string(),
-            width: 1024.0,
-            height: 800.0,
+            title: "StarRust".to_string(),
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
             ..default()
         })
+        .add_plugins(DefaultPlugins)
+        
         .add_state(AppState::Menu)
         .add_plugin(MenuPlugin)
         .add_plugin(GamePlugin)
