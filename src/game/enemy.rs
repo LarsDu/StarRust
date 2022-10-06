@@ -19,8 +19,9 @@ impl Plugin for EnemyPlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                    .with_system(enemy_controller)
+                    .with_system(movement)
                     .with_system(fire_controller),
+
             );
     }
 }
@@ -35,7 +36,7 @@ pub fn spawn(time: Res<Time>, commands: Commands, asset_server: Res<AssetServer>
 pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
     commands
-        .spawn_bundle(
+        .spawn(
             default_enemy_ship_bundle(position, asset_server)
         )    
         .insert(Enemy);
@@ -43,7 +44,9 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
 }
 
 // Enemy controller system
-fn enemy_controller(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {}
+fn movement(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {
+
+}
 
 // Fire controller system
 pub fn fire_controller(

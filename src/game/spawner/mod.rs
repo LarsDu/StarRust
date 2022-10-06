@@ -1,5 +1,6 @@
 use bevy::{prelude::*, time::FixedTimestep};
 
+use super::AiShipBundle;
 use super::constants::*;
 use super::super::*;
 
@@ -20,9 +21,20 @@ impl Plugin for SpawnerPlugin {
 fn setup(
     commands: Commands
 ){
-
-    
-
 }
+
+
+pub fn spawn<T>(
+    time: Res<Time>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    bundle_func: &dyn Fn(Vec2, Res<AssetServer>) -> dyn Bundle
+) {
+    commands.spawn(
+        bundle_func(Vec2::new(25.0, 2.0), asset_server)
+    );
+}
+
+
 
 fn spawn_bundles() {}
