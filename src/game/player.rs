@@ -3,7 +3,7 @@ use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::*;
-use super::ship::yard::player_ship_bundle;
+use super::ship::yard::player_ship;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -35,7 +35,7 @@ impl Plugin for PlayerPlugin {
 pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
     commands
-        .spawn(player_ship_bundle(Vec2::new(-20.0, 0.0), asset_server))
+        .spawn(player_ship(Vec2::new(-20.0, 0.0), asset_server))
         .insert(Player);
 }
 

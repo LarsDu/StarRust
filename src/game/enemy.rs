@@ -3,7 +3,7 @@ use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::{Enemy, FuseTime, Health, Ship};
 use super::constants::*;
-use super::ship::yard::default_enemy_ship_bundle;
+//use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*, utils::Duration};
 use std::f32::consts::PI;
 
@@ -15,7 +15,7 @@ impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<BulletFiredEvent>()
             .add_event::<CollisionEvent>()
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn))
+            .add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
@@ -27,7 +27,7 @@ impl Plugin for EnemyPlugin {
 }
 
 // SYSTEMS
-
+/*
 pub fn spawn(time: Res<Time>, commands: Commands, asset_server: Res<AssetServer>) {
     spawn_at(Vec2::new(25.0, 2.0), commands, asset_server);
 }
@@ -42,6 +42,7 @@ pub fn spawn_at(position: Vec2, mut commands: Commands, asset_server: Res<AssetS
         .insert(Enemy);
         
 }
+*/
 
 // Enemy controller system
 fn movement(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>) {
