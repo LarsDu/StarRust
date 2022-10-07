@@ -3,8 +3,9 @@ use bevy::{
     time::*,
 };
 
-use super::spawner::*;
+use super::spawner::levels::*;
 
+use super::ship::{yard::*,*};
 #[derive(Component)]
 pub struct Player;
 
@@ -43,5 +44,5 @@ pub struct Wall;
 
 #[derive(Component)]
 pub struct Spawner{
-    spawn_infos: Vec<SpawnInfo>
+    pub spawn_infos: Vec<SpawnInfo<AiShipBundle>>
 }

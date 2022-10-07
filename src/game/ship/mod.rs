@@ -1,7 +1,6 @@
 pub mod yard;
 
 use super::components::*;
-use super::SpawnableBundle;
 use bevy::{prelude::*, time::Timer};
 
 #[derive(Bundle)]

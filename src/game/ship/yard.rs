@@ -2,8 +2,13 @@ use bevy::{prelude::*, time::*, utils::Duration};
 
 use super::super::components::*;
 use super::*;
-use crate::game::spawner::SpawnableBundle;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK};
+
+
+pub trait AiShipSpawn{
+    fn spawn(asset_server: &Res<AssetServer>, position: Vec2) -> AiShipBundle;
+}
+
 
 pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> ShipBundle {
     return ShipBundle {
@@ -29,9 +34,9 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Ship
 
 pub struct DefaultEnemyShip;
 
-impl SpawnableBundle for DefaultEnemyShip {
-    fn spawn(mut commands: Commands, asset_server: Res<AssetServer>, spawn_position: Vec2) {
-        let bundle = AiShipBundle {
+impl AiShipSpawn for DefaultEnemyShip {
+    fn spawn(asset_server: &Res<AssetServer>, spawn_position: Vec2) -> AiShipBundle {
+        return AiShipBundle{
             ship_bundle: ShipBundle {
                 ship: Ship {
                     speed: Vec2::new(0.2, 0.2),
@@ -54,6 +59,6 @@ impl SpawnableBundle for DefaultEnemyShip {
                 timer: Timer::new(Duration::from_secs(1), true),
             },
         };
-        commands.spawn(bundle);
+
     }
 }
