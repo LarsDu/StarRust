@@ -3,6 +3,8 @@ use bevy::{
     time::*,
 };
 
+use super::spawner::*;
+
 #[derive(Component)]
 pub struct Player;
 
@@ -38,3 +40,8 @@ pub struct FuseTime {
 
 #[derive(Component)]
 pub struct Wall;
+
+#[derive(Component)]
+pub struct Spawner{
+    spawn_infos: Vec<SpawnInfo>
+}
