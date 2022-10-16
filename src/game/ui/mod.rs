@@ -34,7 +34,7 @@ fn setup_scoreboard(mut commands: Commands, asset_server: Res<AssetServer>) {
                 TextStyle {
                     font: asset_server.load("fonts/Arame-Bold.ttf"),
                     font_size: SCOREBOARD_FONT_SIZE,
-                    color: WALL_COLOR,
+                    color: UI_COLOR,
                 },
             ),
             TextSection::new(
@@ -42,7 +42,7 @@ fn setup_scoreboard(mut commands: Commands, asset_server: Res<AssetServer>) {
                 TextStyle {
                     font: asset_server.load("fonts/Arame-Bold.ttf"),
                     font_size: SCOREBOARD_FONT_SIZE,
-                    color: WALL_COLOR,
+                    color: UI_COLOR,
                 },
             ),
         ])

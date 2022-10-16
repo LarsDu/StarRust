@@ -1,11 +1,8 @@
 use super::super::AppState;
-use super::bullet::BulletFiredEvent;
-use super::collisions::CollisionEvent;
-use super::components::{Enemy, AutoFire, Health, Actor};
+use super::components::*;
 use super::constants::*;
 //use super::ship::yard::default_enemy_ship_bundle;
-use bevy::{prelude::*, time::*, utils::Duration};
-use std::f32::consts::PI;
+use bevy::{prelude::*, time::*};
 
 pub struct EnemyPlugin;
 
