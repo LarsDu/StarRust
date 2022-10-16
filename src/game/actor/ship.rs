@@ -2,17 +2,14 @@ use bevy::{prelude::*, time::*, utils::Duration};
 
 use super::super::components::*;
 use super::*;
-use crate::game::{ALLY_HITMASK, ENEMY_HITMASK};
+use super::super::spawner::*;
+use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
 
-pub trait AiShipSpawn{
-    fn spawn(asset_server: &Res<AssetServer>, position: Vec2) -> AiShipBundle;
-}
 
-
-pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> ShipBundle {
-    return ShipBundle {
-        ship: Ship {
+pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> ActorBundle {
+    return ActorBundle {
+        actor: Actor {
             speed: Vec2::new(0.5, 0.5),
             gun_offset: Vec2::new(1.0, -0.32),
         },
@@ -34,11 +31,16 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Ship
 
 pub struct DefaultEnemyShip;
 
-impl AiShipSpawn for DefaultEnemyShip {
-    fn spawn(asset_server: &Res<AssetServer>, spawn_position: Vec2) -> AiShipBundle {
-        return AiShipBundle{
-            ship_bundle: ShipBundle {
-                ship: Ship {
+impl BundledAsset for DefaultEnemyShip {
+    fn get_bundle(asset_server: &Res<AssetServer>) -> AiActorBundle {
+        let spawn_position = SPAWN_LOCATIONS[0];
+        return AiActorBundle{
+            ai: Ai{
+               mode: AiMode::CHARGE_LEFT1,
+               timer: Timer::default()
+            },
+            actor_bundle: ActorBundle {
+                actor: Actor {
                     speed: Vec2::new(0.2, 0.2),
                     gun_offset: Vec2::new(1.0, 0.0),
                 },
@@ -55,7 +57,7 @@ impl AiShipSpawn for DefaultEnemyShip {
                 },
                 health: Health { hp: 2 },
             },
-            fuse_timer: FuseTime {
+            weapon_cooldown: WeaponCooldown {
                 timer: Timer::new(Duration::from_secs(1), true),
             },
         };

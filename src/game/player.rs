@@ -3,7 +3,7 @@ use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::*;
-use super::ship::yard::player_ship;
+use super::actor::ship::player_ship;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -42,7 +42,7 @@ pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
 // Player controller system
 fn player_controller(
     keyboard_input: Res<Input<KeyCode>>,
-    mut ship_query: Query<(&mut Transform, &Ship), With<Player>>,
+    mut ship_query: Query<(&mut Transform, &Actor), With<Player>>,
 ) {
     for (mut ship_transform, ship) in &mut ship_query {
         let mut direction_x: f32 = 0.0;
@@ -71,7 +71,7 @@ fn player_controller(
 }
 
 pub fn reflect_from_wall(
-    mut ship_query: Query<(&mut Transform, &Collider, &Ship), With<Player>>,
+    mut ship_query: Query<(&mut Transform, &Collider, &Actor), With<Player>>,
     wall_query: Query<&Transform, (With<Wall>, Without<Player>)>,
 ) {
     for (mut ship_transform, ship_collider, ship) in &mut ship_query {
@@ -108,7 +108,7 @@ pub fn reflect_from_wall(
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
     mut bullet_fired_event: EventWriter<BulletFiredEvent>,
-    query: Query<(&Transform, &Ship), With<Player>>,
+    query: Query<(&Transform, &Actor), With<Player>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Space) {
         for (transform, ship) in &query {

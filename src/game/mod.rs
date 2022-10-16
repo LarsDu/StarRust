@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
 // Game Plugin modules
+mod ai;
+pub use ai::*;
+
 mod constants;
 pub use constants::*;
 
@@ -22,8 +25,11 @@ pub use health::*;
 mod components;
 pub use components::Player;
 
-mod ship;
-pub use ship::*;
+mod despawner;
+use despawner::*;
+
+mod actor;
+pub use actor::*;
 
 mod background;
 pub use background::*;

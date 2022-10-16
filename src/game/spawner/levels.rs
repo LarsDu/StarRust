@@ -1,31 +1,28 @@
+use bevy::{prelude::*, time::*, utils::Duration};
+
 use super::*;
 use super::constants::*;
-use super::super::ship::{yard::*, *};
+use super::super::ai::*;
+use super::super::actor::{ship::*, *};
 pub struct SpawnSequence;
-
-pub struct SpawnInfo<B: Bundle>{
-    pub location: Vec3,
-    pub frequency: f32,
-    pub duration: f32,
-    pub bundle: B
-}
 
 
 impl SpawnSequence {
-    pub fn level0(asset_server: &Res<AssetServer>, spawn_position: Vec2) -> Vec<SpawnInfo<AiShipBundle>>{
+    pub fn level0(asset_server: &Res<AssetServer>) -> Vec<SpawnInfo<AiActorBundle>>{
         return vec![
-            SpawnInfo::<AiShipBundle>{
-                location: SPAWN_LOCATIONS[0],
-                frequency: 1.0,
-                duration: 4.0,
-                bundle: DefaultEnemyShip::spawn(asset_server, spawn_position)
+            SpawnInfo::<AiActorBundle>{
+                locations: vec![SPAWN_LOCATIONS[0]],
+                ttl_timer: Timer::new( Duration::from_secs(4), false),
+                frequency_timer: Timer::new( Duration::from_secs(1), true),
+                bundle: DefaultEnemyShip::get_bundle(asset_server),
+   
             },
-            SpawnInfo::<AiShipBundle>{
-                location: SPAWN_LOCATIONS[1],
-                frequency: 1.0,
-                duration: 4.0,
-                bundle: DefaultEnemyShip::spawn(asset_server, spawn_position)
+            SpawnInfo::<AiActorBundle>{
+                locations: Vec::from(SPAWN_LOCATIONS),
+                ttl_timer: Timer::new( Duration::from_secs(4), false),
+                frequency_timer: Timer::new(Duration::from_secs(1), true),
+                bundle: DefaultEnemyShip::get_bundle(asset_server),
             },
-        ]
+        ];
     }
 }

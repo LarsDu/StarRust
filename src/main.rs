@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::camera::*};
+use bevy::prelude::*;
 
 mod menus;
 use menus::MenuPlugin;
@@ -8,6 +8,8 @@ use game::GamePlugin;
 
 mod constants;
 use constants::{SCREEN_HEIGHT,SCREEN_WIDTH};
+
+
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 enum AppState {

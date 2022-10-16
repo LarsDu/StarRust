@@ -1,11 +1,12 @@
 use bevy::{
-    prelude::{Component, Vec2},
+    prelude::*,
     time::*,
 };
 
-use super::spawner::levels::*;
+use super::spawner::{SpawnInfo, levels::*};
+use super::ai::AiMode;
 
-use super::ship::{yard::*,*};
+use super::actor::{ship::*,*};
 #[derive(Component)]
 pub struct Player;
 
@@ -13,7 +14,7 @@ pub struct Player;
 pub struct Enemy;
 
 #[derive(Component, Clone)]
-pub struct Ship {
+pub struct Actor {
     pub speed: Vec2,
     pub gun_offset: Vec2,
 }
@@ -33,8 +34,8 @@ pub struct Collider {
 }
 
 #[derive(Component)]
-pub struct FuseTime {
-    /// track when the bomb should explode (non-repeating timer)
+pub struct WeaponCooldown {
+    /// Used for timed weapon shots
     pub timer: Timer,
 }
 
@@ -43,6 +44,20 @@ pub struct FuseTime {
 pub struct Wall;
 
 #[derive(Component)]
-pub struct Spawner{
-    pub spawn_infos: Vec<SpawnInfo<AiShipBundle>>
+pub struct AiActorSpawner{
+    pub index: i32,
+    pub spawn_infos: Vec<SpawnInfo<AiActorBundle>>
 }
+
+#[derive(Component)]
+pub struct Ai{
+    pub mode: AiMode,
+    pub timer: Timer
+}
+
+#[derive(Component)]
+pub struct TimedDespawn{
+    pub timer: Timer,
+}
+
+

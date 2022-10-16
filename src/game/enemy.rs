@@ -1,7 +1,7 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
 use super::collisions::CollisionEvent;
-use super::components::{Enemy, FuseTime, Health, Ship};
+use super::components::{Enemy, WeaponCooldown, Health, Actor};
 use super::constants::*;
 //use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*, utils::Duration};
@@ -21,7 +21,6 @@ impl Plugin for EnemyPlugin {
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                     .with_system(movement)
                     .with_system(fire_controller),
-
             );
     }
 }
@@ -53,16 +52,16 @@ fn movement(time: Res<Time>, query: Query<(&mut Transform, &Enemy), With<Enemy>>
 pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<BulletFiredEvent>,
-    mut query: Query<(&Transform, &Ship, &mut FuseTime), With<Enemy>>,
+    mut query: Query<(&Transform, &Actor, &mut WeaponCooldown), With<Enemy>>,
 ) {
-    for (transform, ship, mut fuse_timer) in &mut query {
+    for (transform, actor, mut fuse_timer) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
         fuse_timer.timer.tick(time.delta());
         if fuse_timer.timer.finished() {
             let event = BulletFiredEvent {
                 translation: Vec2::new(
-                    transform.translation.x + ship.gun_offset.x * transform.forward().x,
-                    transform.translation.y + ship.gun_offset.y * transform.forward().y,
+                    transform.translation.x + actor.gun_offset.x * transform.forward().x,
+                    transform.translation.y + actor.gun_offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
                 hitmask: ALLY_HITMASK, // Hurt player only

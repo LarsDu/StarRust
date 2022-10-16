@@ -1,6 +1,6 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
-use super::components::{Bullet, Collider, Health, Player, Ship, Wall};
+use super::components::{Bullet, Collider, Health, Player, Actor, Wall};
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -29,8 +29,8 @@ impl Plugin for CollisionPlugin {
 pub fn check_ship_collision(
     mut commands: Commands,
     mut collision_event: EventWriter<CollisionEvent>,
-    ship_a_query: Query<(Entity, &Transform, &Collider), With<Ship>>,
-    mut ship_b_query: Query<(Entity, &mut Health, &Transform, &Collider), With<Ship>>,
+    ship_a_query: Query<(Entity, &Transform, &Collider), With<Actor>>,
+    mut ship_b_query: Query<(Entity, &mut Health, &Transform, &Collider), With<Actor>>,
 ) {
     // TODO: Use quadtrees for more efficient collision resolution
     for (ship_a_entity, ship_a_transform, ship_a_collider) in &ship_a_query {
@@ -70,7 +70,7 @@ pub fn check_bullet_collision(
     mut commands: Commands,
     mut collision_event: EventWriter<CollisionEvent>,
     bullet_query: Query<(Entity, &Bullet, &Collider, &Transform), With<Bullet>>,
-    mut ship_query: Query<(Entity, &Collider, &mut Health, &Transform), With<Ship>>,
+    mut ship_query: Query<(Entity, &Collider, &mut Health, &Transform), With<Actor>>,
 ) {
     // This would be more efficient with quadtrees fyi
     for (bullet_entity, bullet, bullet_collider, bullet_transform) in &bullet_query {
