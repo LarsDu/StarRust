@@ -26,6 +26,7 @@ fn timed_despawn(
         if pos.x < LEFT_WALL || pos.x > RIGHT_WALL + SPAWN_OFFSET || pos.y > TOP_WALL || pos.y < BOTTOM_WALL{
             despawner.timer.tick(time.delta());
             if despawner.timer.finished(){
+                println!("Despawning {}", entity.id());
                 commands.entity(entity).despawn();
             }
         } else {

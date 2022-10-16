@@ -19,24 +19,24 @@ pub struct Actor {
     pub gun_offset: Vec2,
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Health {
     pub hp: u8,
 }
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Bullet;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Collider {
     pub rect: Vec2,
     pub damage: u8,
     pub hitmask: u8, // Not implemented yet
 }
 
-#[derive(Component)]
-pub struct WeaponCooldown {
+#[derive(Component, Clone)]
+pub struct AutoFire {
     /// Used for timed weapon shots
-    pub timer: Timer,
+    pub cooldown_timer: Timer,
 }
 
 
@@ -46,10 +46,12 @@ pub struct Wall;
 #[derive(Component)]
 pub struct AiActorSpawner{
     pub index: i32,
-    pub spawn_infos: Vec<SpawnInfo<AiActorBundle>>
+    pub spawn_infos: Vec<SpawnInfo<AiActorBundle>>,
+    pub ttl_timer: Timer,
+    pub frequency_timer: Timer
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Ai{
     pub mode: AiMode,
     pub timer: Timer

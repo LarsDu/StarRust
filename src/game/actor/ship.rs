@@ -13,7 +13,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             speed: Vec2::new(0.5, 0.5),
             gun_offset: Vec2::new(1.0, -0.32),
         },
-        scene_bundle: SceneBundle {
+        scene_bundle: StarRustSceneBundle {
             scene: asset_server.load("models/basic_hero.glb#Scene0"),
             transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                 .with_scale(Vec3::splat(0.95))
@@ -36,15 +36,15 @@ impl BundledAsset for DefaultEnemyShip {
         let spawn_position = SPAWN_LOCATIONS[0];
         return AiActorBundle{
             ai: Ai{
-               mode: AiMode::CHARGE_LEFT1,
+               mode: AiMode::CHARGE_FORWARD1,
                timer: Timer::default()
             },
             actor_bundle: ActorBundle {
                 actor: Actor {
-                    speed: Vec2::new(0.2, 0.2),
+                    speed: Vec2::new(0.05, 0.05),
                     gun_offset: Vec2::new(1.0, 0.0),
                 },
-                scene_bundle: SceneBundle {
+                scene_bundle: StarRustSceneBundle {
                     scene: asset_server.load("models/basic_enemy.glb#Scene0"),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
@@ -57,8 +57,8 @@ impl BundledAsset for DefaultEnemyShip {
                 },
                 health: Health { hp: 2 },
             },
-            weapon_cooldown: WeaponCooldown {
-                timer: Timer::new(Duration::from_secs(1), true),
+            auto_fire: AutoFire {
+                cooldown_timer: Timer::new(Duration::from_secs_f32(1.0), true),
             },
         };
 

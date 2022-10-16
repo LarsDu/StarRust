@@ -43,17 +43,21 @@ pub use spawner::*;
 mod weapon;
 pub use weapon::*;
 
+use self::{components::AutoFire, autofire::AutoFirePlugin};
+
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(BackgroundPlugin)
+        .add_plugin(AiPlugin)
             .add_plugin(WallPlugin)
             .add_plugin(PlayerPlugin)
-            .add_plugin(EnemyPlugin)
             .add_plugin(BulletPlugin)
             .add_plugin(CollisionPlugin)
             .add_plugin(WeaponPlugin)
-            .add_plugin(SpawnerPlugin);
+            .add_plugin(SpawnerPlugin)
+            .add_plugin(DespawnerPlugin)
+            .add_plugin(EnemyPlugin);
     }
 }

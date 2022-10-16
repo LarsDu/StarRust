@@ -1,8 +1,11 @@
 use bevy::{
     prelude::*,
     time::{FixedTimestep, Timer},
+    utils::Duration
 };
-use core::cmp::min;
+
+use rand::{Rng, thread_rng, rngs::ThreadRng};
+
 use super::super::*;
 use super::actor::{ship::*, *};
 use super::components::*;
@@ -11,10 +14,11 @@ use super::constants::*;
 pub mod levels;
 use levels::*;
 
+
 pub struct SpawnInfo<B: Bundle> {
     pub locations: Vec<Vec2>,
-    pub ttl_timer: Timer,
-    pub frequency_timer: Timer,
+    pub ttl: f32,
+    pub frequency: f32,
     pub bundle: B,
 }
 pub trait BundledAsset {
@@ -36,42 +40,55 @@ impl Plugin for SpawnerPlugin {
     }
 }
 
-fn setup_level(time: Res<Time>, mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup_level(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(AiActorSpawner {
-        index: 0,
+        index: -1,
+        ttl_timer: Timer::from_seconds(1.0, false),
+        frequency_timer: Timer::from_seconds(1.0, true),
         spawn_infos: SpawnSequence::level0(&asset_server),
     });
 }
 
-fn periodic_spawn(mut commands: Commands, time: Res<Time>, mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>) {
+fn periodic_spawn(mut commands: Commands, time: Res<Time>, asset_server: Res<AssetServer>, mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>) {
     // Run logic for each Spawner Component
     for mut spawner in &mut query {
-        let n_spawn_infos = spawner.spawn_infos.len() as i32;
-        let cur_index = (spawner.index % n_spawn_infos) as usize;
-        let spawn_info = &mut spawner.spawn_infos[cur_index];
-        
-        // Tick spawn timer
-        spawn_info.frequency_timer.tick(time.delta());
-        spawn_info.ttl_timer.tick(time.delta());
 
-        if spawn_info.ttl_timer.finished() {
-            spawner.index = min((cur_index + 1) as i32, n_spawn_infos); // <-- Second mutable borrow occurs here
+        let n_spawn_infos = spawner.spawn_infos.len() as i32;
+        // Tick spawn timer
+        spawner.frequency_timer.tick(time.delta());
+        spawner.ttl_timer.tick(time.delta());
+
+        if spawner.ttl_timer.finished() {
+            let new_index = i32::clamp(spawner.index + 1, 0, n_spawn_infos) ;
+            if new_index < n_spawn_infos {
+                spawner.index = new_index;
+                // Get the next spawn info and set the frequency and ttl durations
+                let next_ttl = spawner.spawn_infos[spawner.index as usize].ttl;
+                let next_frequency = spawner.spawn_infos[spawner.index as usize].frequency;
+                spawner.ttl_timer.set_duration(Duration::from_secs_f32(next_ttl));
+                spawner.frequency_timer.set_duration(Duration::from_secs_f32(next_frequency));
+            } else {
+                //TODO: Level is over. Progress into success or failure states
+                //spawner.index = 0;
+            }
         }
 
-        if spawn_info.frequency_timer.finished(){
-            commands.spawn(spawn_info.bundle); // <--The bundle is behind a mutable reference
+        
+        if spawner.frequency_timer.finished(){
+            let spawn_info = &spawner.spawn_infos[spawner.index as usize];
+            //commands.spawn(DefaultEnemyShip::get_bundle(&asset_server));
+            spawn_from_spawn_info(&mut commands, spawn_info);
         }
     }
 }
 
 
-/*
-pub fn spawn_startup_bundles<B: Spawn>(
-    time: Res<Time>,
-    mut commands: Commands,
-    asset_server: &Res<AssetServer>,
-) {
-    let bundle = B::get_bundle(asset_server, Vec2::new(23.0, 2.0));
-    commands.spawn(bundle);
+fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &SpawnInfo<AiActorBundle>){
+    // Read from spawn info
+    let mut bundle = spawn_info.bundle.clone();
+    let mut rng = thread_rng();
+    let spawn_pos = spawn_info.locations[rng.gen_range(0..spawn_info.locations.len())];
+    bundle.actor_bundle.scene_bundle.transform.translation = spawn_pos.extend(0.0);
+    commands.spawn(bundle); // <--The bundle is behind a mutable reference
+
 }
-*/

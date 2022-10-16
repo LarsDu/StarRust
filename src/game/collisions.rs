@@ -1,6 +1,6 @@
 use super::super::AppState;
 use super::bullet::BulletFiredEvent;
-use super::components::{Bullet, Collider, Health, Player, Actor, Wall};
+use super::components::{Bullet, Collider, Health, Player, Actor, Wall, Enemy};
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},

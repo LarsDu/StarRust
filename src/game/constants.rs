@@ -24,12 +24,12 @@ pub const WALL_COLOR: Color = Color::Rgba {
     alpha: 0.03,
 };
 
-pub const SPAWN_OFFSET: f32 = 5.0;
-pub const RIGHT_SPAWN_X: f32 = RIGHT_WALL+SPAWN_OFFSET;
+pub const SPAWN_OFFSET: f32 = 8.0;
+pub const RIGHT_SPAWN_X: f32 = RIGHT_WALL-SPAWN_OFFSET;
 pub const SPAWN_LOCATIONS: [Vec2; 4] = [
+    Vec2::new(RIGHT_SPAWN_X, 0.0),
     Vec2::new(RIGHT_SPAWN_X, 10.0),
     Vec2::new(RIGHT_SPAWN_X, -5.0),
-    Vec2::new(RIGHT_SPAWN_X, 0.0),
     Vec2::new(RIGHT_SPAWN_X, 5.0)
 ];
 
