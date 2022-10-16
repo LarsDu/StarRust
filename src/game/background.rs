@@ -14,7 +14,7 @@ impl Plugin for BackgroundPlugin {
 
 pub fn setup_lights(mut commands: Commands) {
     // Point light
-    commands.spawn_bundle(PointLightBundle {
+    commands.spawn(PointLightBundle {
         point_light: PointLight {
             intensity: 400000.0,
             radius: 15000.0,
@@ -26,7 +26,7 @@ pub fn setup_lights(mut commands: Commands) {
     });
 
     // Directional Light
-    commands.spawn_bundle(DirectionalLightBundle {
+    commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
             illuminance: 16000.0,
             color: Color::WHITE,

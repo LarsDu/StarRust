@@ -41,12 +41,7 @@ impl Plugin for SpawnerPlugin {
 }
 
 fn setup_level(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(AiActorSpawner {
-        index: -1,
-        ttl_timer: Timer::from_seconds(1.0, false),
-        frequency_timer: Timer::from_seconds(1.0, true),
-        spawn_infos: SpawnSequence::level0(&asset_server),
-    });
+    commands.spawn(AiActorSpawner::new(SpawnSequence::level0(&asset_server)));
 }
 
 fn periodic_spawn(mut commands: Commands, time: Res<Time>, asset_server: Res<AssetServer>, mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>) {
@@ -83,7 +78,7 @@ fn periodic_spawn(mut commands: Commands, time: Res<Time>, asset_server: Res<Ass
 }
 
 
-fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &SpawnInfo<AiActorBundle>){
+fn spawn_from_spawn_info(mut commands: &mut Commands, spawn_info: &SpawnInfo<AiActorBundle>){
     // Read from spawn info
     let mut bundle = spawn_info.bundle.clone();
     let mut rng = thread_rng();

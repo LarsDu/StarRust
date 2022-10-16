@@ -38,9 +38,10 @@ pub fn check_ship_collision(
             &mut ship_b_query
         {
             // Skip self-collisions
-            if ship_a_entity.id() == ship_b_entity.id() {
+            if ship_a_entity.id() == ship_b_entity.id() || ship_a_collider.hitmask == ship_b_collider.hitmask{
                 continue;
             }
+
             let collision = collide(
                 ship_a_transform.translation,
                 ship_a_collider.rect,

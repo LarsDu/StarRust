@@ -11,7 +11,7 @@ impl SpawnSequence {
     pub fn level0(asset_server: &Res<AssetServer>) -> Vec<SpawnInfo<AiActorBundle>>{
         return vec![
             SpawnInfo::<AiActorBundle>{
-                locations: vec![SPAWN_LOCATIONS[0]],
+                locations: vec![SPAWN_LOCATIONS[0], SPAWN_LOCATIONS[1]],
                 ttl: 10.0,
                 frequency: 2.0,
                 bundle: DefaultEnemyShip::get_bundle(asset_server),
@@ -21,7 +21,7 @@ impl SpawnSequence {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 10.0,
                 frequency: 1.5,
-                bundle: DefaultEnemyShip::get_bundle(asset_server),
+                bundle: RaptorSineMovementVariant::get_bundle(asset_server),
             },
         ];
     }

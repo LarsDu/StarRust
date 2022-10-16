@@ -1,6 +1,6 @@
 use bevy::{
     prelude::*,
-    time::*,
+    time::Timer,
 };
 
 use super::spawner::{SpawnInfo, levels::*};
@@ -47,8 +47,19 @@ pub struct Wall;
 pub struct AiActorSpawner{
     pub index: i32,
     pub spawn_infos: Vec<SpawnInfo<AiActorBundle>>,
-    pub ttl_timer: Timer,
-    pub frequency_timer: Timer
+    pub ttl_timer: Timer, // init from spawn_infos
+    pub frequency_timer: Timer //init from spawn_infos
+}
+
+impl AiActorSpawner{
+    pub fn new(spawn_infos: Vec<SpawnInfo<AiActorBundle>>) -> Self{
+        return AiActorSpawner{
+            index: 0,
+            ttl_timer: Timer::from_seconds(spawn_infos[0].ttl, false),
+            frequency_timer: Timer::from_seconds(spawn_infos[0].frequency, true),
+            spawn_infos: spawn_infos
+        }
+    }
 }
 
 #[derive(Component, Clone)]
@@ -62,4 +73,5 @@ pub struct TimedDespawn{
     pub timer: Timer,
 }
 
-
+#[derive(Component)]
+pub struct PlayerScore;

@@ -41,7 +41,7 @@ impl BundledAsset for DefaultEnemyShip {
             },
             actor_bundle: ActorBundle {
                 actor: Actor {
-                    speed: Vec2::new(0.05, 0.05),
+                    speed: Vec2::new(0.1, 0.1),
                     gun_offset: Vec2::new(1.0, 0.0),
                 },
                 scene_bundle: StarRustSceneBundle {
@@ -55,7 +55,7 @@ impl BundledAsset for DefaultEnemyShip {
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
                 },
-                health: Health { hp: 2 },
+                health: Health { hp: 1 },
             },
             auto_fire: AutoFire {
                 cooldown_timer: Timer::new(Duration::from_secs_f32(1.0), true),
@@ -63,4 +63,16 @@ impl BundledAsset for DefaultEnemyShip {
         };
 
     }
+}
+
+
+pub struct RaptorSineMovementVariant;
+
+impl BundledAsset for RaptorSineMovementVariant {
+    fn get_bundle(asset_server: &Res<AssetServer>) -> AiActorBundle {
+        let mut variant = DefaultEnemyShip::get_bundle(asset_server).clone();
+        variant.ai.mode = AiMode::SINUSOID1;
+        return variant;
+    }
+
 }

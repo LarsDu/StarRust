@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+pub const SCOREBOARD_FONT_SIZE: f32 = 40.0;
+pub const SCOREBOARD_TEXT_PADDING: f32 = 5.0;
 
 // TIME
 pub const TIME_STEP: f32 = 1.0/60.0;

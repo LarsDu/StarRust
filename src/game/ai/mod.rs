@@ -38,9 +38,8 @@ fn update_ai(
             AiMode::NO_MOVEMENT => {},
             AiMode::FORWARD_BACK1 => {},
             AiMode::CHARGE_FORWARD1 => charge_forward(transform,actor.speed.length()),
-            AiMode::SINUSOID1 => {},
+            AiMode::SINUSOID1 => sine_charge(&time, transform, actor.speed.length(), 0.05, 1.0),
             _ => {}
-
         }
     }
 }
@@ -49,8 +48,18 @@ fn charge_forward(
     mut t: Mut<Transform>,
     speed: f32
 ){
-   
-    t.translation = t.translation + speed * t.forward();
+    t.translation = t.translation + speed * t.forward();  
+}
+
+fn sine_charge(
+    time: &Res<Time>,
+    mut t: Mut<Transform>,
+    forward_speed: f32,
+    amplitude: f32, frequency: f32){
     
+    let forward = t.translation + forward_speed * t.forward();  
+    let up_down = t.up() * amplitude * (time.seconds_since_startup() as f32 * frequency).sin();
+    t.translation = forward + up_down;
+
 }
 

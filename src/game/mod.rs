@@ -4,6 +4,9 @@ use bevy::prelude::*;
 mod ai;
 pub use ai::*;
 
+mod audio;
+pub use audio::*;
+
 mod constants;
 pub use constants::*;
 
@@ -25,6 +28,13 @@ pub use health::*;
 mod components;
 pub use components::Player;
 
+mod events;
+
+mod resources;
+
+mod ui;
+use ui::UiPlugin;
+
 mod despawner;
 use despawner::*;
 
@@ -43,14 +53,16 @@ pub use spawner::*;
 mod weapon;
 pub use weapon::*;
 
-use self::{components::AutoFire, autofire::AutoFirePlugin};
+use self::{autofire::AutoFirePlugin, components::AutoFire};
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(BackgroundPlugin)
-        .add_plugin(AiPlugin)
+            .add_plugin(UiPlugin)
+            .add_plugin(AiPlugin)
+            .add_plugin(AudioPlugin)
             .add_plugin(WallPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(BulletPlugin)
