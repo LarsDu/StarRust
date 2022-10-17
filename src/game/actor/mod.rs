@@ -1,4 +1,5 @@
 pub mod ship;
+pub mod bullet;
 
 use super::components::*;
 use super::ai::*;
@@ -14,14 +15,13 @@ pub struct StarRustSceneBundle{
     pub computed_visibility: ComputedVisibility,
 }
 
-
-
 #[derive(Bundle, Clone)]
 pub struct ActorBundle {
     pub actor: Actor,
     pub scene_bundle: StarRustSceneBundle,
     pub collider: Collider,
     pub health: Health,
+    pub weapon: Weapon,
 }
 
 
@@ -30,4 +30,5 @@ pub struct AiActorBundle {
     pub actor_bundle: ActorBundle,
     pub ai: Ai,
     pub auto_fire: AutoFire,
+    pub death_points_awarded: DeathPointsAwarded
 }

@@ -13,24 +13,28 @@ pub struct Player;
 #[derive(Component)]
 pub struct Enemy;
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Default)]
 pub struct Actor {
     pub speed: Vec2,
-    pub gun_offset: Vec2,
 }
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Default)]
 pub struct Health {
-    pub hp: u8,
+    pub hp: i32,
 }
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Default)]
 pub struct Bullet;
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Default)]
 pub struct Collider {
     pub rect: Vec2,
-    pub damage: u8,
-    pub hitmask: u8, // Not implemented yet
+    pub damage: i32,
+    pub hitmask: u8,
+}
+
+#[derive(Component, Clone)]
+pub struct Weapon {
+    pub offset: Vec2
 }
 
 #[derive(Component, Clone)]
@@ -62,16 +66,22 @@ impl AiActorSpawner{
     }
 }
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Default)]
 pub struct Ai{
     pub mode: AiMode,
     pub timer: Timer
 }
 
-#[derive(Component)]
+#[derive(Component, Clone, Default)]
 pub struct TimedDespawn{
     pub timer: Timer,
 }
 
+// The following gets attached to the scor
 #[derive(Component)]
-pub struct PlayerScore;
+pub struct PlayerScoreBoard;
+
+#[derive(Component, Clone)]
+pub struct DeathPointsAwarded{
+    pub points: i32
+}

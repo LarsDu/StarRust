@@ -19,8 +19,8 @@ pub const BULLET_SPEED: f32 = 0.25;
 // Wall Constants
 pub const WALL_THICKNESS: f32 = 1.0;
 // x coordinates_WALL
-pub const LEFT_WALL: f32 = -30.;
-pub const RIGHT_WALL: f32 = 30.;
+pub const LEFT_WALL: f32 = -25.;
+pub const RIGHT_WALL: f32 = 25.;
 // y coordinates
 pub const BOTTOM_WALL: f32 = -18.;
 pub const TOP_WALL: f32 = 18.;

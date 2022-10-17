@@ -14,7 +14,6 @@ use super::constants::*;
 pub mod levels;
 use levels::*;
 
-
 pub struct SpawnInfo<B: Bundle> {
     pub locations: Vec<Vec2>,
     pub ttl: f32,

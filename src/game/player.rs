@@ -1,5 +1,5 @@
 use super::super::AppState;
-use super::bullet::BulletFiredEvent;
+use super::events::WeaponFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::*;
@@ -16,7 +16,7 @@ pub struct PlayerPlugin;
 // Plugin definition
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<BulletFiredEvent>()
+        app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn))
             .add_system_set(
@@ -107,15 +107,15 @@ pub fn reflect_from_wall(
 // Fire controller system
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
-    mut bullet_fired_event: EventWriter<BulletFiredEvent>,
-    query: Query<(&Transform, &Actor), With<Player>>,
+    mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
+    query: Query<(&Transform, &Actor, &Weapon), With<Player>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Space) {
-        for (transform, ship) in &query {
-            let event = BulletFiredEvent {
+        for (transform, ship, weapon) in &query {
+            let event = WeaponFiredEvent {
                 translation: Vec2::new(
-                    transform.translation.x + ship.gun_offset.x * transform.forward().x,
-                    transform.translation.y + ship.gun_offset.y * transform.forward().y,
+                    transform.translation.x + weapon.offset.x * transform.forward().x,
+                    transform.translation.y + weapon.offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
                 hitmask: ENEMY_HITMASK, //Hurt enemies only

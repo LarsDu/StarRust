@@ -16,9 +16,6 @@ pub use player::*;
 mod enemy;
 pub use enemy::*;
 
-mod bullet;
-pub use bullet::*;
-
 mod collisions;
 pub use collisions::*;
 
@@ -53,7 +50,6 @@ pub use spawner::*;
 mod weapon;
 pub use weapon::*;
 
-use self::{autofire::AutoFirePlugin, components::AutoFire};
 
 pub struct GamePlugin;
 
@@ -65,7 +61,7 @@ impl Plugin for GamePlugin {
             .add_plugin(AudioPlugin)
             .add_plugin(WallPlugin)
             .add_plugin(PlayerPlugin)
-            .add_plugin(BulletPlugin)
+            .add_plugin(WeaponPlugin)
             .add_plugin(CollisionPlugin)
             .add_plugin(WeaponPlugin)
             .add_plugin(SpawnerPlugin)

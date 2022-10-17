@@ -7,8 +7,9 @@ use bevy::{
 pub mod autofire;
 use autofire::AutoFirePlugin;
 
-#[derive(Copy,Clone)]
+#[derive(Copy,Clone, Default)]
 pub enum AiMode{
+    #[default]
     NO_MOVEMENT,
     FORWARD_BACK1,
     CHARGE_FORWARD1,
