@@ -1,12 +1,10 @@
 use bevy::{prelude::*, time::FixedTimestep};
 
-pub mod variants;
-use variants::*;
 use super::super::AppState;
-use super::components::{Bullet, Collider};
+use super::components::*;
 use super::actor::bullet::*;
 use super::events::WeaponFiredEvent;
-use super::constants::BULLET_SPEED;
+
 
 
 pub struct WeaponPlugin;
@@ -23,13 +21,6 @@ impl Plugin for WeaponPlugin {
     }
 }
 
-/*
-#[derive(Bundle)]
-pub struct BulletBundle{
-    pbr_bundle: PbrBundle,
-    collider: Collider,
-    bullet: Bullet,
-}*/
 
 pub fn on_bullet_fired(
     mut commands: Commands,
@@ -51,10 +42,3 @@ fn spawn_bullet(
     );
 }
 
-// BULLET SYSTEMS
-/*fn move_bullets(mut query: Query<&mut Transform, With<Bullet>>) {
-    for mut bullet_transform in &mut query {
-        bullet_transform.translation =
-            bullet_transform.translation + BULLET_SPEED * bullet_transform.forward();
-    }
-}*/

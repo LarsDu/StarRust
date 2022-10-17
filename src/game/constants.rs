@@ -13,8 +13,6 @@ pub const TIME_STEP: f32 = 1.0/60.0;
 pub const ALLY_HITMASK: u8 = 1;  // 0b0001
 pub const ENEMY_HITMASK: u8 = 2; // 0b0010
 
-// Bullet Constants
-pub const BULLET_SPEED: f32 = 0.25;
 
 // Wall Constants
 pub const WALL_THICKNESS: f32 = 1.0;

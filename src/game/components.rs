@@ -3,6 +3,7 @@ use bevy::{
     time::Timer,
 };
 
+use super::ENEMY_HITMASK;
 use super::spawner::{SpawnInfo, levels::*};
 use super::ai::AiMode;
 
@@ -25,11 +26,17 @@ pub struct Health {
 #[derive(Component, Clone, Default)]
 pub struct Bullet;
 
-#[derive(Component, Clone, Default)]
+#[derive(Component, Clone)]
 pub struct Collider {
     pub rect: Vec2,
     pub damage: i32,
     pub hitmask: u8,
+}
+
+impl Default for Collider{
+    fn default() -> Self {
+        return Collider { rect: Vec2::new(3.0, 3.0), damage: 0, hitmask: ENEMY_HITMASK }
+    }
 }
 
 #[derive(Component, Clone)]

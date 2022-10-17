@@ -24,6 +24,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             rect: Vec2::new(1.5, 1.0),
             damage: 1,
             hitmask: ALLY_HITMASK,
+            ..default()
         },
         health: Health { hp: 10 },
     };
@@ -53,6 +54,7 @@ impl BundledAsset for DefaultEnemyShip {
                     rect: Vec2::new(1.0, 1.0),
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
+                    ..default()
                 },
                 health: Health { hp: 1 },
                 weapon: Weapon {

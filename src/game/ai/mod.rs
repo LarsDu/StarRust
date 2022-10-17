@@ -1,5 +1,6 @@
 use super::super::AppState;
 use super::components::*;
+use super::collisions::check_collisions;
 use bevy::{
     prelude::*,
     time::{FixedTimestep}
@@ -24,7 +25,7 @@ impl Plugin for AiPlugin {
         .add_system_set(
             SystemSet::on_update(AppState::InGame)
                 .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
-                .with_system(update_ai)
+                .with_system(update_ai.before(check_collisions))
         );
     }
 }

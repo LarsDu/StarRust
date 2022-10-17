@@ -3,6 +3,7 @@ use super::events::WeaponFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::*;
+use super::collisions::check_collisions;
 use super::actor::ship::player_ship;
 use bevy::{
     prelude::*,
@@ -22,9 +23,9 @@ impl Plugin for PlayerPlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
-                    .with_system(player_controller)
+                    .with_system(player_controller.before(check_collisions))
                     .with_system(fire_controller)
-                    .with_system(reflect_from_wall),
+                    .with_system(reflect_from_wall.before(check_collisions).after(player_controller)),
             );
     }
 }
