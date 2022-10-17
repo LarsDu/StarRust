@@ -49,7 +49,7 @@ pub fn check_collisions(
         {
             // Skip self-collisions and identical hitmasks
             if a_entity.id() == b_entity.id()
-                || (a_collider.hitmask & b_collider.hitmask) == 0
+                || (a_collider.hitmask ^ b_collider.hitmask) == 0
             {
                 continue;
             }

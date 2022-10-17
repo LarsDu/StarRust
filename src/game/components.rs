@@ -5,6 +5,7 @@ use bevy::{
 
 use super::ENEMY_HITMASK;
 use super::spawner::{SpawnInfo, levels::*};
+use super::actor::bullet::*;
 use super::ai::AiMode;
 
 use super::actor::{ship::*,*};
@@ -41,6 +42,7 @@ impl Default for Collider{
 
 #[derive(Component, Clone)]
 pub struct Weapon {
+    pub bullet_type: BulletType,
     pub offset: Vec2
 }
 

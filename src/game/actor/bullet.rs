@@ -1,3 +1,4 @@
+use bevy::pbr::NotShadowCaster;
 use bevy::{prelude::*, utils::Duration};
 
 use super::super::components::*;
@@ -7,6 +8,14 @@ use super::super::ai::AiMode;
 use super::*;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
+#[derive(Clone, Default)]
+pub enum BulletType{
+    #[default]
+    Standard,
+    StandardEnemy
+}
+
+
 #[derive(Bundle, Clone, Default)]
 pub struct BulletActorBundle {
     pub actor: Actor,
@@ -14,9 +23,10 @@ pub struct BulletActorBundle {
     pub collider: Collider,
     pub ai: Ai,
     pub bullet: Bullet,
-    pub timed_despawn: TimedDespawn
-    //pub health: Health,
+    pub timed_despawn: TimedDespawn,
 }
+
+
 
 pub trait AiBulletBundle {
     fn get_bullet_bundle(asset_server: &Res<AssetServer>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle;
@@ -47,8 +57,7 @@ impl AiBulletBundle for StandardBullet {
             },
             bullet: Bullet {},
             timed_despawn: TimedDespawn { timer: Timer::from_seconds(2.0, false) }
-        
-        };
+        }
     }
 }
 

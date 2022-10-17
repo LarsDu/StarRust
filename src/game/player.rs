@@ -109,17 +109,18 @@ pub fn reflect_from_wall(
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
-    query: Query<(&Transform, &Actor, &Weapon), With<Player>>,
+    query: Query<(&Transform, &Weapon, &Collider), With<Player>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Space) {
-        for (transform, ship, weapon) in &query {
+        for (transform, weapon, collider) in &query {
             let event = WeaponFiredEvent {
+                bullet_type: weapon.bullet_type.clone(),
                 translation: Vec2::new(
                     transform.translation.x + weapon.offset.x * transform.forward().x,
                     transform.translation.y + weapon.offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
-                hitmask: ENEMY_HITMASK, //Hurt enemies only
+                hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
             };
             bullet_fired_event.send(event);
         }

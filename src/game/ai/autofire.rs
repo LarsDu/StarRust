@@ -1,7 +1,7 @@
 use super::super::super::AppState;
 use super::super::events::WeaponFiredEvent;
 use super::super::collisions::CollisionEvent;
-use super::super::components::{AutoFire, Actor, Weapon};
+use super::super::components::{AutoFire, Actor, Weapon, Collider};
 use super::super::constants::*;
 //use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*};
@@ -28,19 +28,20 @@ impl Plugin for AutoFirePlugin {
 pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
-    mut query: Query<(&Transform, &Actor, &Weapon, &mut AutoFire), With<AutoFire>>,
+    mut query: Query<(&Transform, &Collider, &Weapon, &mut AutoFire), With<AutoFire>>,
 ) {
-    for (transform, actor, weapon, mut auto_fire) in &mut query {
+    for (transform, collider, weapon, mut auto_fire) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
         auto_fire.cooldown_timer.tick(time.delta());
         if auto_fire.cooldown_timer.finished() {
             let event = WeaponFiredEvent {
+                bullet_type: weapon.bullet_type.clone(),
                 translation: Vec2::new(
                     transform.translation.x + weapon.offset.x * transform.forward().x,
                     transform.translation.y + weapon.offset.y * transform.forward().y,
                 ),
                 rotation: transform.rotation,
-                hitmask: ALLY_HITMASK, // Hurt player only
+                hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
         }

@@ -2,6 +2,7 @@ use bevy::{prelude::*, utils::Duration};
 
 use super::super::components::*;
 use super::super::spawner::*;
+use super::super::actor::bullet::BulletType;
 use super::*;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
@@ -18,6 +19,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             ..default()
         },
         weapon: Weapon {
+            bullet_type: BulletType::Standard,
             offset: Vec2::new(1.0, -0.32),
         },
         collider: Collider {
@@ -51,13 +53,14 @@ impl BundledAsset for DefaultEnemyShip {
                     ..default()
                 },
                 collider: Collider {
-                    rect: Vec2::new(1.0, 1.0),
+                    rect: Vec2::new(1.5, 1.0),
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
                     ..default()
                 },
                 health: Health { hp: 1 },
                 weapon: Weapon {
+                    bullet_type: BulletType::StandardEnemy,
                     offset: Vec2::new(1.0, 0.0),
                 },
             },
