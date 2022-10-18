@@ -36,7 +36,7 @@ const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
 const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
 const HOVERED_PRESSED_BUTTON: Color = Color::rgb(0.25, 0.65, 0.25);
 const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
-const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.25);
+const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.06);
 // Tag component used to mark wich setting is currently selected
 #[derive(Component)]
 struct SelectedOption;
