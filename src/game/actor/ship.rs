@@ -19,6 +19,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             ..default()
         },
         weapon: Weapon {
+            firing_audio_clip: crate::game::clip::AudioClipEnum::LaserShotSilenced,
             bullet_type: BulletType::Standard,
             offset: Vec2::new(1.0, -0.32),
         },
@@ -61,6 +62,7 @@ impl BundledAsset for DefaultEnemyShip {
                 },
                 health: Health { hp: 1 },
                 weapon: Weapon {
+                    firing_audio_clip: crate::game::clip::AudioClipEnum::LaserShotSilenced,
                     bullet_type: BulletType::StandardEnemy,
                     offset: Vec2::new(1.0, 0.0),
                 },

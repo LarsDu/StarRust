@@ -1,3 +1,5 @@
+use crate::game::events::AudioEvent;
+
 use super::super::super::AppState;
 use super::super::events::WeaponFiredEvent;
 use super::super::collisions::CollisionEvent;
@@ -28,6 +30,7 @@ impl Plugin for AutoFirePlugin {
 pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
+    mut audio_event: EventWriter<AudioEvent>,
     mut query: Query<(&Transform, &Collider, &Weapon, &mut AutoFire), With<AutoFire>>,
 ) {
     for (transform, collider, weapon, mut auto_fire) in &mut query {
@@ -44,6 +47,7 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
+            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip})
         }
     }
 }

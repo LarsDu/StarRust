@@ -1,4 +1,5 @@
 use super::super::AppState;
+use super::events::AudioEvent;
 use super::events::WeaponFiredEvent;
 use super::collisions::CollisionEvent;
 use super::components::*;
@@ -19,6 +20,7 @@ impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
+            .add_event::<AudioEvent>()
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn))
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
@@ -108,6 +110,7 @@ pub fn reflect_from_wall(
 // Fire controller system
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
+    audio_event: EventWriter<AudioEvent>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     query: Query<(&Transform, &Weapon, &Collider), With<Player>>,
 ) {
@@ -123,6 +126,8 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
             };
             bullet_fired_event.send(event);
+            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip})
+
         }
     }
 }

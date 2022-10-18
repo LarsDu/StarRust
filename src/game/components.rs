@@ -7,6 +7,7 @@ use super::ENEMY_HITMASK;
 use super::spawner::{SpawnInfo, levels::*};
 use super::actor::bullet::*;
 use super::ai::AiMode;
+use super::audio::clip::AudioClipEnum;
 
 use super::actor::{ship::*,*};
 #[derive(Component)]
@@ -43,7 +44,8 @@ impl Default for Collider{
 #[derive(Component, Clone)]
 pub struct Weapon {
     pub bullet_type: BulletType,
-    pub offset: Vec2
+    pub offset: Vec2,
+    pub firing_audio_clip: AudioClipEnum
 }
 
 #[derive(Component, Clone)]

@@ -9,9 +9,9 @@ edition = "2021"
 bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
 rand = "0.8.5"
 
-[dependencies.bevy_hanabi]
-git = "https://github.com/LarsDu/bevy_hanabi.git"
-branch = "larsdu/update_for_0.9"
+#[dependencies.bevy_hanabi]
+#git = "https://github.com/LarsDu/bevy_hanabi.git"
+#branch = "larsdu/update_for_0.9"
 
 [workspace]
 resolver ="2"
