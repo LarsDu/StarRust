@@ -4,6 +4,7 @@ use super::super::components::*;
 use super::super::spawner::*;
 use super::super::actor::bullet::BulletType;
 use super::*;
+use crate::game::clip::AudioClipEnum;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
 pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> ActorBundle {
@@ -29,7 +30,11 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             hitmask: ALLY_HITMASK,
             ..default()
         },
-        health: Health { hp: 10 },
+        health: Health { 
+            hp: 10,
+            death_sound: AudioClipEnum::LightExplosion,
+            damage_sound: AudioClipEnum::LightPow
+        },
         camera_shake_on_death: CameraShakeOnDeath { ..default() }
     };
 }
@@ -60,7 +65,11 @@ impl BundledAsset for DefaultEnemyShip {
                     hitmask: ENEMY_HITMASK,
                     ..default()
                 },
-                health: Health { hp: 1 },
+                health: Health { 
+                    hp: 1,
+                    death_sound: AudioClipEnum::LightExplosion,
+                    damage_sound: AudioClipEnum::LightPow
+                },
                 weapon: Weapon {
                     firing_audio_clip: crate::game::clip::AudioClipEnum::LaserShotSilenced,
                     bullet_type: BulletType::StandardEnemy,

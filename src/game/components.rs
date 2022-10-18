@@ -21,9 +21,11 @@ pub struct Actor {
     pub speed: Vec2,
 }
 
-#[derive(Component, Clone, Default)]
+#[derive(Component, Clone)]
 pub struct Health {
     pub hp: i32,
+    pub death_sound: AudioClipEnum,
+    pub damage_sound: AudioClipEnum,
 }
 #[derive(Component, Clone, Default)]
 pub struct Bullet;
@@ -99,12 +101,14 @@ pub struct DeathPointsAwarded{
 
 #[derive(Component)]
 pub struct CameraShaker{
-    pub timer: Timer
+    pub timer: Timer,
+    pub magnitude: f32
 }
 
 impl Default for CameraShaker{
     fn default() -> Self {
         return CameraShaker{
+            magnitude: 1.0,
             timer: Timer::from_seconds(0.25, false)
         }
     }
@@ -114,10 +118,10 @@ impl Default for CameraShaker{
 #[derive(Component, Clone)]
 pub struct CameraShakeOnDeath{
     pub magnitude: f32,
-    pub duration: f32
+    pub duration_secs: f32
 }
 impl Default for CameraShakeOnDeath{
     fn default() -> Self {
-        return CameraShakeOnDeath { magnitude: 1.0, duration: 0.2 }
+        return CameraShakeOnDeath { magnitude: 0.70, duration_secs: 0.2 }
     }
 }

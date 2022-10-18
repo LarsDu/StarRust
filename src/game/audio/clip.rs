@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 #[derive(Clone, Copy)]
 pub enum AudioClipEnum{
+    NoSound,
     LaserShotSilenced,
     LightPow,
     LightExplosion,
@@ -18,7 +19,8 @@ pub fn play_audio_clip(
     asset_server: &Res<AssetServer>,
     clips_enum: AudioClipEnum
 ){
-    let audio_clips = match clips_enum {
+    let audio_clip = match clips_enum {
+        AudioClipEnum::NoSound => asset_server.load(""),
         AudioClipEnum::LaserShotSilenced => asset_server.load("audio/clips/laser_shot_silenced.ogg"),
         AudioClipEnum::LightPow => asset_server.load("audio/clips/light_pow.ogg"),
         AudioClipEnum::LightExplosion => asset_server.load("audio/clips/light_explosion.ogg"),
@@ -30,6 +32,6 @@ pub fn play_audio_clip(
         AudioClipEnum::EventSlam => asset_server.load("audio/clips/event_slam.ogg"),
     };
 
-    audio.play(audio_clips);
+    audio.play(audio_clip);
     return;
 }

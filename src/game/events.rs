@@ -10,6 +10,7 @@ pub struct AudioEvent{
     pub clip: AudioClipEnum,
 }
 
+
 pub struct WeaponFiredEvent {
     pub bullet_type: BulletType,
     pub translation: Vec2,
@@ -23,5 +24,6 @@ pub struct ParticleEvent{
 
 
 pub struct CameraShakeEvent{
-
+    pub magnitude: f32,
+    pub duration_secs: f32
 }

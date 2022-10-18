@@ -71,6 +71,7 @@ impl Plugin for GamePlugin {
             .add_plugin(WeaponPlugin)
             .add_plugin(SpawnerPlugin)
             .add_plugin(DespawnerPlugin)
-            .add_plugin(EnemyPlugin);
+            .add_plugin(EnemyPlugin)
+            .add_plugin(VfxPlugin);
     }
 }
