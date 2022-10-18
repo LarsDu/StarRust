@@ -22,6 +22,7 @@ pub struct ActorBundle {
     pub collider: Collider,
     pub health: Health,
     pub weapon: Weapon,
+    pub camera_shake_on_death: CameraShakeOnDeath
 }
 
 
@@ -30,5 +31,5 @@ pub struct AiActorBundle {
     pub actor_bundle: ActorBundle,
     pub ai: Ai,
     pub auto_fire: AutoFire,
-    pub death_points_awarded: DeathPointsAwarded
+    pub death_points_awarded: DeathPointsAwarded,
 }

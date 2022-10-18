@@ -13,3 +13,12 @@ pub struct WeaponFiredEvent {
     pub rotation: Quat,
     pub hitmask: u8,
 }
+
+pub struct ParticleEvent{
+
+}
+
+
+pub struct CameraShakeEvent{
+
+}

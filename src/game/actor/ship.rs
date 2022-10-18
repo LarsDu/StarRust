@@ -29,6 +29,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             ..default()
         },
         health: Health { hp: 10 },
+        camera_shake_on_death: CameraShakeOnDeath { ..default() }
     };
 }
 
@@ -63,6 +64,7 @@ impl BundledAsset for DefaultEnemyShip {
                     bullet_type: BulletType::StandardEnemy,
                     offset: Vec2::new(1.0, 0.0),
                 },
+                camera_shake_on_death: CameraShakeOnDeath { ..default() }
             },
             auto_fire: AutoFire {
                 cooldown_timer: Timer::new(Duration::from_secs_f32(1.0), true),

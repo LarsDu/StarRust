@@ -1,10 +1,10 @@
 use bevy::prelude::*;
-
+//use bevy_hanabi::prelude::*;
 mod menus;
 use menus::MenuPlugin;
 
 mod game;
-use game::GamePlugin;
+use game::{GamePlugin, components::CameraShaker};
 
 mod constants;
 use constants::{SCREEN_HEIGHT,SCREEN_WIDTH};
@@ -26,7 +26,7 @@ fn main() {
             ..default()
         })
         .add_plugins(DefaultPlugins)
-        
+        //.add_plugin(HanabiPlugin)
         .add_state(AppState::Menu)
         .add_plugin(MenuPlugin)
         .add_plugin(GamePlugin)
@@ -48,5 +48,5 @@ pub fn setup_camera(mut commands: Commands) {
         transform: Transform::from_xyz(0.0, 0.0, 999.0).looking_at(Vec3::ZERO, Vec3::Y),
         /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
         ..default()
-    });
+    }).insert(CameraShaker{..default()});
 }

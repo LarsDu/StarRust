@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-
+//use bevy_hanabi::prelude::HanabiPlugin;
 // Game Plugin modules
 mod ai;
 pub use ai::*;
@@ -22,7 +22,7 @@ pub use collisions::*;
 mod health;
 pub use health::*;
 
-mod components;
+pub mod components;
 pub use components::Player;
 
 mod events;
@@ -50,12 +50,17 @@ pub use spawner::*;
 mod weapon;
 pub use weapon::*;
 
+mod vfx;
+pub use vfx::*;
+
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(BackgroundPlugin)
+        app
+            //.add_plugin(HanabiPlugin)
+            .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
             .add_plugin(AiPlugin)
             .add_plugin(AudioPlugin)

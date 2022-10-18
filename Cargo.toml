@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
-bevy_hanabi = "0.3"
+bevy_hanabi = "0.4"
 rand = "0.8.5"
 
 [workspace]

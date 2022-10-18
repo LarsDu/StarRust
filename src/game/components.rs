@@ -94,3 +94,28 @@ pub struct PlayerScoreBoard;
 pub struct DeathPointsAwarded{
     pub points: i32
 }
+
+#[derive(Component)]
+pub struct CameraShaker{
+    pub timer: Timer
+}
+
+impl Default for CameraShaker{
+    fn default() -> Self {
+        return CameraShaker{
+            timer: Timer::from_seconds(0.25, false)
+        }
+    }
+}
+
+
+#[derive(Component, Clone)]
+pub struct CameraShakeOnDeath{
+    pub magnitude: f32,
+    pub duration: f32
+}
+impl Default for CameraShakeOnDeath{
+    fn default() -> Self {
+        return CameraShakeOnDeath { magnitude: 1.0, duration: 0.2 }
+    }
+}
