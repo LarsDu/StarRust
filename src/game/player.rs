@@ -110,7 +110,7 @@ pub fn reflect_from_wall(
 // Fire controller system
 pub fn fire_controller(
     keyboard_input: Res<Input<KeyCode>>,
-    audio_event: EventWriter<AudioEvent>,
+    mut audio_event: EventWriter<AudioEvent>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     query: Query<(&Transform, &Weapon, &Collider), With<Player>>,
 ) {
