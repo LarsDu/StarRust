@@ -1,14 +1,17 @@
 [package]
 name = "star-rust"
 version = "0.1.0"
-edition = "2021"
+edition = "2022"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
-bevy_hanabi = "0.4"
 rand = "0.8.5"
+
+[dependencies.bevy_hanabi]
+git = "https://github.com/LarsDu/bevy_hanabi.git"
+branch = "larsdu/update_for_0.9"
 
 [workspace]
 resolver ="2"
