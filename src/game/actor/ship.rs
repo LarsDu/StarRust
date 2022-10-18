@@ -25,7 +25,7 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
             offset: Vec2::new(1.0, -0.32),
         },
         collider: Collider {
-            rect: Vec2::new(1.5, 1.0),
+            rect: Vec2::new(1.5, 1.5),
             damage: 1,
             hitmask: ALLY_HITMASK,
             ..default()
@@ -60,7 +60,7 @@ impl BundledAsset for DefaultEnemyShip {
                     ..default()
                 },
                 collider: Collider {
-                    rect: Vec2::new(1.5, 1.0),
+                    rect: Vec2::new(1.5, 1.5),
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
                     ..default()
