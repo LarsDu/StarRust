@@ -18,7 +18,7 @@ enum AppState {
 }
 fn main() {
     App::new()
-        .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
+        //.insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
         .insert_resource(WindowDescriptor {
             title: "StarRust".to_string(),
             width: SCREEN_WIDTH,
@@ -56,5 +56,7 @@ fn setup_camera(mut commands: Commands) {
         transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR-1.0).looking_at(Vec3::ZERO, Vec3::Y),
         /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
         ..default()
-    }).insert(CameraShaker{..default()});
+    })
+    //.insert(Camera2d{..default()})
+    .insert(CameraShaker{..default()});
 }
