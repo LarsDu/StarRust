@@ -8,11 +8,14 @@ edition = "2021"
 [dependencies]
 bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
 rand = "0.8.5"
-bevy_particle_systems = "0.5.0"
 
 #[dependencies.bevy_hanabi]
 #git = "https://github.com/LarsDu/bevy_hanabi.git"
 #branch = "larsdu/update_for_0.9"
+
+[dependencies.bevy_particle_systems]
+git = "https://github.com/LarsDu/bevy_particle_systems.git"
+branch = "larsdu/bevy-0.9-dev"
 
 [workspace]
 resolver ="2"

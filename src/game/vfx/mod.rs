@@ -1,6 +1,6 @@
 use std::f32::consts::PI;
 
-use crate::constants::CAMERA_DEPTH;
+use crate::constants::CAMERA_FAR;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
 use bevy_particle_systems::*;
 
@@ -60,7 +60,7 @@ fn shake_camera(
             let mut rng = thread_rng();
             let magnitude_at_time = shaker.magnitude * shake_time;
             let theta = magnitude_at_time * rng.gen_range(0.0..1.0) * 2.0 * PI;
-            t.translation = Vec3::new(theta.cos(), theta.sin(), CAMERA_DEPTH);
+            t.translation = Vec3::new(theta.cos(), theta.sin(), CAMERA_FAR);
         }
     }
 }
@@ -77,14 +77,14 @@ fn on_explosion_event(
     for explosion_data in &mut events.iter(){
         let particles = ParticleSystemBundle {
             particle_system: ParticleSystem {
-                max_particles: 10_000,
-                default_sprite: asset_server.load("assets/textures/particles/px.png"),
+                max_particles: 100,
+                default_sprite: asset_server.load("textures/particles/px.png"),
                 spawn_rate_per_second: 25.0.into(),
-                initial_velocity: JitteredValue::jittered(3.0, -1.0..1.0),
-                lifetime: JitteredValue::jittered(8.0, -2.0..2.0),
+                initial_velocity: JitteredValue::jittered(6.0, -1.0..1.0),
+                lifetime: JitteredValue::jittered(10.0, -0.03..0.03),
                 color: ColorOverTime::Gradient(Gradient::new(vec![
-                    ColorPoint::new(Color::WHITE, 0.0),
-                    ColorPoint::new(Color::rgba(0.0, 0.0, 1.0, 0.0), 1.0),
+                    ColorPoint::new(Color::YELLOW, 0.0),
+                    ColorPoint::new(Color::rgba(1.0, 0.3, 0.0, 0.0), 1.0),
                 ])),
                 looping: true,
                 system_duration_seconds: 10.0,
@@ -95,7 +95,8 @@ fn on_explosion_event(
 
         commands.spawn(
             particles
-        ).insert(Playing);
+        ).insert(Playing).insert(Transform::from_translation(explosion_data.position));
+
     }
 
 }
