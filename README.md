@@ -1,15 +1,20 @@
 # StarRust
 
-Sidescrolling space shooter made from Rust and Bevy
+Open-source sidescrolling space shooter made with Rust and Bevy
 
-A lot of inspiration from
-[belzile's platformer](https://github.com/belzile/platformer/tree/part-13)
-albeit updated for bevy 0.8. and
+Currently very unstable
 
-[bevy rogue-like prototype](https://github.com/StarArawn/bevy_roguelike_prototype/blob/main/src/game/gameplay/enemy/spawner.rs)
+Remaining work:
 
-Issues:
-
--   How to have generic spawn functions?
--   Add a spawnable trait to your bundle?
--   How to select and move waypoints?
+-   [ ] Resolve state management between main menu, game mode, and levels
+-   [ ] Add particle effects with bevy-hanabi (which needs an update for
+        0.9-dev)
+    -   [ ] Particle Explosions
+    -   [ ] Particle background
+-   [ ] Volume control with bevy kira audio
+-   [ ] More enemies
+    -   [ ] A level 1 boss
+    -   [ ] Asteroids
+-   [ ] Powerup system
+-   [ ] Weapon variants
+    -   [ ] Cone shot
