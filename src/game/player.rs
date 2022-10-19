@@ -1,24 +1,26 @@
 use super::super::AppState;
-use super::events::AudioEvent;
-use super::events::WeaponFiredEvent;
+use super::actor::ship::player_ship;
+use super::collisions::check_collisions;
 use super::collisions::CollisionEvent;
 use super::components::*;
-use super::constants::*;
-use super::collisions::check_collisions;
-use super::actor::ship::player_ship;
+use super::events::AudioEvent;
+use super::events::WeaponFiredEvent;
+use super::AudioClipAssets;
+use super::SceneAssets;
+use super::scene;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
     time::FixedTimestep,
 };
 
-
 pub struct PlayerPlugin;
 
 // Plugin definition
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<WeaponFiredEvent>()
+        app.add_startup_system(scene::setup_resources) //why does this need to be explicitly specified?
+            .add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<AudioEvent>()
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn))
@@ -27,7 +29,11 @@ impl Plugin for PlayerPlugin {
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
                     .with_system(player_controller.before(check_collisions))
                     .with_system(fire_controller)
-                    .with_system(reflect_from_wall.before(check_collisions).after(player_controller)),
+                    .with_system(
+                        reflect_from_wall
+                            .before(check_collisions)
+                            .after(player_controller),
+                    ),
             );
     }
 }
@@ -35,10 +41,10 @@ impl Plugin for PlayerPlugin {
 // SYSTEMS
 
 // Player spawner system
-pub fn spawn(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) {
     // note that we have to include the `Scene0` label
     commands
-        .spawn(player_ship(Vec2::new(-20.0, 0.0), asset_server))
+        .spawn(player_ship(Vec2::new(-20.0, 0.0), audio_clips, models))
         .insert(Player);
 }
 
@@ -66,7 +72,7 @@ fn player_controller(
         if keyboard_input.pressed(KeyCode::Right) {
             direction_x += ship.speed.x;
         }
-        
+
         // Calculate the new position based on player input
         ship_transform.translation.y = ship_transform.translation.y + direction_y;
         ship_transform.translation.x = ship_transform.translation.x + direction_x;
@@ -126,8 +132,9 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
             };
             bullet_fired_event.send(event);
-            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip})
-
+            audio_event.send(AudioEvent {
+                clip: weapon.firing_audio_clip.clone(),
+            })
         }
     }
 }

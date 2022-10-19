@@ -1,4 +1,8 @@
 use bevy::prelude::*;
+
+
+// Models
+
 pub const SCOREBOARD_FONT_SIZE: f32 = 20.0;
 pub const SCOREBOARD_TEXT_PADDING: f32 = 5.0;
 pub const UI_COLOR: Color = Color::Rgba {
@@ -37,6 +41,3 @@ pub const SPAWN_LOCATIONS: [Vec2; 4] = [
     Vec2::new(RIGHT_SPAWN_X, -5.0),
     Vec2::new(RIGHT_SPAWN_X, 5.0)
 ];
-
-
-                                        

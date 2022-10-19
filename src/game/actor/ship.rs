@@ -1,26 +1,26 @@
 use bevy::{prelude::*, utils::Duration};
-
 use super::super::components::*;
 use super::super::spawner::*;
 use super::super::actor::bullet::BulletType;
 use super::*;
-use crate::game::clip::AudioClipEnum;
+use crate::game::AudioClipAssets;
+use crate::game::SceneAssets;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
-pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> ActorBundle {
+pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) -> ActorBundle {
     return ActorBundle {
         actor: Actor {
             speed: Vec2::new(0.5, 0.5),
         },
         scene_bundle: StarRustSceneBundle {
-            scene: asset_server.load("models/basic_hero.glb#Scene0"),
+            scene: models.default_player.clone(),
             transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                 .with_scale(Vec3::splat(0.95))
                 .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
             ..default()
         },
         weapon: Weapon {
-            firing_audio_clip: crate::game::clip::AudioClipEnum::LaserShotSilenced,
+            firing_audio_clip: audio_clips.laser_shot_silenced.clone(),
             bullet_type: BulletType::Standard,
             offset: Vec2::new(1.0, -0.32),
         },
@@ -32,8 +32,8 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
         },
         health: Health { 
             hp: 10,
-            death_sound: AudioClipEnum::LightExplosion,
-            damage_sound: AudioClipEnum::LightPow
+            death_sound: audio_clips.light_explosion.clone(),
+            damage_sound: audio_clips.light_pow.clone()
         },
         camera_shake_on_death: CameraShakeOnDeath { ..default() }
     };
@@ -42,11 +42,11 @@ pub fn player_ship(spawn_position: Vec2, asset_server: Res<AssetServer>) -> Acto
 pub struct DefaultEnemyShip;
 
 impl BundledAsset for DefaultEnemyShip {
-    fn get_bundle(asset_server: &Res<AssetServer>) -> AiActorBundle {
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let spawn_position = SPAWN_LOCATIONS[0];
         return AiActorBundle {
             ai: Ai {
-                mode: AiMode::CHARGE_FORWARD1,
+                mode: AiMode::ChargeForward1,
                 timer: Timer::default(),
             },
             actor_bundle: ActorBundle {
@@ -54,7 +54,7 @@ impl BundledAsset for DefaultEnemyShip {
                     speed: Vec2::new(0.1, 0.1),
                 },
                 scene_bundle: StarRustSceneBundle {
-                    scene: asset_server.load("models/basic_enemy.glb#Scene0"),
+                    scene: models.default_enemy.clone(),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
                     ..default()
@@ -67,11 +67,11 @@ impl BundledAsset for DefaultEnemyShip {
                 },
                 health: Health { 
                     hp: 1,
-                    death_sound: AudioClipEnum::LightExplosion,
-                    damage_sound: AudioClipEnum::LightPow
+                    death_sound: audio_clips.laser_shot_silenced.clone(),
+                    damage_sound: audio_clips.no_sound.clone()
                 },
                 weapon: Weapon {
-                    firing_audio_clip: crate::game::clip::AudioClipEnum::LaserShotSilenced,
+                    firing_audio_clip: audio_clips.laser_shot_silenced.clone(),
                     bullet_type: BulletType::StandardEnemy,
                     offset: Vec2::new(1.0, 0.0),
                 },
@@ -88,9 +88,9 @@ impl BundledAsset for DefaultEnemyShip {
 pub struct RaptorSineMovementVariant;
 
 impl BundledAsset for RaptorSineMovementVariant {
-    fn get_bundle(asset_server: &Res<AssetServer>) -> AiActorBundle {
-        let mut variant = DefaultEnemyShip::get_bundle(asset_server).clone();
-        variant.ai.mode = AiMode::SINUSOID1;
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
+        let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
+        variant.ai.mode = AiMode::Sinusoid1;
         return variant;
     }
 }

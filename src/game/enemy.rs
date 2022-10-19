@@ -1,9 +1,6 @@
 use super::super::AppState;
-use super::components::*;
 use super::events::*;
 use super::constants::*;
-use super::resources::Scoreboard;
-//use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*};
 
 pub struct EnemyPlugin;

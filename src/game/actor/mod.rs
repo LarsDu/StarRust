@@ -3,7 +3,6 @@ pub mod bullet;
 
 use super::components::*;
 use super::ai::*;
-use super::ai::autofire::*;
 use bevy::prelude::*;
 
 #[derive(Bundle, Clone, Default)]

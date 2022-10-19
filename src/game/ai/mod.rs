@@ -11,10 +11,10 @@ use autofire::AutoFirePlugin;
 #[derive(Copy,Clone, Default)]
 pub enum AiMode{
     #[default]
-    NO_MOVEMENT,
-    FORWARD_BACK1,
-    CHARGE_FORWARD1,
-    SINUSOID1,
+    NoMovement,
+    ForwardBack1,
+    ChargeForward1,
+    Sinusoid1,
 }
 
 pub struct AiPlugin;
@@ -37,11 +37,10 @@ fn update_ai(
     for (transform, actor, mut ai) in &mut query{
         ai.timer.tick(time.delta());
         match ai.mode{
-            AiMode::NO_MOVEMENT => {},
-            AiMode::FORWARD_BACK1 => {},
-            AiMode::CHARGE_FORWARD1 => charge_forward(transform,actor.speed.length()),
-            AiMode::SINUSOID1 => sine_charge(&time, transform, actor.speed.length(), 0.05, 1.0),
-            _ => {}
+            AiMode::NoMovement => {},
+            AiMode::ForwardBack1 => {},
+            AiMode::ChargeForward1 => charge_forward(transform,actor.speed.length()),
+            AiMode::Sinusoid1 => sine_charge(&time, transform, actor.speed.length(), 0.05, 1.0),
         }
     }
 }

@@ -1,13 +1,11 @@
 use super::super::constants::*;
 use super::super::AppState;
 use super::components::PlayerScoreBoard;
-use super::components::*;
 use super::constants::*;
 use super::events::{AudioEvent, ScoreEvent};
 use super::resources::Scoreboard;
 
-//use super::ship::yard::default_enemy_ship_bundle;
-use bevy::{prelude::*, time::*};
+use bevy::prelude::*;
 
 pub struct UiPlugin;
 
@@ -18,11 +16,7 @@ impl Plugin for UiPlugin {
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_scoreboard))
             .add_event::<ScoreEvent>()
             .add_event::<AudioEvent>()
-            .add_system_set(
-                SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                    .with_system(on_score_event),
-            );
+            .add_system(on_score_event);
     }
 }
 

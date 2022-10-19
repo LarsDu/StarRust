@@ -4,7 +4,7 @@ use super::events::ScoreEvent;
 use super::events::{AudioEvent, CameraShakeEvent, WeaponFiredEvent};
 use bevy::{
     prelude::*,
-    sprite::collide_aabb::{collide, Collision},
+    sprite::collide_aabb::collide,
     time::*,
 };
 use std::cmp::max;
@@ -32,7 +32,7 @@ pub fn check_collisions(
     mut collision_event: EventWriter<CollisionEvent>,
     mut camera_shake_event: EventWriter<CameraShakeEvent>,
     mut score_event: EventWriter<ScoreEvent>,
-    a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>), With<Actor>>,
+    a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>)>,
     mut b_query: Query<
         (
             Entity,
@@ -71,7 +71,7 @@ pub fn check_collisions(
                 // Play damage sound
                 if a_collider.damage > 0 {
                     audio_event.send(AudioEvent {
-                        clip: b_health.damage_sound,
+                        clip: b_health.damage_sound.clone(),
                     });
                 }
 
@@ -90,7 +90,7 @@ pub fn check_collisions(
 
                     // Play death sound
                     audio_event.send(AudioEvent {
-                        clip: b_health.death_sound,
+                        clip: b_health.death_sound.clone(),
                     });
                     commands.entity(b_entity).despawn_recursive();
                 }

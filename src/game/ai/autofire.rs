@@ -3,9 +3,8 @@ use crate::game::events::AudioEvent;
 use super::super::super::AppState;
 use super::super::events::WeaponFiredEvent;
 use super::super::collisions::CollisionEvent;
-use super::super::components::{AutoFire, Actor, Weapon, Collider};
+use super::super::components::{AutoFire, Weapon, Collider};
 use super::super::constants::*;
-//use super::ship::yard::default_enemy_ship_bundle;
 use bevy::{prelude::*, time::*};
 
 pub struct AutoFirePlugin;
@@ -31,7 +30,7 @@ pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     mut audio_event: EventWriter<AudioEvent>,
-    mut query: Query<(&Transform, &Collider, &Weapon, &mut AutoFire), With<AutoFire>>,
+    mut query: Query<(&Transform, &Collider, &Weapon, &mut AutoFire)>,
 ) {
     for (transform, collider, weapon, mut auto_fire) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
@@ -47,7 +46,7 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
-            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip})
+            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip.clone()})
         }
     }
 }
