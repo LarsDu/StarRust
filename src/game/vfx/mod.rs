@@ -87,6 +87,7 @@ fn on_explosion_event(
                     ColorPoint::new(Color::rgba(1.0, 0.3, 0.0, 0.0), 1.0),
                 ])),
                 looping: true,
+                scale: ValueOverTime::from(5.0),
                 system_duration_seconds: 10.0,
                 ..ParticleSystem::default()
             },

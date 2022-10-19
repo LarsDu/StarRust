@@ -23,7 +23,7 @@ pub struct BulletActorBundle {
     pub collider: Collider,
     pub ai: Ai,
     pub bullet: Bullet,
-    pub timed_despawn: TimedDespawn,
+    pub timed_despawn: TimedOobDespawn,
 }
 
 
@@ -56,7 +56,7 @@ impl AiBulletBundle for StandardBullet {
                 timer: Timer::default(),
             },
             bullet: Bullet {},
-            timed_despawn: TimedDespawn { timer: Timer::from_seconds(2.0, false) }
+            timed_despawn: TimedOobDespawn { timer: Timer::from_seconds(2.0, false) }
         }
     }
 }
