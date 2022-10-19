@@ -17,8 +17,9 @@ pub struct WeaponFiredEvent {
     pub hitmask: u8,
 }
 
-pub struct ParticleEvent{
-
+pub struct ExplosionEvent{
+    pub position: Vec3,
+    pub lifetime: f32
 }
 
 

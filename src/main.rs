@@ -34,7 +34,7 @@ fn main() {
         .run();
 }
 
-pub fn setup_camera(mut commands: Commands) {
+fn setup_camera(mut commands: Commands) {
     /*commands.spawn(Camera2dBundle{
         ..default()
     }

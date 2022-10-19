@@ -1,5 +1,6 @@
 use bevy::{prelude::*, scene::ScenePlugin};
 use bevy_hanabi::prelude::HanabiPlugin;
+
 // Game Plugin modules
 mod ai;
 pub use ai::*;
@@ -60,8 +61,7 @@ pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_plugin(HanabiPlugin)
+        app.add_plugin(HanabiPlugin)
             .add_plugin(ScenePlugin)
             .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
@@ -78,3 +78,6 @@ impl Plugin for GamePlugin {
             .add_plugin(VfxPlugin);
     }
 }
+
+
+

@@ -1,7 +1,7 @@
 use super::super::AppState;
 use super::components::*;
 use super::events::ScoreEvent;
-use super::events::{AudioEvent, CameraShakeEvent, WeaponFiredEvent};
+use super::events::{AudioEvent, CameraShakeEvent, ExplosionEvent, WeaponFiredEvent};
 use bevy::{
     prelude::*,
     sprite::collide_aabb::collide,
@@ -31,6 +31,7 @@ pub fn check_collisions(
     mut audio_event: EventWriter<AudioEvent>,
     mut collision_event: EventWriter<CollisionEvent>,
     mut camera_shake_event: EventWriter<CameraShakeEvent>,
+    mut explosion_event: EventWriter<ExplosionEvent>,
     mut score_event: EventWriter<ScoreEvent>,
     a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>)>,
     mut b_query: Query<
@@ -86,12 +87,19 @@ pub fn check_collisions(
                             magnitude: s.magnitude,
                             duration_secs: s.duration_secs,
                         });
+                        explosion_event.send(
+                            ExplosionEvent{
+                                position: b_transform.translation,
+                                lifetime: 0.25
+                            }
+                        );
                     }
 
                     // Play death sound
                     audio_event.send(AudioEvent {
                         clip: b_health.death_sound.clone(),
                     });
+
                     commands.entity(b_entity).despawn_recursive();
                 }
 

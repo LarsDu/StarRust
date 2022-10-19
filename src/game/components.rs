@@ -89,6 +89,12 @@ pub struct TimedDespawn {
     pub timer: Timer,
 }
 
+// Timed despawn out of bounds
+#[derive(Component, Clone, Default)]
+pub struct TimedOobDespawn {
+    pub timer: Timer,
+}
+
 // The following gets attached to the scor
 #[derive(Component)]
 pub struct PlayerScoreBoard;

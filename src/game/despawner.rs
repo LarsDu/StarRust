@@ -10,6 +10,7 @@ impl Plugin for DespawnerPlugin {
         app.add_system_set(
             SystemSet::on_update(AppState::InGame)
                 .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
+                .with_system(timed_oob_despawn)
                 .with_system(timed_despawn)
         );
     }
@@ -18,7 +19,21 @@ impl Plugin for DespawnerPlugin {
 fn timed_despawn(
     time: Res<Time>,
     mut commands: Commands,
-    mut query: Query<(Entity, &Transform, &mut TimedDespawn), With<TimedDespawn>>
+    mut query: Query<(Entity, &mut TimedDespawn)>
+){
+    for (entity, mut despawner) in &mut query{
+        despawner.timer.tick(time.delta());
+        if despawner.timer.finished(){
+            commands.entity(entity).despawn_recursive();
+        }
+    }
+}
+
+
+fn timed_oob_despawn(
+    time: Res<Time>,
+    mut commands: Commands,
+    mut query: Query<(Entity, &Transform, &mut TimedOobDespawn)>
 ){
     for (entity, transform, mut despawner) in &mut query{
         
@@ -27,11 +42,10 @@ fn timed_despawn(
             despawner.timer.tick(time.delta());
             if despawner.timer.finished(){
                 //println!("Despawning {}", entity.id());
-                commands.entity(entity).despawn();
+                commands.entity(entity).despawn_recursive();
             }
         } else {
             despawner.timer.reset();
         }
     }
-
 }
