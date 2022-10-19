@@ -2,20 +2,23 @@ use std::f32::consts::PI;
 
 use crate::constants::CAMERA_DEPTH;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
-use bevy_hanabi::ParticleEffect;
-use bevy_hanabi::ParticleLifetimeModifier;
-use bevy_hanabi::PositionCircleModifier;
-use bevy_hanabi::SizeOverLifetimeModifier;
+use bevy_particle_systems::*;
+
+//use bevy_hanabi::ParticleEffect;
+//use bevy_hanabi::ParticleLifetimeModifier;
+//use bevy_hanabi::PositionCircleModifier;
+//use bevy_hanabi::SizeOverLifetimeModifier;
+/*use bevy_hanabi::{
+    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient, PositionSphereModifier,
+    ShapeDimension, Spawner,
+};*/
+
 use rand::{thread_rng, Rng};
 
 use super::super::AppState;
 use super::components::*;
 use super::constants::*;
 use super::events::*;
-use bevy_hanabi::{
-    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient, PositionSphereModifier,
-    ShapeDimension, Spawner,
-};
 
 pub struct VfxPlugin;
 
@@ -62,8 +65,43 @@ fn shake_camera(
     }
 }
 
-// TODO: Hanabi doesn't work with wasm
 fn on_explosion_event(
+    mut events: EventReader<ExplosionEvent>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>
+) {
+    if events.is_empty(){
+        return;
+    }
+
+    for explosion_data in &mut events.iter(){
+        let particles = ParticleSystemBundle {
+            particle_system: ParticleSystem {
+                max_particles: 10_000,
+                default_sprite: asset_server.load("assets/textures/particles/px.png"),
+                spawn_rate_per_second: 25.0.into(),
+                initial_velocity: JitteredValue::jittered(3.0, -1.0..1.0),
+                lifetime: JitteredValue::jittered(8.0, -2.0..2.0),
+                color: ColorOverTime::Gradient(Gradient::new(vec![
+                    ColorPoint::new(Color::WHITE, 0.0),
+                    ColorPoint::new(Color::rgba(0.0, 0.0, 1.0, 0.0), 1.0),
+                ])),
+                looping: true,
+                system_duration_seconds: 10.0,
+                ..ParticleSystem::default()
+            },
+            ..ParticleSystemBundle::default()
+        };
+
+        commands.spawn(
+            particles
+        ).insert(Playing);
+    }
+
+}
+
+// TODO: Hanabi doesn't work with wasm
+/*fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
     mut effects: ResMut<Assets<EffectAsset>>,
@@ -127,3 +165,4 @@ fn on_explosion_event(
             });
     }
 }
+*/

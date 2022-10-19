@@ -26,7 +26,6 @@ fn main() {
             ..default()
         })
         .add_plugins(DefaultPlugins)
-        //.add_plugin(HanabiPlugin)
         .add_state(AppState::Menu)
         .add_plugin(MenuPlugin)
         .add_plugin(GamePlugin)
