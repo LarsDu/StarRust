@@ -26,6 +26,10 @@ pub struct LevelPlugin;
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
+            //.add_state(AppState::InGame)
+            //.add_state(AppState::Menu)
+            //.add_state(MenuState::Main)
+            //.add_state(MenuState::LevelEnd)
             .add_event::<LevelEndEvent>()
             .add_system_set(
                 SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
@@ -102,8 +106,14 @@ fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &LevelSpawnInfo<Ai
     commands.spawn(bundle); // <--The bundle is behind a mutable reference
 }
 
-fn level_ender(mut event: EventReader<LevelEndEvent>, mut menu_state: ResMut<State<MenuState>>) {
+fn level_ender(
+    mut event: EventReader<LevelEndEvent>,
+    mut game_state: ResMut<State<AppState>>,
+    mut menu_state: ResMut<State<MenuState>>,
+) {
     if !event.is_empty() {
-        menu_state.set(MenuState::LevelEnd).unwrap();
+        // Use overwrite_set for events, since events may register over multiple frames
+        menu_state.overwrite_set(MenuState::LevelEnd).unwrap();
+        game_state.overwrite_set(AppState::Paused).unwrap();
     }
 }

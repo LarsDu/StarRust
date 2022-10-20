@@ -164,11 +164,12 @@ pub fn fire_controller(
 fn on_player_death(
     mut menu_state: ResMut<State<MenuState>>,
     mut death_events: EventReader<PlayerDeathEvent>,
+    mut game_state: ResMut<State<AppState>>,
     //query: Query<Entity, With<Player>>
 ){
     if !death_events.is_empty(){
-        // Possibly support multiple ships controlled by the player
-        //for entity in &query{}
-        menu_state.set(MenuState::PlayerDeath).unwrap();
+        // Currently panics
+        menu_state.overwrite_set(MenuState::PlayerDeath).unwrap();
+        game_state.overwrite_set(AppState::Paused).unwrap();
     }
 }

@@ -49,8 +49,8 @@ impl Plugin for MenuPlugin {
             )
             .add_system_set(
                 SystemSet::on_exit(MenuState::PlayerDeath)
-                    .with_system(despawn_screen::<OnPlayerDeathScreen>),
-            )
+                .with_system(despawn_screen::<OnPlayerDeathScreen>),
+           )
             .add_system_set(
                 SystemSet::on_update(AppState::Menu)
                     .with_system(menu_action)

@@ -15,6 +15,7 @@ use constants::{SCREEN_HEIGHT,SCREEN_WIDTH};
 enum AppState {
     InGame,
     Menu,
+    Paused,
 }
 fn main() {
     App::new()
