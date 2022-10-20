@@ -1,6 +1,6 @@
-use bevy::{prelude::*, utils::Duration};
+use bevy::prelude::*;
 use super::super::components::*;
-use super::super::spawner::*;
+use super::super::levels::*;
 use super::super::actor::bullet::BulletType;
 use super::*;
 use crate::game::AudioClipAssets;
@@ -19,11 +19,12 @@ pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, mode
                 .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
             ..default()
         },
-        weapon: Weapon {
-            firing_audio_clip: audio_clips.laser_shot_silenced.clone(),
-            bullet_type: BulletType::Standard,
-            offset: Vec2::new(1.0, -0.32),
-        },
+        weapon: Weapon::new(
+            BulletType::Standard,    
+                Vec2::new(1.0, -0.32),
+                audio_clips.laser_shot_silenced.clone(),
+                0.15
+        ),
         collider: Collider {
             rect: Vec2::new(1.5, 1.5),
             damage: 1,
@@ -70,16 +71,15 @@ impl BundledAsset for DefaultEnemyShip {
                     death_sound: audio_clips.laser_shot_silenced.clone(),
                     damage_sound: audio_clips.no_sound.clone()
                 },
-                weapon: Weapon {
-                    firing_audio_clip: audio_clips.laser_shot_silenced.clone(),
-                    bullet_type: BulletType::StandardEnemy,
-                    offset: Vec2::new(1.0, 0.0),
-                },
+                weapon: Weapon::new(
+                    BulletType::StandardEnemy,
+                    Vec2::new(1.0, 0.0),
+                    audio_clips.laser_shot_silenced.clone(),
+                    0.5
+                ),
                 camera_shake_on_death: CameraShakeOnDeath { ..default() }
             },
-            auto_fire: AutoFire {
-                cooldown_timer: Timer::new(Duration::from_secs_f32(1.0), true),
-            },
+            auto_fire: AutoFire {},
             death_points_awarded: DeathPointsAwarded { points: 20 },
         };
     }

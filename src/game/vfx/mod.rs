@@ -13,7 +13,7 @@ use super::components::*;
 use super::constants::*;
 use super::events::*;
 use bevy_hanabi::{
-    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient, PositionSphereModifier,
+    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient,
     ShapeDimension, Spawner,
 };
 

@@ -2,7 +2,7 @@ use bevy::{prelude::*, time::Timer};
 
 use super::actor::bullet::*;
 use super::ai::AiMode;
-use super::spawner::SpawnInfo;
+use super::levels::LevelSpawnInfo;
 use super::ENEMY_HITMASK;
 
 use super::actor::*;
@@ -48,27 +48,42 @@ pub struct Weapon {
     pub bullet_type: BulletType,
     pub offset: Vec2,
     pub firing_audio_clip: Handle<AudioSource>,
-}
-
-#[derive(Component, Clone)]
-pub struct AutoFire {
-    /// Used for timed weapon shots
     pub cooldown_timer: Timer,
 }
 
+
+impl Weapon {
+    pub fn new(
+        bullet_type: BulletType,
+        offset: Vec2,
+        firing_audio_clip: Handle<AudioSource>,
+        cooldown: f32,
+    ) -> Self {
+        let cooldown_timer = Timer::from_seconds(cooldown, true);
+        return Self {
+            bullet_type: bullet_type,
+            offset: offset,
+            firing_audio_clip: firing_audio_clip,
+            cooldown_timer: cooldown_timer,
+        };
+    }
+}
+
+#[derive(Component, Clone)]
+pub struct AutoFire;
 #[derive(Component)]
 pub struct Wall;
 
 #[derive(Component)]
 pub struct AiActorSpawner {
     pub index: i32,
-    pub spawn_infos: Vec<SpawnInfo<AiActorBundle>>,
+    pub spawn_infos: Vec<LevelSpawnInfo<AiActorBundle>>,
     pub ttl_timer: Timer,       // init from spawn_infos
     pub frequency_timer: Timer, //init from spawn_infos
 }
 
 impl AiActorSpawner {
-    pub fn new(spawn_infos: Vec<SpawnInfo<AiActorBundle>>) -> Self {
+    pub fn new(spawn_infos: Vec<LevelSpawnInfo<AiActorBundle>>) -> Self {
         return AiActorSpawner {
             index: 0,
             ttl_timer: Timer::from_seconds(spawn_infos[0].ttl, false),

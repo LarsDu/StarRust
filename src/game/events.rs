@@ -1,6 +1,12 @@
 use bevy::prelude::*;
 use super::actor::bullet::BulletType;
 
+
+pub struct LevelEndEvent;
+
+#[derive(Default)]
+pub struct PlayerDeathEvent;
+
 pub struct ScoreEvent{
     pub increment: i32,
 }

@@ -38,7 +38,7 @@ impl AiBulletBundle for StandardBullet {
     fn get_bullet_bundle(models: &Res<SceneAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
         return BulletActorBundle {
             actor: Actor {
-                speed: Vec2::new(0.25, 0.25),
+                speed: Vec2::new(0.55, 0.55),
             },
             scene_bundle: StarRustSceneBundle {
                 scene: models.default_bullet.clone(),

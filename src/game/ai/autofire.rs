@@ -30,12 +30,12 @@ pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     mut audio_event: EventWriter<AudioEvent>,
-    mut query: Query<(&Transform, &Collider, &Weapon, &mut AutoFire)>,
+    mut query: Query<(&Transform, &Collider, &mut Weapon,), With<AutoFire>>,
 ) {
-    for (transform, collider, weapon, mut auto_fire) in &mut query {
+    for (transform, collider, mut weapon) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
-        auto_fire.cooldown_timer.tick(time.delta());
-        if auto_fire.cooldown_timer.finished() {
+        weapon.cooldown_timer.tick(time.delta());
+        if weapon.cooldown_timer.finished() {
             let event = WeaponFiredEvent {
                 bullet_type: weapon.bullet_type.clone(),
                 translation: Vec2::new(

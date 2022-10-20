@@ -34,28 +34,27 @@ mod ui;
 use ui::UiPlugin;
 
 mod despawner;
-use despawner::*;
+use despawner::DespawnerPlugin;
 
 mod actor;
-pub use actor::*;
 
 mod background;
-pub use background::*;
+pub use background::BackgroundPlugin;
 
 mod walls;
-pub use walls::*;
+pub use walls::WallPlugin;
 
-mod spawner;
-pub use spawner::*;
+mod levels;
+pub use levels::LevelPlugin;
 
 mod weapon;
-pub use weapon::*;
+pub use weapon::WeaponPlugin;
 
 mod vfx;
-pub use vfx::*;
+pub use vfx::VfxPlugin;
 
 mod scene;
-pub use scene::*;
+pub use scene::SceneAssets;
 
 pub struct GamePlugin;
 
@@ -72,7 +71,7 @@ impl Plugin for GamePlugin {
             .add_plugin(WeaponPlugin)
             .add_plugin(CollisionPlugin)
             .add_plugin(WeaponPlugin)
-            .add_plugin(SpawnerPlugin)
+            .add_plugin(LevelPlugin)
             .add_plugin(DespawnerPlugin)
             .add_plugin(EnemyPlugin)
             .add_plugin(VfxPlugin);

@@ -3,20 +3,54 @@ use bevy::{app::AppExit, prelude::*};
 
 use super::AppState;
 
-pub struct MenuPlugin;
-#[derive(Component)]
-struct OnMainMenuScreen;
+const TEXT_COLOR: Color = Color::rgb(0.9, 0.9, 0.9);
+const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
+const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
+const HOVERED_PRESSED_BUTTON: Color = Color::rgb(0.25, 0.65, 0.25);
+const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
+const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.06);
+const LEVEL_END_BOX_COLOR: Color = Color::rgba(0.0, 0.0, 0.8, 1.0);
+const PLAYER_DEATH_BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 1.0);
 
+#[derive(Clone, Eq, PartialEq, Debug, Hash)]
+pub enum MenuState {
+    Main,
+    LevelEnd,
+    PlayerDeath,
+    Disabled,
+}
+
+#[derive(Component)]
+pub struct OnMainMenuScreen;
+
+#[derive(Component)]
+pub struct OnLevelEndScreen;
+
+#[derive(Component)]
+pub struct OnPlayerDeathScreen;
+pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
             //.add_startup_system(setup_camera) //FIXME: Despawn menu camera where appropriate
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
             .add_state(MenuState::Main)
+            .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
             .add_system_set(
                 SystemSet::on_exit(MenuState::Main).with_system(despawn_screen::<OnMainMenuScreen>),
             )
-            .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
+            .add_system_set(SystemSet::on_enter(MenuState::LevelEnd).with_system(level_end_setup))
+            .add_system_set(
+                SystemSet::on_exit(MenuState::LevelEnd)
+                    .with_system(despawn_screen::<OnLevelEndScreen>),
+            )
+            .add_system_set(
+                SystemSet::on_enter(MenuState::PlayerDeath).with_system(player_death_setup),
+            )
+            .add_system_set(
+                SystemSet::on_exit(MenuState::PlayerDeath)
+                    .with_system(despawn_screen::<OnPlayerDeathScreen>),
+            )
             .add_system_set(
                 SystemSet::on_update(AppState::Menu)
                     .with_system(menu_action)
@@ -26,17 +60,7 @@ impl Plugin for MenuPlugin {
 }
 
 // State used for the current menu screen
-#[derive(Clone, Eq, PartialEq, Debug, Hash)]
-enum MenuState {
-    Main,
-    Disabled,
-}
-const TEXT_COLOR: Color = Color::rgb(0.9, 0.9, 0.9);
-const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
-const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
-const HOVERED_PRESSED_BUTTON: Color = Color::rgb(0.25, 0.65, 0.25);
-const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
-const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.06);
+
 // Tag component used to mark wich setting is currently selected
 #[derive(Component)]
 struct SelectedOption;
@@ -160,8 +184,7 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         image: UiImage(icon),
                         ..default()
                     });
-                    parent
-                        .spawn(TextBundle::from_section("Play", button_text_style.clone()));
+                    parent.spawn(TextBundle::from_section("Play", button_text_style.clone()));
                 });
             parent
                 .spawn(ButtonBundle {
@@ -177,6 +200,200 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("Quit", button_text_style));
+                });
+        });
+}
+
+fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let font = asset_server.load("fonts/Arame-Bold.ttf");
+    // Common style for all buttons on the screen
+    let button_style = Style {
+        size: Size::new(Val::Px(250.0), Val::Px(65.0)),
+        margin: UiRect::all(Val::Px(20.0)),
+        justify_content: JustifyContent::Center,
+        align_items: AlignItems::Center,
+        ..default()
+    };
+    let button_icon_style = Style {
+        size: Size::new(Val::Px(30.0), Val::Auto),
+        // This takes the icons out of the flexbox flow, to be positioned exactly
+        position_type: PositionType::Absolute,
+        // The icon will be close to the left border of the button
+        position: UiRect {
+            left: Val::Px(10.0),
+            right: Val::Auto,
+            top: Val::Auto,
+            bottom: Val::Auto,
+        },
+        ..default()
+    };
+    let button_text_style = TextStyle {
+        font: font.clone(),
+        font_size: 40.0,
+        color: TEXT_COLOR,
+    };
+
+    commands
+        .spawn(NodeBundle {
+            style: Style {
+                margin: UiRect::all(Val::Auto),
+                flex_direction: FlexDirection::ColumnReverse,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            background_color: LEVEL_END_BOX_COLOR.into(),
+            ..default()
+        })
+        .insert(OnLevelEndScreen)
+        .with_children(|parent| {
+            // Display the game name
+            parent.spawn(
+                TextBundle::from_section(
+                    "LEVEL END",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 80.0,
+                        color: TEXT_COLOR,
+                    },
+                )
+                .with_style(Style {
+                    margin: UiRect::all(Val::Px(50.0)),
+                    ..default()
+                }),
+            );
+
+            // Display
+            // - MAIN MENU
+            // - RESTART
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style.clone(),
+                    ..default()
+                })
+                .insert(MenuButtonAction::Play)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/right.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style.clone(),
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section(
+                        "MAIN MENU",
+                        button_text_style.clone(),
+                    ));
+                });
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style,
+                    ..default()
+                })
+                .insert(MenuButtonAction::Quit)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style,
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
+                });
+        });
+}
+
+fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let font = asset_server.load("fonts/Arame-Bold.ttf");
+    // Common style for all buttons on the screen
+    let button_style = Style {
+        size: Size::new(Val::Px(250.0), Val::Px(65.0)),
+        margin: UiRect::all(Val::Px(20.0)),
+        justify_content: JustifyContent::Center,
+        align_items: AlignItems::Center,
+        ..default()
+    };
+    let button_icon_style = Style {
+        size: Size::new(Val::Px(30.0), Val::Auto),
+        // This takes the icons out of the flexbox flow, to be positioned exactly
+        position_type: PositionType::Absolute,
+        // The icon will be close to the left border of the button
+        position: UiRect {
+            left: Val::Px(10.0),
+            right: Val::Auto,
+            top: Val::Auto,
+            bottom: Val::Auto,
+        },
+        ..default()
+    };
+    let button_text_style = TextStyle {
+        font: font.clone(),
+        font_size: 40.0,
+        color: TEXT_COLOR,
+    };
+
+    commands
+        .spawn(NodeBundle {
+            style: Style {
+                margin: UiRect::all(Val::Auto),
+                flex_direction: FlexDirection::ColumnReverse,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            background_color: PLAYER_DEATH_BOX_COLOR.into(),
+            ..default()
+        })
+        .insert(OnPlayerDeathScreen)
+        .with_children(|parent| {
+            // Display the game name
+            parent.spawn(
+                TextBundle::from_section(
+                    "GAME OVER",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 80.0,
+                        color: TEXT_COLOR,
+                    },
+                )
+                .with_style(Style {
+                    margin: UiRect::all(Val::Px(50.0)),
+                    ..default()
+                }),
+            );
+
+            // Display
+            // - MAIN MENU
+            // - RESTART
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style.clone(),
+                    ..default()
+                })
+                .insert(MenuButtonAction::Play)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/right.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style.clone(),
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section(
+                        "MAIN MENU",
+                        button_text_style.clone(),
+                    ));
+                });
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style,
+                    ..default()
+                })
+                .insert(MenuButtonAction::Quit)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style,
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
                 });
         });
 }

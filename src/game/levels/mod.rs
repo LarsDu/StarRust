@@ -1,16 +1,17 @@
+use bevy::log::Level;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
 
-use rand::{thread_rng, Rng};
-
-use super::{super::*, AudioClipAssets, SceneAssets, scene};
+use super::super::menus::MenuState;
 use super::actor::{ship::*, *};
 use super::components::*;
 use super::constants::*;
+use super::events::LevelEndEvent;
+use super::{super::*, scene, AudioClipAssets, SceneAssets};
+use rand::{thread_rng, Rng};
+pub mod lvl;
+use lvl::*;
 
-pub mod levels;
-use levels::*;
-
-pub struct SpawnInfo<B: Bundle> {
+pub struct LevelSpawnInfo<B: Bundle> {
     pub locations: Vec<Vec2>,
     pub ttl: f32,
     pub frequency: f32,
@@ -20,29 +21,40 @@ pub trait BundledAsset {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle;
 }
 
-pub struct SpawnerPlugin;
+pub struct LevelPlugin;
 
-impl Plugin for SpawnerPlugin {
+impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
-        .add_system_set(
-            SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
-        )
-        .add_system_set(
-            SystemSet::new()
-                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                .with_system(periodic_spawn),
-        );
+            .add_event::<LevelEndEvent>()
+            .add_system_set(
+                SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
+            )
+            .add_system_set(
+                SystemSet::new()
+                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    .with_system(level_periodic_spawn),
+            )
+            .add_system(level_ender);
     }
 }
 
-fn setup_level(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) {
-    commands.spawn(AiActorSpawner::new(SpawnSequence::level0(&audio_clips, &models)));
+fn setup_level(
+    mut commands: Commands,
+    audio_clips: Res<AudioClipAssets>,
+    models: Res<SceneAssets>,
+) {
+    commands.spawn(AiActorSpawner::new(SpawnSequence::level0(
+        &audio_clips,
+        &models,
+    )));
 }
 
-fn periodic_spawn(
+fn level_periodic_spawn(
     mut commands: Commands,
     time: Res<Time>,
+    //mut menu_state: ResMut<State<MenuState<>>>,
+    mut level_end_event: EventWriter<LevelEndEvent>,
     mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>,
 ) {
     // Run logic for each Spawner Component
@@ -68,6 +80,8 @@ fn periodic_spawn(
             } else {
                 //TODO: Level is over. Progress into success or failure states
                 //spawner.index = 0;
+                //menu_state.set(MenuState::LevelEnd).unwrap();
+                level_end_event.send(LevelEndEvent {});
             }
         }
 
@@ -79,11 +93,17 @@ fn periodic_spawn(
     }
 }
 
-fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &SpawnInfo<AiActorBundle>) {
+fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &LevelSpawnInfo<AiActorBundle>) {
     // Read from spawn info
     let mut bundle = spawn_info.bundle.clone();
     let mut rng = thread_rng();
     let spawn_pos = spawn_info.locations[rng.gen_range(0..spawn_info.locations.len())];
     bundle.actor_bundle.scene_bundle.transform.translation = spawn_pos.extend(0.0);
     commands.spawn(bundle); // <--The bundle is behind a mutable reference
+}
+
+fn level_ender(mut event: EventReader<LevelEndEvent>, mut menu_state: ResMut<State<MenuState>>) {
+    if !event.is_empty() {
+        menu_state.set(MenuState::LevelEnd).unwrap();
+    }
 }

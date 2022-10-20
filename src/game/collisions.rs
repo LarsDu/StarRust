@@ -1,12 +1,7 @@
 use super::super::AppState;
 use super::components::*;
-use super::events::ScoreEvent;
-use super::events::{AudioEvent, CameraShakeEvent, ExplosionEvent, WeaponFiredEvent};
-use bevy::{
-    prelude::*,
-    sprite::collide_aabb::collide,
-    time::*,
-};
+use super::events::*;
+use bevy::{prelude::*, sprite::collide_aabb::collide, time::*};
 use std::cmp::max;
 
 #[derive(Default)]
@@ -18,6 +13,7 @@ impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
+            .add_event::<PlayerDeathEvent>()
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
@@ -32,6 +28,7 @@ pub fn check_collisions(
     mut collision_event: EventWriter<CollisionEvent>,
     mut camera_shake_event: EventWriter<CameraShakeEvent>,
     mut explosion_event: EventWriter<ExplosionEvent>,
+    mut player_death_event: EventWriter<PlayerDeathEvent>,
     mut score_event: EventWriter<ScoreEvent>,
     a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>)>,
     mut b_query: Query<
@@ -42,14 +39,23 @@ pub fn check_collisions(
             &Collider,
             Option<&DeathPointsAwarded>,
             Option<&CameraShakeOnDeath>,
+            Option<&Player>,
         ),
         With<Actor>,
     >,
 ) {
     // TODO: Use quadtrees for more efficient collision resolution
+    // TODO: Find a way to break up this giant function
     for (a_entity, a_transform, a_collider, a_bullet) in &a_query {
-        for (b_entity, mut b_health, b_transform, b_collider, death_points, b_camera_shake) in
-            &mut b_query
+        for (
+            b_entity,
+            mut b_health,
+            b_transform,
+            b_collider,
+            b_death_points,
+            b_camera_shake,
+            b_player,
+        ) in &mut b_query
         {
             // Skip self-collisions and identical hitmasks
             if a_entity.id() == b_entity.id() || (a_collider.hitmask ^ b_collider.hitmask) == 0 {
@@ -77,7 +83,7 @@ pub fn check_collisions(
                 }
 
                 if b_health.hp == 0 {
-                    if let Some(d) = death_points {
+                    if let Some(d) = b_death_points {
                         score_event.send(ScoreEvent {
                             increment: d.points,
                         });
@@ -87,12 +93,13 @@ pub fn check_collisions(
                             magnitude: s.magnitude,
                             duration_secs: s.duration_secs,
                         });
-                        explosion_event.send(
-                            ExplosionEvent{
-                                position: b_transform.translation,
-                                lifetime: 0.25
-                            }
-                        );
+                        explosion_event.send(ExplosionEvent {
+                            position: b_transform.translation,
+                            lifetime: 0.25,
+                        });
+                    }
+                    if let Some(_) = b_player {
+                        player_death_event.send(PlayerDeathEvent::default())
                     }
 
                     // Play death sound

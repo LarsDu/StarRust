@@ -6,11 +6,11 @@ Currently very unstable
 
 Remaining work:
 
--   [ ] Resolve state management between main menu, game mode, and levels
--   [ ] Add particle effects with bevy-hanabi (which needs an update for
-        0.9-dev)
-    -   [ ] Particle Explosions
-    -   [ ] Particle background
+-   [x] Resolve basic state management between main menu, game mode, and levels
+-   [-] Add particle effects with bevy-hanabi (which needs an update for
+    0.9-dev)
+    -   [-] Particle Explosions
+    -   [-] Particle background
 -   [ ] Volume control with bevy kira audio
 -   [ ] More enemies
     -   [ ] A level 1 boss
