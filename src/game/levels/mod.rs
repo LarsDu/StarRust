@@ -68,7 +68,8 @@ fn level_periodic_spawn(
         spawner.frequency_timer.tick(time.delta());
         spawner.ttl_timer.tick(time.delta());
 
-        if spawner.ttl_timer.finished() {
+        // Fixme: Make this more functional
+        if spawner.ttl_timer.just_finished() {
             let new_index = i32::clamp(spawner.index + 1, 0, n_spawn_infos);
             if new_index < n_spawn_infos {
                 spawner.index = new_index;
@@ -85,6 +86,7 @@ fn level_periodic_spawn(
                 //TODO: Level is over. Progress into success or failure states
                 //spawner.index = 0;
                 //menu_state.set(MenuState::LevelEnd).unwrap();
+                println!("Level over!");
                 level_end_event.send(LevelEndEvent {});
             }
         }
@@ -107,13 +109,14 @@ fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &LevelSpawnInfo<Ai
 }
 
 fn level_ender(
-    mut event: EventReader<LevelEndEvent>,
+    mut events: EventReader<LevelEndEvent>,
     mut game_state: ResMut<State<AppState>>,
     mut menu_state: ResMut<State<MenuState>>,
 ) {
-    if !event.is_empty() {
+    if !events.is_empty() {
         // Use overwrite_set for events, since events may register over multiple frames
         menu_state.overwrite_set(MenuState::LevelEnd).unwrap();
-        game_state.overwrite_set(AppState::Paused).unwrap();
+        game_state.overwrite_set(AppState::Menu).unwrap();
+        events.clear();
     }
 }

@@ -70,6 +70,7 @@ struct SelectedOption;
 enum MenuButtonAction {
     Play,
     Quit,
+    Restart,
 }
 // This system handles changing all buttons color based on mouse interaction
 fn button_system(
@@ -101,6 +102,10 @@ fn menu_action(
         if *interaction == Interaction::Clicked {
             match menu_button_action {
                 MenuButtonAction::Quit => app_exit_events.send(AppExit),
+                MenuButtonAction::Restart => {
+                    menu_state.set(MenuState::Disabled).unwrap();
+                    game_state.set(AppState::InGame).unwrap();
+                }
                 MenuButtonAction::Play => {
                     menu_state.set(MenuState::Disabled).unwrap();
                     game_state.set(AppState::InGame).unwrap();
@@ -288,7 +293,7 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     style: button_style,
                     ..default()
                 })
-                .insert(MenuButtonAction::Quit)
+                .insert(MenuButtonAction::Restart)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/exitRight.png");
                     parent.spawn(ImageBundle {
@@ -385,7 +390,7 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     style: button_style,
                     ..default()
                 })
-                .insert(MenuButtonAction::Quit)
+                .insert(MenuButtonAction::Restart)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/exitRight.png");
                     parent.spawn(ImageBundle {

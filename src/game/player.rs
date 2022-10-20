@@ -157,14 +157,15 @@ pub fn fire_controller(
 }
 
 fn on_player_death(
-    mut menu_state: ResMut<State<MenuState>>,
     mut death_events: EventReader<PlayerDeathEvent>,
+    mut menu_state: ResMut<State<MenuState>>,
     mut game_state: ResMut<State<AppState>>,
     //query: Query<Entity, With<Player>>
 ) {
     if !death_events.is_empty() {
         // Currently panics
         menu_state.overwrite_set(MenuState::PlayerDeath).unwrap();
-        game_state.overwrite_set(AppState::Paused).unwrap();
+        game_state.overwrite_set(AppState::Menu).unwrap();
+        death_events.clear();
     }
 }

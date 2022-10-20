@@ -10,14 +10,14 @@ impl SpawnSequence {
         return vec![
             LevelSpawnInfo::<AiActorBundle>{
                 locations: vec![SPAWN_LOCATIONS[0], SPAWN_LOCATIONS[1]],
-                ttl: 10.0,
+                ttl: 15.0,
                 frequency: 2.0,
                 bundle: DefaultEnemyShip::get_bundle(audio_clips, models),
    
             },
             LevelSpawnInfo::<AiActorBundle>{
                 locations: Vec::from(SPAWN_LOCATIONS),
-                ttl: 35.0,
+                ttl: 30.0,
                 frequency: 1.0,
                 bundle: RaptorSineMovementVariant::get_bundle(audio_clips, models),
             },
