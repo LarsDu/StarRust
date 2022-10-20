@@ -70,6 +70,7 @@ struct SelectedOption;
 enum MenuButtonAction {
     Play,
     Quit,
+    MainMenu,
     Restart,
 }
 // This system handles changing all buttons color based on mouse interaction
@@ -102,13 +103,17 @@ fn menu_action(
         if *interaction == Interaction::Clicked {
             match menu_button_action {
                 MenuButtonAction::Quit => app_exit_events.send(AppExit),
+                MenuButtonAction::MainMenu => {
+                    menu_state.overwrite_set(MenuState::Main).unwrap();
+                    //game_state.overwrite_set(AppState::Menu).unwrap();
+                }
                 MenuButtonAction::Restart => {
-                    menu_state.set(MenuState::Disabled).unwrap();
-                    game_state.set(AppState::InGame).unwrap();
+                    menu_state.overwrite_set(MenuState::Main).unwrap();
+                    //game_state.overwrite_set(AppState::Menu).unwrap();
                 }
                 MenuButtonAction::Play => {
-                    menu_state.set(MenuState::Disabled).unwrap();
-                    game_state.set(AppState::InGame).unwrap();
+                    menu_state.overwrite_set(MenuState::Disabled).unwrap();
+                    game_state.overwrite_set(AppState::InGame).unwrap();
                 }
             }
         }
@@ -275,7 +280,7 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     style: button_style.clone(),
                     ..default()
                 })
-                .insert(MenuButtonAction::Play)
+                .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/right.png");
                     parent.spawn(ImageBundle {
@@ -372,7 +377,7 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     style: button_style.clone(),
                     ..default()
                 })
-                .insert(MenuButtonAction::Play)
+                .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/right.png");
                     parent.spawn(ImageBundle {
