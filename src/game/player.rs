@@ -5,11 +5,11 @@ use super::actor::ship::player_ship;
 use super::collisions::check_collisions;
 use super::collisions::CollisionEvent;
 use super::components::*;
-use super::events::{AudioEvent, PlayerDeathEvent};
 use super::events::WeaponFiredEvent;
+use super::events::{AudioEvent, PlayerDeathEvent};
+use super::scene;
 use super::AudioClipAssets;
 use super::SceneAssets;
-use super::scene;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -52,9 +52,7 @@ pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: 
 
     // Don't have the weapon start firing immediately
     player_bundle.weapon.cooldown_timer.pause();
-    commands
-        .spawn(player_bundle)
-        .insert(Player);
+    commands.spawn(player_bundle).insert(Player);
 }
 
 // Player controller system
@@ -130,35 +128,32 @@ pub fn fire_controller(
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     mut query: Query<(&Transform, &mut Weapon, &Collider), With<Player>>,
 ) {
-
-        for (transform, mut weapon, collider) in &mut query {
-            if keyboard_input.just_pressed(KeyCode::Space){ 
-                weapon.cooldown_timer.reset();
-                weapon.cooldown_timer.set_repeating(true);
-                weapon.cooldown_timer.unpause();
-            }
-            else if keyboard_input.just_released(KeyCode::Space){ 
-                weapon.cooldown_timer.pause()
-            }
-            weapon.cooldown_timer.tick(time.delta());
-            
-            if weapon.cooldown_timer.just_finished(){
-                let event = WeaponFiredEvent {
-                    bullet_type: weapon.bullet_type.clone(),
-                    translation: Vec2::new(
-                        transform.translation.x + weapon.offset.x * transform.forward().x,
-                        transform.translation.y + weapon.offset.y * transform.forward().y,
-                    ),
-                    rotation: transform.rotation,
-                    hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
-                };
-                bullet_fired_event.send(event);
-                audio_event.send(AudioEvent {
-                    clip: weapon.firing_audio_clip.clone(),
-                })
-            }
+    for (transform, mut weapon, collider) in &mut query {
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            weapon.cooldown_timer.reset();
+            weapon.cooldown_timer.set_repeating(true);
+            weapon.cooldown_timer.unpause();
+        } else if keyboard_input.just_released(KeyCode::Space) {
+            weapon.cooldown_timer.pause()
         }
-    
+        weapon.cooldown_timer.tick(time.delta());
+
+        if weapon.cooldown_timer.just_finished() {
+            let event = WeaponFiredEvent {
+                bullet_type: weapon.bullet_type.clone(),
+                translation: Vec2::new(
+                    transform.translation.x + weapon.offset.x * transform.forward().x,
+                    transform.translation.y + weapon.offset.y * transform.forward().y,
+                ),
+                rotation: transform.rotation,
+                hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
+            };
+            bullet_fired_event.send(event);
+            audio_event.send(AudioEvent {
+                clip: weapon.firing_audio_clip.clone(),
+            })
+        }
+    }
 }
 
 fn on_player_death(
@@ -166,8 +161,8 @@ fn on_player_death(
     mut death_events: EventReader<PlayerDeathEvent>,
     mut game_state: ResMut<State<AppState>>,
     //query: Query<Entity, With<Player>>
-){
-    if !death_events.is_empty(){
+) {
+    if !death_events.is_empty() {
         // Currently panics
         menu_state.overwrite_set(MenuState::PlayerDeath).unwrap();
         game_state.overwrite_set(AppState::Paused).unwrap();
