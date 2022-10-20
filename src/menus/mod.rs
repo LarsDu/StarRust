@@ -1,6 +1,8 @@
 // Adapted from https://github.com/bevyengine/bevy/blob/v0.8.1/examples/games/game_menu.rs
 use bevy::{app::AppExit, prelude::*};
 
+use crate::utils::despawn_all;
+
 use super::AppState;
 
 const TEXT_COLOR: Color = Color::rgb(0.9, 0.9, 0.9);
@@ -37,19 +39,19 @@ impl Plugin for MenuPlugin {
             .add_state(MenuState::Main)
             .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
             .add_system_set(
-                SystemSet::on_exit(MenuState::Main).with_system(despawn_screen::<OnMainMenuScreen>),
+                SystemSet::on_exit(MenuState::Main).with_system(despawn_all::<OnMainMenuScreen>),
             )
             .add_system_set(SystemSet::on_enter(MenuState::LevelEnd).with_system(level_end_setup))
             .add_system_set(
                 SystemSet::on_exit(MenuState::LevelEnd)
-                    .with_system(despawn_screen::<OnLevelEndScreen>),
+                    .with_system(despawn_all::<OnLevelEndScreen>)
             )
             .add_system_set(
                 SystemSet::on_enter(MenuState::PlayerDeath).with_system(player_death_setup),
             )
             .add_system_set(
                 SystemSet::on_exit(MenuState::PlayerDeath)
-                    .with_system(despawn_screen::<OnPlayerDeathScreen>),
+                    .with_system(despawn_all::<OnPlayerDeathScreen>),
             )
             .add_system_set(
                 SystemSet::on_update(AppState::Menu)
@@ -105,11 +107,11 @@ fn menu_action(
                 MenuButtonAction::Quit => app_exit_events.send(AppExit),
                 MenuButtonAction::MainMenu => {
                     menu_state.overwrite_set(MenuState::Main).unwrap();
-                    //game_state.overwrite_set(AppState::Menu).unwrap();
+                    //game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
                 }
                 MenuButtonAction::Restart => {
                     menu_state.overwrite_set(MenuState::Main).unwrap();
-                    //game_state.overwrite_set(AppState::Menu).unwrap();
+                    game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
                 }
                 MenuButtonAction::Play => {
                     menu_state.overwrite_set(MenuState::Disabled).unwrap();
@@ -408,8 +410,4 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         });
 }
 
-fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
-    for entity in &to_despawn {
-        commands.entity(entity).despawn_recursive();
-    }
-}
+

@@ -1,12 +1,15 @@
-pub mod ship;
 pub mod bullet;
+pub mod ship;
 
-use super::components::*;
+use crate::AppState;
+
+use super::super::utils::despawn_all;
 use super::ai::*;
+use super::components::*;
 use bevy::prelude::*;
 
 #[derive(Bundle, Clone, Default)]
-pub struct StarRustSceneBundle{
+pub struct StarRustSceneBundle {
     pub scene: Handle<Scene>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
@@ -21,9 +24,8 @@ pub struct ActorBundle {
     pub collider: Collider,
     pub health: Health,
     pub weapon: Weapon,
-    pub camera_shake_on_death: CameraShakeOnDeath
+    pub camera_shake_on_death: CameraShakeOnDeath,
 }
-
 
 #[derive(Bundle, Clone)]
 pub struct AiActorBundle {
@@ -31,4 +33,12 @@ pub struct AiActorBundle {
     pub ai: Ai,
     pub auto_fire: AutoFire,
     pub death_points_awarded: DeathPointsAwarded,
+}
+
+pub struct ActorPlugin;
+impl Plugin for ActorPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<Actor>))
+            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<Actor>));
+    }
 }

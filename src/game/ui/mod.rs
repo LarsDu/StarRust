@@ -1,11 +1,12 @@
+use bevy::prelude::*;
 use super::super::constants::*;
 use super::super::AppState;
+use super::Player;
 use super::components::PlayerScoreBoard;
 use super::constants::*;
 use super::events::{AudioEvent, ScoreEvent};
 use super::resources::Scoreboard;
-
-use bevy::prelude::*;
+use super::super::utils::despawn_all;
 
 pub struct UiPlugin;
 
@@ -14,6 +15,7 @@ impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Scoreboard { score: 0 })
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_scoreboard))
+            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<PlayerScoreBoard>))
             .add_event::<ScoreEvent>()
             .add_event::<AudioEvent>()
             .add_system(on_score_event);
@@ -53,6 +55,8 @@ fn setup_scoreboard(mut commands: Commands, asset_server: Res<AssetServer>) {
         )
         .insert(PlayerScoreBoard);
 }
+
+
 
 fn on_score_event(
     mut score_events: EventReader<ScoreEvent>,

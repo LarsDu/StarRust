@@ -9,6 +9,7 @@ use game::{GamePlugin, components::CameraShaker};
 mod constants;
 use constants::{SCREEN_HEIGHT,SCREEN_WIDTH};
 
+pub mod utils;
 
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
