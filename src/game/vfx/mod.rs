@@ -1,7 +1,17 @@
 use std::f32::consts::PI;
 
-use crate::constants::CAMERA_DEPTH;
+use crate::constants::CAMERA_FAR;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
+use bevy_particle_systems::*;
+
+//use bevy_hanabi::ParticleEffect;
+//use bevy_hanabi::ParticleLifetimeModifier;
+//use bevy_hanabi::PositionCircleModifier;
+//use bevy_hanabi::SizeOverLifetimeModifier;
+/*use bevy_hanabi::{
+    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient, PositionSphereModifier,
+    ShapeDimension, Spawner,
+};*/
 
 use rand::{thread_rng, Rng};
 
@@ -9,16 +19,6 @@ use super::super::AppState;
 use super::components::*;
 use super::constants::*;
 use super::events::*;
-
-/*
-use bevy_hanabi::ParticleEffect;
-use bevy_hanabi::ParticleLifetimeModifier;
-use bevy_hanabi::PositionCircleModifier;
-use bevy_hanabi::SizeOverLifetimeModifier;
-use bevy_hanabi::{
-    AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient,
-    ShapeDimension, Spawner,
-};*/
 
 pub struct VfxPlugin;
 
@@ -60,21 +60,58 @@ fn shake_camera(
             let mut rng = thread_rng();
             let magnitude_at_time = shaker.magnitude * shake_time;
             let theta = magnitude_at_time * rng.gen_range(0.0..1.0) * 2.0 * PI;
-            t.translation = Vec3::new(theta.cos(), theta.sin(), CAMERA_DEPTH);
+            t.translation = Vec3::new(theta.cos(), theta.sin(), CAMERA_FAR);
         }
     }
 }
 
-// TODO: Hanabi doesn't work with wasm
 fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
-    //mut effects: ResMut<Assets<EffectAsset>>,
+    asset_server: Res<AssetServer>
+) {
+    if events.is_empty(){
+        return;
+    }
+
+    for explosion_data in &mut events.iter(){
+        let particles = ParticleSystemBundle {
+            particle_system: ParticleSystem {
+                max_particles: 100,
+                default_sprite: asset_server.load("textures/particles/px.png"),
+                spawn_rate_per_second: 25.0.into(),
+                initial_velocity: JitteredValue::jittered(6.0, -1.0..1.0),
+                lifetime: JitteredValue::jittered(10.0, -0.03..0.03),
+                color: ColorOverTime::Gradient(Gradient::new(vec![
+                    ColorPoint::new(Color::YELLOW, 0.0),
+                    ColorPoint::new(Color::rgba(1.0, 0.3, 0.0, 0.0), 1.0),
+                ])),
+                looping: true,
+                scale: ValueOverTime::from(100.0),
+                system_duration_seconds: 10.0,
+                ..ParticleSystem::default()
+            },
+            ..ParticleSystemBundle::default()
+        };
+
+        commands.spawn(
+            particles
+        ).insert(Playing).insert(Transform::from_translation(explosion_data.position));
+
+    }
+
+}
+
+// TODO: Hanabi doesn't work with wasm
+/*fn on_explosion_event(
+    mut events: EventReader<ExplosionEvent>,
+    mut commands: Commands,
+    mut effects: ResMut<Assets<EffectAsset>>,
 ) {
     if events.is_empty() {
         return;
     }
-    /*
+    
     for explosion_data in &mut events.iter() {
         // Define a color gradient
         let mut gradient = Gradient::new();
@@ -129,6 +166,5 @@ fn on_explosion_event(
             .insert(TimedDespawn {
                 timer: Timer::new(Duration::from_secs_f32(explosion_data.lifetime), false),
             });
-        
-    }*/
-}
+    }
+}*/

@@ -23,7 +23,7 @@ pub struct BulletActorBundle {
     pub collider: Collider,
     pub ai: Ai,
     pub bullet: Bullet,
-    pub timed_despawn: TimedDespawn,
+    pub timed_despawn: TimedOobDespawn,
 }
 
 

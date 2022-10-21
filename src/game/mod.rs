@@ -1,5 +1,6 @@
 use bevy::{prelude::*, scene::ScenePlugin};
-//use bevy_hanabi::prelude::HanabiPlugin;
+//use bevy_hanabi::prelude::HanabiPlugin; <-- No WASM support
+use bevy_particle_systems::ParticleSystemPlugin;
 
 // Game Plugin modules
 
@@ -62,9 +63,9 @@ pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app
-            //.add_plugin(HanabiPlugin)
+        app.add_plugin(ParticleSystemPlugin::default())
             .add_plugin(ScenePlugin)
+            //.add_plugin(HanabiPlugin) //Incompatible with WASM
             .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
             .add_plugin(AiPlugin)
