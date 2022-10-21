@@ -13,7 +13,7 @@ install-wasm: prereqs
 	rustup target install wasm32-unknown-unknown
 
 
-run-wasm: setup-wasm
+run-wasm: install-wasm
 	# Run a minimal server with the game compiled into WASM
 	cargo run --release --target wasm32-unknown-unknown
 

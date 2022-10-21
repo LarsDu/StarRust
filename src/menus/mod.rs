@@ -34,7 +34,6 @@ pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            //.add_startup_system(setup_camera) //FIXME: Despawn menu camera where appropriate
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
             .add_state(MenuState::Main)
             .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
