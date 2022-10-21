@@ -8,7 +8,7 @@ use super::components::*;
 use super::constants::*;
 use super::events::LevelEndEvent;
 use super::{super::*, scene, AudioClipAssets, SceneAssets};
-use rand::{thread_rng, Rng};
+use fastrand;
 pub mod lvl;
 use lvl::*;
 
@@ -27,9 +27,9 @@ pub struct LevelPlugin;
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
+            .add_event::<LevelEndEvent>()    
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
             .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
-            .add_event::<LevelEndEvent>()
             .add_system_set(
                 SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
             )
@@ -100,8 +100,8 @@ fn level_periodic_spawn(
 fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &LevelSpawnInfo<AiActorBundle>) {
     // Read from spawn info
     let mut bundle = spawn_info.bundle.clone();
-    let mut rng = thread_rng();
-    let spawn_pos = spawn_info.locations[rng.gen_range(0..spawn_info.locations.len())];
+    let rng = fastrand::Rng::new();
+    let spawn_pos = spawn_info.locations[rng.usize(0..spawn_info.locations.len())];
     bundle.actor_bundle.scene_bundle.transform.translation = spawn_pos.extend(0.0);
     commands.spawn(bundle); // <--The bundle is behind a mutable reference
 }
