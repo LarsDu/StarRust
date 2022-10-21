@@ -5,11 +5,11 @@ run:
 build:
 	cargo build
 
-prereqs:
+install-wasm-prereqs:
 	cargo install -f wasm-bindgen-cli
 	cargo install wasm-server-runner
 
-install-wasm: wasm-prereqs
+install-wasm: install-wasm-prereqs
 	rustup target install wasm32-unknown-unknown
 
 
