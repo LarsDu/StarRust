@@ -30,8 +30,8 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      #- name: Build WASM
-        #run: make build-wasm
+      - name: Build WASM
+        run: make build-wasm
 
       - name: Deploy GitHub Pages site
         uses: actions/deploy-pages@v1.2.2
