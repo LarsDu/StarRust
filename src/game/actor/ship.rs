@@ -22,7 +22,7 @@ pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, mode
         weapon: Weapon::new(
             BulletType::Standard,    
                 Vec2::new(1.0, -0.32),
-                audio_clips.laser_shot_silenced.clone(),
+                audio_clips.laser_shot.clone(),
                 0.15
         ),
         collider: Collider {
@@ -68,13 +68,13 @@ impl BundledAsset for DefaultEnemyShip {
                 },
                 health: Health { 
                     hp: 1,
-                    death_sound: audio_clips.laser_shot_silenced.clone(),
+                    death_sound: audio_clips.light_explosion.clone(),
                     damage_sound: audio_clips.no_sound.clone()
                 },
                 weapon: Weapon::new(
                     BulletType::StandardEnemy,
                     Vec2::new(1.0, 0.0),
-                    audio_clips.laser_shot_silenced.clone(),
+                    audio_clips.laser_shot.clone(),
                     0.5
                 ),
                 camera_shake_on_death: CameraShakeOnDeath { ..default() }

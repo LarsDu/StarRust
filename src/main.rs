@@ -1,18 +1,14 @@
-use bevy::{prelude::*, core_pipeline::clear_color::ClearColorConfig};
+use bevy::prelude::*;
 //use bevy_hanabi::prelude::*;
 mod menus;
 use menus::MenuPlugin;
 
 mod game;
-use game::{components::CameraShaker, GamePlugin};
+use game::{GamePlugin,components::CameraShaker};
 
 mod constants;
-<<<<<<< HEAD
-use constants::{SCREEN_HEIGHT, SCREEN_WIDTH};
-=======
 use constants::{SCREEN_HEIGHT,SCREEN_WIDTH, CAMERA_FAR};
 
->>>>>>> larsdu/particlesystembundle
 
 pub mod utils;
 
@@ -24,12 +20,8 @@ enum AppState {
 }
 fn main() {
     App::new()
-<<<<<<< HEAD
     .add_state(AppState::Menu)
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
-=======
-        //.insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
->>>>>>> larsdu/particlesystembundle
         .insert_resource(WindowDescriptor {
             title: "StarRust".to_string(),
             width: SCREEN_WIDTH,
@@ -37,10 +29,6 @@ fn main() {
             ..default()
         })
         .add_plugins(DefaultPlugins)
-<<<<<<< HEAD
-=======
-        .add_state(AppState::Menu)
->>>>>>> larsdu/particlesystembundle
         .add_plugin(MenuPlugin)
         .add_plugin(GamePlugin)
         .add_startup_system(setup_camera)
@@ -58,19 +46,6 @@ fn setup_camera(mut commands: Commands) {
     }
     );*/
     // Bevy 2d camera is at Z=999.9
-<<<<<<< HEAD
-    commands
-        .spawn(Camera3dBundle {
-            projection: Projection::Orthographic(OrthographicProjection {
-                scale: 0.05,
-                ..default()
-            }),
-            transform: Transform::from_xyz(0.0, 0.0, 999.0).looking_at(Vec3::ZERO, Vec3::Y),
-            /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
-            ..default()
-        })
-        .insert(CameraShaker { ..default() });
-=======
     commands.spawn(Camera3dBundle {
         camera_3d: Camera3d {  ..default()},
         camera: Camera {priority: 1, ..default()},
@@ -86,5 +61,4 @@ fn setup_camera(mut commands: Commands) {
     })
     //.insert(Camera2d{..default()})
     .insert(CameraShaker{..default()});
->>>>>>> larsdu/particlesystembundle
 }

@@ -18,7 +18,6 @@ impl Plugin for BasicParticlesPlugin{
     }
 }
 
-fn update_particles
 
 fn update_emitter(
     time: Res<Time>,

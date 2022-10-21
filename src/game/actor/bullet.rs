@@ -56,7 +56,7 @@ impl AiBulletBundle for StandardBullet {
                 timer: Timer::default(),
             },
             bullet: Bullet {},
-            timed_despawn: TimedDespawn { timer: Timer::from_seconds(2.0, TimerMode::Repeating) }
+            timed_despawn: TimedOobDespawn { timer: Timer::from_seconds(2.0, TimerMode::Repeating) }
         }
     }
 }

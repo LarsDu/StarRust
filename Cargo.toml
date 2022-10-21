@@ -17,9 +17,9 @@ rev = "48e9dc1"
 #branch = "larsdu/update_for_0.9"
 #rev = "82d9423"
 
-[dependencies.bevy_particle_systems]
-git = "https://github.com/LarsDu/bevy_particle_systems.git"
-rev = "5c0dd64a24176d4e4bc24d7ddbaed5ae183682e4"
+#[dependencies.bevy_particle_systems]
+#git = "https://github.com/LarsDu/bevy_particle_systems.git"
+#rev = "5c0dd64a24176d4e4bc24d7ddbaed5ae183682e4"
 #branch = "larsdu/bevy-0.9-dev"
 
 [workspace]

@@ -44,7 +44,7 @@ impl Plugin for MenuPlugin {
             .add_system_set(SystemSet::on_enter(MenuState::LevelEnd).with_system(level_end_setup))
             .add_system_set(
                 SystemSet::on_exit(MenuState::LevelEnd)
-                    .with_system(despawn_all::<OnLevelEndScreen>)
+                    .with_system(despawn_all::<OnLevelEndScreen>),
             )
             .add_system_set(
                 SystemSet::on_enter(MenuState::PlayerDeath).with_system(player_death_setup),
@@ -164,25 +164,22 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         })
         .insert(OnMainMenuScreen)
         .with_children(|parent| {
-            // Display the game name
-            parent.spawn(
-                TextBundle::from_section(
-                    "Star Rust",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 80.0,
-                        color: TEXT_COLOR,
-                    },
-                )
-                .with_style(Style {
-                    margin: UiRect::all(Val::Px(50.0)),
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style.clone(),
                     ..default()
-                }),
-            );
+                })
+                .insert(MenuButtonAction::Quit)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style.clone(),
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section("Quit", button_text_style.clone()));
+                });
 
-            // Display
-            // - Play
-            // - quit
             parent
                 .spawn(ButtonBundle {
                     style: button_style.clone(),
@@ -198,21 +195,21 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     });
                     parent.spawn(TextBundle::from_section("Play", button_text_style.clone()));
                 });
-            parent
-                .spawn(ButtonBundle {
-                    style: button_style,
+
+            parent.spawn(
+                TextBundle::from_section(
+                    "Star Rust",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 80.0,
+                        color: TEXT_COLOR,
+                    },
+                )
+                .with_style(Style {
+                    margin: UiRect::all(Val::Px(50.0)),
                     ..default()
-                })
-                .insert(MenuButtonAction::Quit)
-                .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style,
-                        image: UiImage(icon),
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("Quit", button_text_style));
-                });
+                }),
+            );
         });
 }
 
@@ -392,6 +389,7 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         button_text_style.clone(),
                     ));
                 });
+            /*
             parent
                 .spawn(ButtonBundle {
                     style: button_style,
@@ -406,8 +404,6 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("RESTART", button_text_style));
-                });
+                });*/
         });
 }
-
-

@@ -5,6 +5,7 @@ use bevy::prelude::*;
 #[derive(Resource)]
 pub struct AudioClipAssets{
     pub no_sound: Handle<AudioSource>,
+    pub laser_shot: Handle<AudioSource>,
     pub laser_shot_silenced: Handle<AudioSource>,
     pub light_pow: Handle<AudioSource>,
     pub light_explosion: Handle<AudioSource>,
@@ -28,8 +29,9 @@ impl Plugin for AudioPlugin {
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>){
     let audio_clip_assets = AudioClipAssets{
         no_sound: asset_server.load(""),
+        laser_shot: asset_server.load("audio/clips/laser_shot.ogg"),
         laser_shot_silenced: asset_server.load("audio/clips/laser_shot_silenced.ogg"),
-        light_pow: asset_server.load("audio/clips/laser_shot_silenced.ogg"),
+        light_pow: asset_server.load("audio/clips/light_pow.ogg"),
         light_explosion: asset_server.load("audio/clips/light_explosion.ogg"),
         collection1: asset_server.load("audio/clips/collection1.ogg"),
         point_counter: asset_server.load("audio/clips/point_counter.ogg"),
@@ -45,6 +47,6 @@ fn on_audio_event(audio: Res<Audio>, mut audio_events: EventReader<AudioEvent>) 
         return;
     }
     for event in audio_events.iter() {
-        //audio.play(event.clip.clone());
+        audio.play(event.clip.clone());
     }
 }

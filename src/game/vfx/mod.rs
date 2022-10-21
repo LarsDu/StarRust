@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use crate::constants::CAMERA_FAR;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
-use bevy_particle_systems::*;
+//use bevy_particle_systems::*;
 
 //use bevy_hanabi::ParticleEffect;
 //use bevy_hanabi::ParticleLifetimeModifier;
@@ -27,7 +27,7 @@ impl Plugin for VfxPlugin {
         app.add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_event::<CameraShakeEvent>()
             .add_event::<ExplosionEvent>()
-            .add_system(on_explosion_event)
+            //.add_system(on_explosion_event)
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
@@ -65,6 +65,7 @@ fn shake_camera(
     }
 }
 
+/*
 fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
@@ -101,7 +102,7 @@ fn on_explosion_event(
     }
 
 }
-
+*/
 // TODO: Hanabi doesn't work with wasm
 /*fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
