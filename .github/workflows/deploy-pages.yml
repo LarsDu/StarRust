@@ -33,10 +33,11 @@ jobs:
         steps:
             # Runs a single command using the runners shell
             - name: Copy assets to build folder
-              run: cp -r assets/ _site/assets
+              run: |
+                  cp -r $GITHUB_WORKSPACE/assets/ $GITHUB_WORKSPACE/_site/assets
 
-            - name: Build WASM artifact to _site/
-              run: make build-wasm
+            #- name: Build WASM artifact to _site/
+            #  run: make build-wasm
 
             - name: Checkout
               uses: actions/checkout@v3
