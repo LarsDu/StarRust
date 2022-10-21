@@ -216,25 +216,13 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(300.0), Val::Px(65.0)),
+        size: Size::new(Val::Px(315.0), Val::Px(65.0)),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,
         ..default()
     };
-    let button_icon_style = Style {
-        size: Size::new(Val::Px(30.0), Val::Auto),
-        // This takes the icons out of the flexbox flow, to be positioned exactly
-        position_type: PositionType::Absolute,
-        // The icon will be close to the left border of the button
-        position: UiRect {
-            left: Val::Px(10.0),
-            right: Val::Auto,
-            top: Val::Auto,
-            bottom: Val::Auto,
-        },
-        ..default()
-    };
+
     let button_text_style = TextStyle {
         font: font.clone(),
         font_size: 40.0,
@@ -280,12 +268,6 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 })
                 .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/right.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style.clone(),
-                        image: UiImage(icon),
-                        ..default()
-                    });
                     parent.spawn(TextBundle::from_section(
                         "MAIN MENU",
                         button_text_style.clone(),
@@ -298,25 +280,13 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(250.0), Val::Px(65.0)),
+        size: Size::new(Val::Px(300.0), Val::Px(65.0)),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,
         ..default()
     };
-    let button_icon_style = Style {
-        size: Size::new(Val::Px(30.0), Val::Auto),
-        // This takes the icons out of the flexbox flow, to be positioned exactly
-        position_type: PositionType::Absolute,
-        // The icon will be close to the left border of the button
-        position: UiRect {
-            left: Val::Px(10.0),
-            right: Val::Auto,
-            top: Val::Auto,
-            bottom: Val::Auto,
-        },
-        ..default()
-    };
+
     let button_text_style = TextStyle {
         font: font.clone(),
         font_size: 40.0,
@@ -336,25 +306,24 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         })
         .insert(OnPlayerDeathScreen)
         .with_children(|parent| {
-            // Display the game name
-            parent.spawn(
-                TextBundle::from_section(
-                    "GAME OVER",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 80.0,
-                        color: TEXT_COLOR,
-                    },
-                )
-                .with_style(Style {
-                    margin: UiRect::all(Val::Px(50.0)),
-                    ..default()
-                }),
-            );
 
-            // Display
-            // - MAIN MENU
-            // - RESTART
+            /*
+            parent
+                .spawn(ButtonBundle {
+                    style: button_style,
+                    ..default()
+                })
+                .insert(MenuButtonAction::Restart)
+                .with_children(|parent| {
+                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    parent.spawn(ImageBundle {
+                        style: button_icon_style,
+                        image: UiImage(icon),
+                        ..default()
+                    });
+                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
+                });*/
+
             parent
                 .spawn(ButtonBundle {
                     style: button_style.clone(),
@@ -373,21 +342,21 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         button_text_style.clone(),
                     ));
                 });
-            /*
-            parent
-                .spawn(ButtonBundle {
-                    style: button_style,
+
+            // Display the game name
+            parent.spawn(
+                TextBundle::from_section(
+                    "GAME OVER",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 80.0,
+                        color: TEXT_COLOR,
+                    },
+                )
+                .with_style(Style {
+                    margin: UiRect::all(Val::Px(50.0)),
                     ..default()
-                })
-                .insert(MenuButtonAction::Restart)
-                .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style,
-                        image: UiImage(icon),
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
-                });*/
+                }),
+            );
         });
 }
