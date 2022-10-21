@@ -1,3 +1,6 @@
+# Wasm output
+out/
+
 # Blender
 **/*.blend1
 
