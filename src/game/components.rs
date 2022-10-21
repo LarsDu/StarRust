@@ -59,7 +59,7 @@ impl Weapon {
         firing_audio_clip: Handle<AudioSource>,
         cooldown: f32,
     ) -> Self {
-        let cooldown_timer = Timer::from_seconds(cooldown, true);
+        let cooldown_timer = Timer::from_seconds(cooldown, TimerMode::Repeating);
         return Self {
             bullet_type: bullet_type,
             offset: offset,
@@ -86,8 +86,8 @@ impl AiActorSpawner {
     pub fn new(spawn_infos: Vec<LevelSpawnInfo<AiActorBundle>>) -> Self {
         return AiActorSpawner {
             index: 0,
-            ttl_timer: Timer::from_seconds(spawn_infos[0].ttl, false),
-            frequency_timer: Timer::from_seconds(spawn_infos[0].frequency, true),
+            ttl_timer: Timer::from_seconds(spawn_infos[0].ttl, TimerMode::Once),
+            frequency_timer: Timer::from_seconds(spawn_infos[0].frequency, TimerMode::Repeating),
             spawn_infos: spawn_infos,
         };
     }
@@ -129,7 +129,7 @@ impl Default for CameraShaker {
     fn default() -> Self {
         return CameraShaker {
             magnitude: 1.0,
-            timer: Timer::from_seconds(0.25, false),
+            timer: Timer::from_seconds(0.25, TimerMode::Once),
         };
     }
 }

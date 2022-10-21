@@ -6,12 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
 rand = "0.8.5"
+
+[dependencies.bevy]
+git = "https://github.com/bevyengine/bevy.git"
+rev = "48e9dc1"
 
 #[dependencies.bevy_hanabi]
 #git = "https://github.com/LarsDu/bevy_hanabi.git"
 #branch = "larsdu/update_for_0.9"
+#rev = "82d9423"
 
 [workspace]
 resolver ="2"

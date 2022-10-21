@@ -131,7 +131,7 @@ pub fn fire_controller(
     for (transform, mut weapon, collider) in &mut query {
         if keyboard_input.just_pressed(KeyCode::Space) {
             weapon.cooldown_timer.reset();
-            weapon.cooldown_timer.set_repeating(true);
+            weapon.cooldown_timer.set_mode(TimerMode::Repeating);
             weapon.cooldown_timer.unpause();
         } else if keyboard_input.just_released(KeyCode::Space) {
             weapon.cooldown_timer.pause()
