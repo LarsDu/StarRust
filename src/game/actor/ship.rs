@@ -32,7 +32,7 @@ pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, mode
             ..default()
         },
         health: Health { 
-            hp: 10,
+            hp: 20,
             death_sound: audio_clips.light_explosion.clone(),
             damage_sound: audio_clips.light_pow.clone()
         },

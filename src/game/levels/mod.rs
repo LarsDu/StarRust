@@ -1,5 +1,6 @@
-use bevy::log::Level;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
+
+use crate::utils::despawn_all;
 
 use super::super::menus::MenuState;
 use super::actor::{ship::*, *};
@@ -26,10 +27,8 @@ pub struct LevelPlugin;
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
-            //.add_state(AppState::InGame)
-            //.add_state(AppState::Menu)
-            //.add_state(MenuState::Main)
-            //.add_state(MenuState::LevelEnd)
+            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
+            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
             .add_event::<LevelEndEvent>()
             .add_system_set(
                 SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
@@ -70,9 +69,8 @@ fn level_periodic_spawn(
 
         // Fixme: Make this more functional
         if spawner.ttl_timer.just_finished() {
-            let new_index = i32::clamp(spawner.index + 1, 0, n_spawn_infos);
-            if new_index < n_spawn_infos {
-                spawner.index = new_index;
+            spawner.index += 1;
+            if spawner.index < n_spawn_infos {
                 // Get the next spawn info and set the frequency and ttl durations
                 let next_ttl = spawner.spawn_infos[spawner.index as usize].ttl;
                 let next_frequency = spawner.spawn_infos[spawner.index as usize].frequency;
@@ -82,11 +80,11 @@ fn level_periodic_spawn(
                 spawner
                     .frequency_timer
                     .set_duration(Duration::from_secs_f32(next_frequency));
+                    
+                spawner.ttl_timer.reset();
             } else {
                 //TODO: Level is over. Progress into success or failure states
-                //spawner.index = 0;
-                //menu_state.set(MenuState::LevelEnd).unwrap();
-                println!("Level over!");
+                spawner.index = 0;
                 level_end_event.send(LevelEndEvent {});
             }
         }

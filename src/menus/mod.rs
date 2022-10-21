@@ -111,7 +111,7 @@ fn menu_action(
                 }
                 MenuButtonAction::Restart => {
                     menu_state.overwrite_set(MenuState::Main).unwrap();
-                    game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
+                    //game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
                 }
                 MenuButtonAction::Play => {
                     menu_state.overwrite_set(MenuState::Disabled).unwrap();
@@ -220,7 +220,7 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(250.0), Val::Px(65.0)),
+        size: Size::new(Val::Px(300.0), Val::Px(65.0)),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,

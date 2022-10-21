@@ -2,20 +2,23 @@ use std::f32::consts::PI;
 
 use crate::constants::CAMERA_DEPTH;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
-use bevy_hanabi::ParticleEffect;
-use bevy_hanabi::ParticleLifetimeModifier;
-use bevy_hanabi::PositionCircleModifier;
-use bevy_hanabi::SizeOverLifetimeModifier;
+
 use rand::{thread_rng, Rng};
 
 use super::super::AppState;
 use super::components::*;
 use super::constants::*;
 use super::events::*;
+
+/*
+use bevy_hanabi::ParticleEffect;
+use bevy_hanabi::ParticleLifetimeModifier;
+use bevy_hanabi::PositionCircleModifier;
+use bevy_hanabi::SizeOverLifetimeModifier;
 use bevy_hanabi::{
     AccelModifier, ColorOverLifetimeModifier, EffectAsset, Gradient,
     ShapeDimension, Spawner,
-};
+};*/
 
 pub struct VfxPlugin;
 
@@ -66,11 +69,12 @@ fn shake_camera(
 fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
-    mut effects: ResMut<Assets<EffectAsset>>,
+    //mut effects: ResMut<Assets<EffectAsset>>,
 ) {
     if events.is_empty() {
         return;
     }
+    /*
     for explosion_data in &mut events.iter() {
         // Define a color gradient
         let mut gradient = Gradient::new();
@@ -125,5 +129,6 @@ fn on_explosion_event(
             .insert(TimedDespawn {
                 timer: Timer::new(Duration::from_secs_f32(explosion_data.lifetime), false),
             });
-    }
+        
+    }*/
 }

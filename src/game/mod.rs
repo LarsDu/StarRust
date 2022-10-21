@@ -1,5 +1,5 @@
 use bevy::{prelude::*, scene::ScenePlugin};
-use bevy_hanabi::prelude::HanabiPlugin;
+//use bevy_hanabi::prelude::HanabiPlugin;
 
 // Game Plugin modules
 
@@ -58,12 +58,12 @@ pub use vfx::VfxPlugin;
 mod scene;
 pub use scene::SceneAssets;
 
-
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(HanabiPlugin)
+        app
+            //.add_plugin(HanabiPlugin)
             .add_plugin(ScenePlugin)
             .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
@@ -78,9 +78,6 @@ impl Plugin for GamePlugin {
             .add_plugin(DespawnerPlugin)
             .add_plugin(EnemyPlugin)
             .add_plugin(VfxPlugin)
-            .add_plugin(ActorPlugin);// currently for cleaning up entities
+            .add_plugin(ActorPlugin); // currently for cleaning up entities
     }
 }
-
-
-
