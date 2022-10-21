@@ -35,7 +35,7 @@ impl Plugin for LevelPlugin {
             )
             .add_system_set(
                 SystemSet::new()
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                     .with_system(level_periodic_spawn),
             )
             .add_system(level_ender);

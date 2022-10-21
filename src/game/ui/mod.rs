@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use super::super::constants::*;
 use super::super::AppState;
-use super::Player;
 use super::components::PlayerScoreBoard;
 use super::constants::*;
 use super::events::{AudioEvent, ScoreEvent};
@@ -22,7 +21,8 @@ impl Plugin for UiPlugin {
     }
 }
 
-fn setup_scoreboard(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup_scoreboard(mut scoreboard: ResMut<Scoreboard>, mut commands: Commands, asset_server: Res<AssetServer>) {
+    scoreboard.score = 0;
     commands
         .spawn(
             TextBundle::from_sections([

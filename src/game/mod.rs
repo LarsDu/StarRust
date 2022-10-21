@@ -59,11 +59,13 @@ pub use vfx::VfxPlugin;
 mod scene;
 pub use scene::SceneAssets;
 
+
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app//.add_plugin(ParticleSystemPlugin)
+            //.add_plugin(MenuPlugin)
             .add_plugin(ScenePlugin)
             //.add_plugin(HanabiPlugin) //Incompatible with WASM
             .add_plugin(BackgroundPlugin)

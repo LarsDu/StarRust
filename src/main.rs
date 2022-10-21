@@ -20,7 +20,7 @@ enum AppState {
 }
 fn main() {
     App::new()
-    .add_state(AppState::InGame)
+    .add_state(AppState::Menu)
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
         .insert_resource(WindowDescriptor {
             title: "StarRust".to_string(),
@@ -29,8 +29,8 @@ fn main() {
             ..default()
         })
         .add_plugins(DefaultPlugins)
-        .add_plugin(MenuPlugin)
         .add_plugin(GamePlugin)
+        .add_plugin(MenuPlugin)
         .add_startup_system(setup_camera)
         .run();
 }
