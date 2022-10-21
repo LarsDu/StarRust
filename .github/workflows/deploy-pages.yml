@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI Publism WASM to Pages
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: make build-wasm
+
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v1.2.2
+        with:
+          # Should this action only emit build telemetry instead of deploying the build artifact?
+          # The status of the previous build.
+          # GitHub token
+          token: ${{ github.token }}
+          # Time in milliseconds after which to timeout and cancel the deployment (default: 10 minutes)
+          timeout: 600000
+          # Maximum number of status report errors before cancelling a deployment (default: 10)
+          error_count: 10
+          # Time in milliseconds between two deployment status report (default: 5 seconds)
+          reporting_interval: 5000
+          # Name of the artifact to deploy
+          artifact_name: index.html
+          # Is this attempting to deploy a pull request as a GitHub Pages preview site? (NOTE: This feature is only in alpha currently and is not available to the public!)
+          preview: false
