@@ -33,11 +33,11 @@ jobs:
         steps:
             # Runs a single command using the runners shell
 
-            - name: Build WASM artifact to _site/
-              run: make build-wasm
-
             - name: Checkout
               uses: actions/checkout@v3
+
+            - name: Build WASM artifact to _site/
+              run: make build-wasm
 
             - name: Copy assets to static folder
               run: |
