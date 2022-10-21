@@ -18,7 +18,7 @@ impl Plugin for AutoFirePlugin {
             .add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                     .with_system(fire_controller),
             );
     }

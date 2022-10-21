@@ -30,7 +30,7 @@ impl Plugin for VfxPlugin {
             //.add_system(on_explosion_event)
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                     .with_system(shake_camera),
             );
     }
