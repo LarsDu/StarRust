@@ -331,12 +331,12 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 })
                 .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/right.png");
+                    /*let icon = asset_server.load("textures/Game Icons/right.png");
                     parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
                         image: UiImage(icon),
                         ..default()
-                    });
+                    });*/
                     parent.spawn(TextBundle::from_section(
                         "MAIN MENU",
                         button_text_style.clone(),
