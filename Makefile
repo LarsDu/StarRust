@@ -9,7 +9,7 @@ prereqs:
 	cargo install -f wasm-bindgen-cli
 	cargo install wasm-server-runner
 
-install-wasm: prereqs
+install-wasm:
 	rustup target install wasm32-unknown-unknown
 
 
@@ -22,5 +22,5 @@ watch-wasm:
 
 build-wasm: install-wasm
 	cargo build --release --target wasm32-unknown-unknown
-	wasm-bindgen --out-dir ./out/ --target web ./target/wasm32-unknown-unknown/release/star-rust.wasm 
+	wasm-bindgen --out-dir ./_site/ --target web ./target/wasm32-unknown-unknown/release/star-rust.wasm 
 
