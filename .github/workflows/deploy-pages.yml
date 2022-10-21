@@ -32,15 +32,19 @@ jobs:
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
             # Runs a single command using the runners shell
-            - name: Copy assets to build folder
-              run: |
-                  cp -r $GITHUB_WORKSPACE/assets/ $GITHUB_WORKSPACE/_site/assets
 
             #- name: Build WASM artifact to _site/
             #  run: make build-wasm
 
             - name: Checkout
               uses: actions/checkout@v3
+
+            - name: Copy assets to static folder
+              run: |
+                  cp -r $GITHUB_WORKSPACE/assets/ _site/assets \
+                  echo $PWD \
+                  echo ls
+                  .
 
             - name: Setup Pages
               uses: actions/configure-pages@v2
