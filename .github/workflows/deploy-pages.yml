@@ -33,18 +33,15 @@ jobs:
         steps:
             # Runs a single command using the runners shell
 
-            #- name: Build WASM artifact to _site/
-            #  run: make build-wasm
+            - name: Build WASM artifact to _site/
+              run: make build-wasm
 
             - name: Checkout
               uses: actions/checkout@v3
 
             - name: Copy assets to static folder
               run: |
-                  cp -r $GITHUB_WORKSPACE/assets/ _site/assets && \
-                  echo $PWD && \
-                  echo ls \
-                  .
+                  cp -r $GITHUB_WORKSPACE/assets/ _site/assets
 
             - name: Setup Pages
               uses: actions/configure-pages@v2
