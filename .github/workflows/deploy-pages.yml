@@ -41,9 +41,9 @@ jobs:
 
             - name: Copy assets to static folder
               run: |
-                  cp -r $GITHUB_WORKSPACE/assets/ _site/assets \
-                  echo $PWD \
-                  echo ls
+                  cp -r $GITHUB_WORKSPACE/assets/ _site/assets && \
+                  echo $PWD && \
+                  echo ls \
                   .
 
             - name: Setup Pages
