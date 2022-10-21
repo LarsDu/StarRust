@@ -10,7 +10,7 @@ fastrand = "1.7.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 
 [dependencies.bevy]
 git = "https://github.com/bevyengine/bevy.git"
-rev = "48e9dc1"
+rev = "543465b721048355e34eb6078923645747c1d44b"
 
 #[dependencies.bevy_hanabi]
 #git = "https://github.com/LarsDu/bevy_hanabi.git"

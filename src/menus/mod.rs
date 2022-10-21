@@ -35,7 +35,7 @@ impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
-            .add_state(MenuState::Main)
+            .add_state(MenuState::Disabled)
             .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
             .add_system_set(
                 SystemSet::on_exit(MenuState::Main).with_system(despawn_all::<OnMainMenuScreen>),
@@ -290,21 +290,6 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         "MAIN MENU",
                         button_text_style.clone(),
                     ));
-                });
-            parent
-                .spawn(ButtonBundle {
-                    style: button_style,
-                    ..default()
-                })
-                .insert(MenuButtonAction::Restart)
-                .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style,
-                        image: UiImage(icon),
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
                 });
         });
 }

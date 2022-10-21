@@ -20,7 +20,7 @@ enum AppState {
 }
 fn main() {
     App::new()
-    .add_state(AppState::Menu)
+    .add_state(AppState::InGame)
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
         .insert_resource(WindowDescriptor {
             title: "StarRust".to_string(),

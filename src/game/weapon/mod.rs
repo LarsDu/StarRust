@@ -14,7 +14,7 @@ impl Plugin for WeaponPlugin {
             .add_system(on_bullet_fired)
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64)),
+                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64)),
             );
     }
 }
