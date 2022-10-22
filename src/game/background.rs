@@ -14,21 +14,21 @@ impl Plugin for BackgroundPlugin {
 
 pub fn setup_lights(mut commands: Commands) {
     // Point light
-    commands.spawn(PointLightBundle {
+    /*commands.spawn(PointLightBundle {
         point_light: PointLight {
-            intensity: 400000.0,
-            radius: 15000.0,
+            intensity: 30000.0,
+            radius: 150000.0,
             shadows_enabled: true,
             ..default()
         },
         transform: Transform::from_xyz(0.0, 5.0, 12.0).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
-    });
+    });*/
 
     // Directional Light
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
-            illuminance: 16000.0,
+            illuminance: 25000.0,
             color: Color::WHITE,
             ..default()
         },

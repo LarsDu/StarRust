@@ -61,12 +61,12 @@ impl BundledAsset for DefaultEnemyShip {
                 scene_bundle: StarRustSceneBundle {
                     scene: models.default_enemy.clone(),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
-                        .with_scale(Vec3::splat(20.0))
+                        .with_scale(Vec3::splat(23.0))
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
                     ..default()
                 },
                 collider: Collider {
-                    rect: Vec2::new(30.0, 30.0),
+                    rect: Vec2::new(35.0, 35.0),
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
                     ..default()
@@ -105,7 +105,7 @@ pub struct JetCharger;
 impl BundledAsset for JetCharger {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
-        variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
+        variant.actor_bundle.scene_bundle.scene = models.basic_boss.clone();
         variant.actor_bundle.actor.speed = Vec2::new(3.5,3.5);
         variant.ai.mode = AiMode::ChargeForward1;
         // Disable Weapon
