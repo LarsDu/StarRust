@@ -30,9 +30,10 @@ TODO:
     -   [ ] "Bombs"
     -   [ ] Missiles with sinusoidal trajectories
 -   [ ] Performance:
-    -   [ ] Entirely unclear whether materials are being shared amongst gltf
-            models. Look into this.
-    -   [ ] Figure out if draw calls are being optimized.
+    -   [ ] Replace all death triggering events (player, camera shake, etc) with
+            [removal detection](https://github.com/bevyengine/bevy/blob/main/examples/ecs/removal_detection.rs)
+    -   [ ] All materials in the game are the same for all 3d elements, but
+            these materials are almost certainly not being batched/shared.
 -   [ ] Multiple levels
 
 ### [Contributor Guidlines](https://github.com/LarsDu/StarRust/blob/main/CONTRIBUTING.md)
