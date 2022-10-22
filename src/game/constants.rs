@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 // TIME
-//pub const TIME_STEP: f32 = 1.0/60.0;
+pub const TIME_STEP: f32 = 1.0/60.0;
 
 
 // Models

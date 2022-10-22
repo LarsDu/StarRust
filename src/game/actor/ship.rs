@@ -50,7 +50,7 @@ pub fn player_ship(
 
 pub struct DefaultEnemyShip;
 
-impl BundledAsset for DefaultEnemyShip {
+impl BundledAsset<AiActorBundle> for DefaultEnemyShip {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let spawn_position = SPAWN_LOCATIONS[0];
         return AiActorBundle {
@@ -96,7 +96,7 @@ impl BundledAsset for DefaultEnemyShip {
 
 pub struct RaptorSineMovementVariant;
 
-impl BundledAsset for RaptorSineMovementVariant {
+impl BundledAsset<AiActorBundle> for RaptorSineMovementVariant {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.ai.mode = AiMode::Sinusoid1;
@@ -106,7 +106,7 @@ impl BundledAsset for RaptorSineMovementVariant {
 
 pub struct JetCharger;
 
-impl BundledAsset for JetCharger {
+impl BundledAsset<AiActorBundle> for JetCharger {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
@@ -129,7 +129,8 @@ impl BundledAsset for JetCharger {
 
 pub struct SpacePlatformBare;
 
-impl BundledAsset for SpacePlatformBare {
+impl BundledAsset<AiActorBundle> for SpacePlatformBare {
+    // How do I insert a wall here?
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.actor_bundle.scene_bundle.scene = models.space_platform.clone();
@@ -155,7 +156,7 @@ impl BundledAsset for SpacePlatformBare {
 // FIXME: Replace with dedicated powerup system, bundles, and spawnpoints!!
 pub struct Star;
 
-impl BundledAsset for Star {
+impl BundledAsset<AiActorBundle> for Star {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.actor_bundle.scene_bundle.scene = models.powerup_star.clone();

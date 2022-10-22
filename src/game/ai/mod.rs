@@ -1,4 +1,4 @@
-use super::super::AppState;
+use super::{super::AppState, constants::TIME_STEP};
 use super::components::*;
 use super::collisions::check_collisions;
 use bevy::{
@@ -23,7 +23,7 @@ impl Plugin for AiPlugin {
         app.add_plugin(AutoFirePlugin)
         .add_system_set(
             SystemSet::on_update(AppState::InGame)
-                .with_run_criteria(FixedTimestep::step(1.0 / 60.0 as f64))
+                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(update_ai.before(check_collisions))
         );
     }

@@ -1,5 +1,6 @@
 use super::super::AppState;
 use super::components::*;
+use super::constants::TIME_STEP;
 use super::events::*;
 use bevy::{prelude::*, sprite::collide_aabb::collide, time::*};
 use std::cmp::max;
@@ -16,7 +17,7 @@ impl Plugin for CollisionPlugin {
             .add_event::<PlayerDeathEvent>()
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
-                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64)) //FIXME: can potentially break WASM builds
                     .with_system(check_collisions),
             );
     }
