@@ -68,4 +68,5 @@ fn on_score_event(
         let mut player_score_text = text_query.single_mut();
         player_score_text.sections[1].value = scoreboard.score.to_string();
     }
+
 }

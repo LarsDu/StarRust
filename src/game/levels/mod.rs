@@ -27,9 +27,13 @@ pub struct LevelPlugin;
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
-            .add_event::<LevelEndEvent>()    
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
-            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>))
+            .add_event::<LevelEndEvent>()
+            .add_system_set(
+                SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
+            )
+            .add_system_set(
+                SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
+            )
             .add_system_set(
                 SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
             )
@@ -51,6 +55,9 @@ fn setup_level(
         &audio_clips,
         &models,
     )));
+    commands.spawn(AiActorSpawner::new(
+        SpawnSequence::level0_powerups(&audio_clips, &models)
+    ));
 }
 
 fn level_periodic_spawn(
@@ -80,7 +87,7 @@ fn level_periodic_spawn(
                 spawner
                     .frequency_timer
                     .set_duration(Duration::from_secs_f32(next_frequency));
-                    
+
                 spawner.ttl_timer.reset();
             } else {
                 //TODO: Level is over. Progress into success or failure states
