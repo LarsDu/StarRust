@@ -114,3 +114,22 @@ impl BundledAsset for JetCharger {
         return variant;
     }
 }
+
+
+
+pub struct SpacePlatformBare;
+
+impl BundledAsset for SpacePlatformBare {
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
+        let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
+        variant.actor_bundle.scene_bundle.scene = models.space_platform.clone();
+        variant.actor_bundle.actor.speed = Vec2::new(2.0,2.0);
+        variant.actor_bundle.health.hp = 100;
+        variant.actor_bundle.collider.rect = Vec2::new(100.0, 40.0);
+        variant.ai.mode = AiMode::ChargeForward1;
+        // Disable Weapon
+        variant.actor_bundle.weapon.cooldown_timer.set_mode(TimerMode::Once);
+        variant.actor_bundle.weapon.cooldown_timer.set_duration(Duration::from_secs(300));
+        return variant;
+    }
+}

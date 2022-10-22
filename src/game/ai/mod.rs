@@ -38,7 +38,7 @@ fn update_ai(
         match ai.mode{
             AiMode::NoMovement => {},
             AiMode::ChargeForward1 => charge_forward(transform,actor.speed.length()),
-            AiMode::Sinusoid1 => sine_charge(&time, transform, actor.speed.length(), 0.05, 1.0),
+            AiMode::Sinusoid1 => sine_charge(&time, transform, actor.speed.length(), 1.5, 1.0),
         }
     }
 }
