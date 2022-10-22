@@ -17,7 +17,7 @@ impl SpawnSequence {
             },
             LevelSpawnInfo::<AiActorBundle>{
                 locations: Vec::from(SPAWN_LOCATIONS),
-                ttl: 5.0,
+                ttl: 15.0,
                 frequency: 1.0,
                 bundle: JetCharger::get_bundle(audio_clips, models),
             },

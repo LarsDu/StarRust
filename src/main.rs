@@ -21,7 +21,7 @@ enum AppState {
 fn main() {
     App::new()
     .add_state(AppState::Menu)
-        .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
+        .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
         .insert_resource(WindowDescriptor {
             title: "StarRust".to_string(),
             width: SCREEN_WIDTH,
@@ -36,15 +36,16 @@ fn main() {
 }
 
 fn setup_camera(mut commands: Commands) {
-    /*commands.spawn(Camera2dBundle{
+    commands.spawn(Camera2dBundle{
         projection: OrthographicProjection {
             scale: 1.0,
             ..default()
         },
+        camera: Camera {priority: 0, ..default()},
         transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR-0.1).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     }
-    );*/
+    );
     // Bevy 2d camera is at Z=999.9
     commands.spawn(Camera3dBundle {
         camera_3d: Camera3d {  ..default()},
@@ -53,7 +54,7 @@ fn setup_camera(mut commands: Commands) {
             scale: 1.0,
            ..default()
         }),
-        transform: Transform::from_xyz(0.0, 0.0, 1.0).looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR-0.1).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     })
     .insert(CameraShaker{..default()});

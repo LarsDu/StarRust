@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use crate::constants::CAMERA_FAR;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
-//use bevy_particle_systems::*;
+use bevy_particle_systems::*;
 
 //use bevy_hanabi::ParticleEffect;
 //use bevy_hanabi::ParticleLifetimeModifier;
@@ -27,7 +27,7 @@ impl Plugin for VfxPlugin {
         app.add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_event::<CameraShakeEvent>()
             .add_event::<ExplosionEvent>()
-            //.add_system(on_explosion_event)
+            .add_system(on_explosion_event)
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
@@ -65,7 +65,7 @@ fn shake_camera(
     }
 }
 
-/*
+
 fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
@@ -78,18 +78,18 @@ fn on_explosion_event(
     for explosion_data in &mut events.iter(){
         let particles = ParticleSystemBundle {
             particle_system: ParticleSystem {
-                max_particles: 100,
+                max_particles: 1000,
                 default_sprite: asset_server.load("textures/particles/px.png"),
-                spawn_rate_per_second: 25.0.into(),
-                initial_velocity: JitteredValue::jittered(6.0, -1.0..1.0),
-                lifetime: JitteredValue::jittered(10.0, -0.03..0.03),
+                spawn_rate_per_second: 200.0.into(),
+                initial_velocity: JitteredValue::jittered(100.0, -20.0..5.0),
+                lifetime: JitteredValue::jittered(0.35, -0.03..0.03),
                 color: ColorOverTime::Gradient(Gradient::new(vec![
                     ColorPoint::new(Color::YELLOW, 0.0),
                     ColorPoint::new(Color::rgba(1.0, 0.3, 0.0, 0.0), 1.0),
                 ])),
-                looping: true,
-                scale: ValueOverTime::from(100.0),
-                system_duration_seconds: 10.0,
+                looping: false,
+                scale: ValueOverTime::from(10.0),
+                system_duration_seconds: 0.1,
                 ..ParticleSystem::default()
             },
             ..ParticleSystemBundle::default()
@@ -102,7 +102,7 @@ fn on_explosion_event(
     }
 
 }
-*/
+
 // TODO: Hanabi doesn't work with wasm
 /*fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,

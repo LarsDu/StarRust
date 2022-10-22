@@ -14,7 +14,7 @@ use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) -> ActorBundle {
     return ActorBundle {
         actor: Actor {
-            speed: Vec2::new(6.0, 6.0),
+            speed: Vec2::new(8.0, 8.0),
         },
         scene_bundle: StarRustSceneBundle {
             scene: models.default_player.clone(),
@@ -106,7 +106,7 @@ impl BundledAsset for JetCharger {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
-        variant.actor_bundle.actor.speed = Vec2::new(1.5,1.5);
+        variant.actor_bundle.actor.speed = Vec2::new(3.5,3.5);
         variant.ai.mode = AiMode::ChargeForward1;
         // Disable Weapon
         variant.actor_bundle.weapon.cooldown_timer.set_mode(TimerMode::Once);

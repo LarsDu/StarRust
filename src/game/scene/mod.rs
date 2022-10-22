@@ -38,7 +38,7 @@ pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>
         asteroid: asset_server.load("models/asteroid.glb#Scene0"),
         space_platform: asset_server.load("models/space_platform.glb#Scene0"),
         turret_base: asset_server.load("models/turret_base.glb#Scene0"),
-        turret_barrel: asset_server.load("models/turret_barrel.glb#Scene0"),
+        turret_barrel: asset_server.load("models/turret_barrel1.glb#Scene0"),
         powerup_star: asset_server.load("models/powerup_star.glb#Scene0"),
         powerup_ico: asset_server.load("models/powerup_ico.glb#Scene0"),
     };
