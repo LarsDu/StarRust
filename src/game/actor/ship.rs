@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use bevy::prelude::*;
 use super::super::components::*;
 use super::super::levels::*;
@@ -5,28 +7,30 @@ use super::super::actor::bullet::BulletType;
 use super::*;
 use crate::game::AudioClipAssets;
 use crate::game::SceneAssets;
+use crate::game::constants::ASSET_SCALE;
+use crate::game::player::spawn;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
 
 pub fn player_ship(spawn_position: Vec2, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) -> ActorBundle {
     return ActorBundle {
         actor: Actor {
-            speed: Vec2::new(0.5, 0.5),
+            speed: Vec2::new(6.0, 6.0),
         },
         scene_bundle: StarRustSceneBundle {
             scene: models.default_player.clone(),
             transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
-                .with_scale(Vec3::splat(0.95))
+                .with_scale(Vec3::splat(ASSET_SCALE))
                 .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
             ..default()
         },
         weapon: Weapon::new(
             BulletType::Standard,    
-                Vec2::new(1.0, -0.32),
+                Vec2::new(20.0, -10.0),
                 audio_clips.laser_shot.clone(),
                 0.15
         ),
         collider: Collider {
-            rect: Vec2::new(1.5, 1.5),
+            rect: Vec2::new(30.0, 30.0),
             damage: 1,
             hitmask: ALLY_HITMASK,
             ..default()
@@ -52,16 +56,17 @@ impl BundledAsset for DefaultEnemyShip {
             },
             actor_bundle: ActorBundle {
                 actor: Actor {
-                    speed: Vec2::new(0.1, 0.1),
+                    speed: Vec2::new(2.0, 2.0),
                 },
                 scene_bundle: StarRustSceneBundle {
                     scene: models.default_enemy.clone(),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
+                        .with_scale(Vec3::splat(20.0))
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
                     ..default()
                 },
                 collider: Collider {
-                    rect: Vec2::new(1.5, 1.5),
+                    rect: Vec2::new(30.0, 30.0),
                     damage: 1,
                     hitmask: ENEMY_HITMASK,
                     ..default()
@@ -73,7 +78,7 @@ impl BundledAsset for DefaultEnemyShip {
                 },
                 weapon: Weapon::new(
                     BulletType::StandardEnemy,
-                    Vec2::new(1.0, 0.0),
+                    Vec2::new(20.0, 0.0),
                     audio_clips.laser_shot.clone(),
                     0.5
                 ),
@@ -91,6 +96,21 @@ impl BundledAsset for RaptorSineMovementVariant {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
         variant.ai.mode = AiMode::Sinusoid1;
+        return variant;
+    }
+}
+
+pub struct JetCharger;
+
+impl BundledAsset for JetCharger {
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
+        let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
+        variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
+        variant.actor_bundle.actor.speed = Vec2::new(1.5,1.5);
+        variant.ai.mode = AiMode::ChargeForward1;
+        // Disable Weapon
+        variant.actor_bundle.weapon.cooldown_timer.set_mode(TimerMode::Once);
+        variant.actor_bundle.weapon.cooldown_timer.set_duration(Duration::from_secs(300));
         return variant;
     }
 }

@@ -13,7 +13,7 @@ impl Plugin for EnemyPlugin {
         .add_event::<ScoreEvent>()
         .add_system_set(
                 SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
             );
     }
 }

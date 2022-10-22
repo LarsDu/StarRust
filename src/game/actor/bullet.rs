@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::game::constants::ASSET_SCALE;
+
 use super::super::scene::SceneAssets;
 
 use super::super::components::*;
@@ -38,11 +40,12 @@ impl AiBulletBundle for StandardBullet {
     fn get_bullet_bundle(models: &Res<SceneAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
         return BulletActorBundle {
             actor: Actor {
-                speed: Vec2::new(0.55, 0.55),
+                speed: Vec2::new(10.0, 10.0),
             },
             scene_bundle: StarRustSceneBundle {
                 scene: models.default_bullet.clone(),
                 transform: Transform::from_xyz(weapon_data.translation.x, weapon_data.translation.y, 2.0)
+                    .with_scale(Vec3::splat(ASSET_SCALE))
                     .with_rotation(weapon_data.rotation),
                 ..default()
             },

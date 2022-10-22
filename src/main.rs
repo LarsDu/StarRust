@@ -50,15 +50,11 @@ fn setup_camera(mut commands: Commands) {
         camera_3d: Camera3d {  ..default()},
         camera: Camera {priority: 1, ..default()},
         projection: Projection::Orthographic(OrthographicProjection {
-            //far: -1000.0,
-            //near: 0.0,
-            scale: 0.05,
+            scale: 1.0,
            ..default()
         }),
-        transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR-1.0).looking_at(Vec3::ZERO, Vec3::Y),
-        /*transform: Transform::from_xyz(0.0, 0.0, -30.0).looking_at(Vec3::ZERO, Vec3::Y),*/
+        transform: Transform::from_xyz(0.0, 0.0, 1.0).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     })
-    //.insert(Camera2d{..default()})
     .insert(CameraShaker{..default()});
 }
