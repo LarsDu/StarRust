@@ -161,7 +161,7 @@ impl BundledAsset for Star {
         variant.actor_bundle.scene_bundle.scene = models.powerup_star.clone();
         variant.actor_bundle.collider.damage = 0;
         variant.death_points_awarded.points = 1;
-        variant.actor_bundle.actor.speed = Vec2::new(4.0, 4.0);
+        variant.actor_bundle.actor.speed = Vec2::new(6.0, 6.0);
         variant.actor_bundle.health.hp = 1;
         variant.actor_bundle.health.death_sound = audio_clips.coin_larry.clone();
         variant.actor_bundle.collider.rect = Vec2::new(10.0, 10.0);
