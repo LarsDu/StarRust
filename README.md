@@ -17,13 +17,22 @@ TODO:
     -   [ ] Reintroduce FixedTimeStep
 -   [ ] Implement new enemies
     -   [ ] Platform with turret
-    -   [ ] Boss with turret
+    -   [ ] Boss with multiple turret
 -   [ ] UI
     -   [ ] Player Healthbar
--   [ ] Powerups
+-   [ ] PowerUps
+    -   [ ] PowerUp Plugin
+    -   [ ] PowerUp-specific bundles
     -   [ ] Powerup pickups
+-   [ ] Weapon PowerUps
+    -   [ ] 3x Cone shot
+    -   [ ] 6x Cone shot
+    -   [ ] "Bombs"
+    -   [ ] Missiles with sinusoidal trajectories
 -   [ ] Performance:
     -   [ ] Entirely unclear whether materials are being shared amongst gltf
-            models. Look into this
+            models. Look into this.
+    -   [ ] Figure out if draw calls are being optimized.
+-   [ ] Multiple levels
 
 ### [Contributor Guidlines](https://github.com/LarsDu/StarRust/blob/main/CONTRIBUTING.md)
