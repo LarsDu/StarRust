@@ -22,3 +22,8 @@ TODO:
     -   [ ] Player Healthbar
 -   [ ] Powerups
     -   [ ] Powerup pickups
+-   [ ] Performance:
+    -   [ ] Entirely unclear whether materials are being shared amongst gltf
+            models. Look into this
+
+### [Contributor Guidlines](https://github.com/LarsDu/StarRust/blob/main/CONTRIBUTING.md)
