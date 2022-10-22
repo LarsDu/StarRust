@@ -105,7 +105,7 @@ pub struct JetCharger;
 impl BundledAsset for JetCharger {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
-        variant.actor_bundle.scene_bundle.scene = models.basic_boss.clone();
+        variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
         variant.actor_bundle.actor.speed = Vec2::new(3.5,3.5);
         variant.ai.mode = AiMode::ChargeForward1;
         // Disable Weapon
