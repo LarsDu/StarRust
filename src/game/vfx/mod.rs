@@ -27,12 +27,8 @@ impl Plugin for VfxPlugin {
         app.add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_event::<CameraShakeEvent>()
             .add_event::<ExplosionEvent>()
-            .add_system(on_explosion_event)
-            .add_system_set(
-                SystemSet::on_update(AppState::InGame)
-                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                    .with_system(shake_camera),
-            );
+            //.add_system(on_explosion_event)
+            .add_system(shake_camera);
     }
 }
 
