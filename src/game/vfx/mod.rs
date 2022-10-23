@@ -53,7 +53,7 @@ fn shake_camera(
         // Shake time goes from higher to lower as the shake progresses and should land at around 0.0
         let shake_time = shaker.timer.duration().as_secs_f32() - shaker.timer.elapsed_secs();
         
-        if shake_time > 0.001 {
+        if shake_time > 0.01 {
             let rng = fastrand::Rng::new();
             let magnitude_at_time = shaker.magnitude * shake_time;            
             let theta = rng.f32() * 2.0 * PI;

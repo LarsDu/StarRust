@@ -31,12 +31,18 @@ impl SpawnSequence {
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 30.0,
-                frequency: 1.0,
-                spawn_func: SpacePlatformBare::spawn_bundle,
+                frequency: 0.8,
+                spawn_func: RaptorSineMovementVariant::spawn_bundle,
             },
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
-                ttl: 150.0,
+                ttl: 15.0,
+                frequency: 1.0,
+                spawn_func: JetCharger::spawn_bundle,
+            },
+            LevelSpawnInfo {
+                locations: Vec::from(SPAWN_LOCATIONS),
+                ttl: 40.0,
                 frequency: 0.8,
                 spawn_func: RaptorSineMovementVariant::spawn_bundle,
             },
