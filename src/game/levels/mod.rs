@@ -12,14 +12,14 @@ use fastrand;
 pub mod lvl;
 use lvl::*;
 
+
+// FIXME: Use enum rather than bundle here to make this 
+// capable of spawning any type of bundle!
 pub struct LevelSpawnInfo<T: Bundle> {
     pub locations: Vec<Vec2>,
     pub ttl: f32,
     pub frequency: f32,
     pub bundle: T,
-}
-pub trait BundledAsset<T: Bundle>{
-    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> T;
 }
 
 pub struct LevelPlugin;

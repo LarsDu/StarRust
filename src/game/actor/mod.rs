@@ -4,9 +4,20 @@ pub mod ship;
 use crate::AppState;
 
 use super::super::utils::despawn_all;
+use super::AudioClipAssets;
+use super::SceneAssets;
 use super::ai::*;
 use super::components::*;
 use bevy::prelude::*;
+
+
+pub trait BundledAsset<T: Bundle>{
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> T;
+    fn spawn_bundle(commands: &mut Commands, audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>){
+        let bundle = Self::get_bundle(audio_clips, models);
+        commands.spawn(bundle);
+    }
+}
 
 #[derive(Bundle, Clone, Default)]
 pub struct StarRustSceneBundle {

@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use super::super::actor::bullet::BulletType;
 use super::super::components::*;
-use super::super::levels::*;
+use super::super::actor::BundledAsset;
 use super::*;
 use crate::game::constants::ASSET_SCALE;
 use crate::game::player::spawn;
