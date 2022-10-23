@@ -4,16 +4,19 @@ pub mod ship;
 use crate::AppState;
 
 use super::super::utils::despawn_all;
-use super::AudioClipAssets;
-use super::SceneAssets;
 use super::ai::*;
 use super::components::*;
+use super::AudioClipAssets;
+use super::SceneAssets;
 use bevy::prelude::*;
 
-
-pub trait BundledAsset<T: Bundle>{
+pub trait BundledAsset<T: Bundle> {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> T;
-    fn spawn_bundle(commands: &mut Commands, audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>){
+    fn spawn_bundle(
+        commands: &mut Commands,
+        audio_clips: &Res<AudioClipAssets>,
+        models: &Res<SceneAssets>,
+    ) {
         let bundle = Self::get_bundle(audio_clips, models);
         commands.spawn(bundle);
     }
@@ -44,7 +47,7 @@ pub struct AiActorBundle {
     pub ai: Ai,
     pub auto_fire: AutoFire,
     pub death_points_awarded: DeathPointsAwarded,
-    pub timed_oob_despawn: TimedOobDespawn
+    pub timed_oob_despawn: TimedOobDespawn,
 }
 
 pub struct ActorPlugin;

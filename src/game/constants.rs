@@ -1,8 +1,7 @@
 use bevy::prelude::*;
 
 // TIME
-pub const TIME_STEP: f32 = 1.0/60.0;
-
+pub const TIME_STEP: f32 = 1.0 / 60.0;
 
 // Models
 pub const SCOREBOARD_FONT_SIZE: f32 = 20.0;
@@ -14,8 +13,7 @@ pub const UI_COLOR: Color = Color::Rgba {
     alpha: 1.0,
 };
 
-
-pub const ALLY_HITMASK: u8 = 1;  // 0b0001
+pub const ALLY_HITMASK: u8 = 1; // 0b0001
 pub const ENEMY_HITMASK: u8 = 2; // 0b0010
 
 pub const ASSET_SCALE: f32 = 20.0;
@@ -36,7 +34,7 @@ pub const WALL_COLOR: Color = Color::Rgba {
 };
 
 pub const SPAWN_OFFSET: f32 = 8.0 * ASSET_SCALE;
-pub const RIGHT_SPAWN_X: f32 = RIGHT_WALL+SPAWN_OFFSET;
+pub const RIGHT_SPAWN_X: f32 = RIGHT_WALL + SPAWN_OFFSET;
 pub const SPAWN_LOCATIONS: [Vec2; 7] = [
     Vec2::new(RIGHT_SPAWN_X, 0.0),
     Vec2::new(RIGHT_SPAWN_X, 300.0),

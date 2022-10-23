@@ -1,11 +1,11 @@
-use bevy::prelude::*;
 use super::super::constants::*;
+use super::super::utils::despawn_all;
 use super::super::AppState;
 use super::components::PlayerScoreBoard;
 use super::constants::*;
 use super::events::{AudioEvent, ScoreEvent};
 use super::resources::Scoreboard;
-use super::super::utils::despawn_all;
+use bevy::prelude::*;
 
 pub struct UiPlugin;
 
@@ -14,14 +14,20 @@ impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Scoreboard { score: 0 })
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_scoreboard))
-            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<PlayerScoreBoard>))
+            .add_system_set(
+                SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<PlayerScoreBoard>),
+            )
             .add_event::<ScoreEvent>()
             .add_event::<AudioEvent>()
             .add_system(on_score_event);
     }
 }
 
-fn setup_scoreboard(mut scoreboard: ResMut<Scoreboard>, mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup_scoreboard(
+    mut scoreboard: ResMut<Scoreboard>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     scoreboard.score = 0;
     commands
         .spawn(
@@ -56,8 +62,6 @@ fn setup_scoreboard(mut scoreboard: ResMut<Scoreboard>, mut commands: Commands, 
         .insert(PlayerScoreBoard);
 }
 
-
-
 fn on_score_event(
     mut score_events: EventReader<ScoreEvent>,
     mut scoreboard: ResMut<Scoreboard>,
@@ -68,5 +72,5 @@ fn on_score_event(
         let mut player_score_text = text_query.single_mut();
         player_score_text.sections[1].value = scoreboard.score.to_string();
     }
-
+    score_events.clear(); // Clear buffer to prevent double registration of scoring events (???)
 }

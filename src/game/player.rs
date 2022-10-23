@@ -48,7 +48,7 @@ impl Plugin for PlayerPlugin {
 pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) {
     // note that we have to include the `Scene0` label
 
-    let mut player_bundle = player_ship(Vec2::new(-20.0, 0.0), audio_clips, models);
+    let mut player_bundle = player_ship(Vec2::new(-150.0, 0.0), audio_clips, models);
 
     // Don't have the weapon start firing immediately
     player_bundle.weapon.cooldown_timer.pause();
@@ -157,7 +157,7 @@ pub fn fire_controller(
 }
 
 fn on_player_death(
-    mut death_events: EventReader<PlayerDeathEvent>,
+    death_events: EventReader<PlayerDeathEvent>,
     mut menu_state: ResMut<State<MenuState>>,
     mut game_state: ResMut<State<AppState>>,
     //query: Query<Entity, With<Player>>

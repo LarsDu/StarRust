@@ -4,7 +4,6 @@ use super::super::super::AppState;
 use super::super::events::WeaponFiredEvent;
 use super::super::collisions::CollisionEvent;
 use super::super::components::{AutoFire, Weapon, Collider};
-use super::super::constants::*;
 use bevy::{prelude::*, time::*};
 
 pub struct AutoFirePlugin;
