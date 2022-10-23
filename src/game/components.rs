@@ -105,10 +105,17 @@ pub struct TimedDespawn {
 }
 
 // Timed despawn out of bounds
-#[derive(Component, Clone, Default)]
+#[derive(Component, Clone)]
 pub struct TimedOobDespawn {
     pub timer: Timer,
 }
+
+impl Default for TimedOobDespawn{
+    fn default() -> Self {
+        return TimedOobDespawn { timer: Timer::from_seconds(1.0, TimerMode::Once) }    
+    }
+}
+
 
 // The following gets attached to the scor
 #[derive(Component)]

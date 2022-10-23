@@ -1,6 +1,5 @@
 use super::super::AppState;
 use super::events::*;
-use super::constants::*;
 use bevy::{prelude::*, time::*};
 
 pub struct EnemyPlugin;

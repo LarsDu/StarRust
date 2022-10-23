@@ -44,6 +44,7 @@ pub struct AiActorBundle {
     pub ai: Ai,
     pub auto_fire: AutoFire,
     pub death_points_awarded: DeathPointsAwarded,
+    pub timed_oob_despawn: TimedOobDespawn
 }
 
 pub struct ActorPlugin;

@@ -41,6 +41,7 @@ fn timed_oob_despawn(
     mut commands: Commands,
     mut query: Query<(Entity, &Transform, &mut TimedOobDespawn)>,
 ) {
+    // Timed despawn for entities that go out of bounds
     for (entity, transform, mut despawner) in &mut query {
         let pos = transform.translation;
         if pos.x < LEFT_WALL

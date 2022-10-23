@@ -5,7 +5,6 @@ use super::super::components::*;
 use super::super::actor::BundledAsset;
 use super::*;
 use crate::game::constants::ASSET_SCALE;
-use crate::game::player::spawn;
 use crate::game::AudioClipAssets;
 use crate::game::SceneAssets;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK, SPAWN_LOCATIONS};
@@ -89,7 +88,8 @@ impl BundledAsset<AiActorBundle> for DefaultEnemyShip {
                 camera_shake_on_death: CameraShakeOnDeath { ..default() },
             },
             auto_fire: AutoFire {},
-            death_points_awarded: DeathPointsAwarded { points: 20 }, //FIXME: Gets doubled
+            death_points_awarded: DeathPointsAwarded { points: 20 }, //FIXME: Gets doubled for some reason
+            timed_oob_despawn: TimedOobDespawn{..default()},
         };
     }
 }
