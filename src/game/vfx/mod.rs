@@ -49,14 +49,15 @@ fn shake_camera(
         }
         // Tick the shaker
         shaker.timer.tick(time.delta());
-
+        
         // Shake time goes from higher to lower as the shake progresses and should land at around 0.0
         let shake_time = shaker.timer.duration().as_secs_f32() - shaker.timer.elapsed_secs();
+        
         if shake_time > 0.001 {
             let rng = fastrand::Rng::new();
-            let magnitude_at_time = shaker.magnitude * shake_time;
-            let theta = magnitude_at_time * rng.f32() * 2.0 * PI;
-            t.translation = Vec3::new(theta.cos(), theta.sin(), CAMERA_FAR);
+            let magnitude_at_time = shaker.magnitude * shake_time;            
+            let theta = rng.f32() * 2.0 * PI;
+            t.translation = Vec3::new(magnitude_at_time * theta.cos(), magnitude_at_time * theta.sin(), CAMERA_FAR);
         }
     }
 }

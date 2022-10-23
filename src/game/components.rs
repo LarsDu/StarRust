@@ -128,7 +128,7 @@ pub struct CameraShaker {
 impl Default for CameraShaker {
     fn default() -> Self {
         return CameraShaker {
-            magnitude: 1.0,
+            magnitude: 25.0,
             timer: Timer::from_seconds(0.25, TimerMode::Once),
         };
     }
@@ -142,8 +142,8 @@ pub struct CameraShakeOnDeath {
 impl Default for CameraShakeOnDeath {
     fn default() -> Self {
         return CameraShakeOnDeath {
-            magnitude: 0.70,
-            duration_secs: 0.2,
+            magnitude: 25.0,
+            duration_secs: 0.25,
         };
     }
 }

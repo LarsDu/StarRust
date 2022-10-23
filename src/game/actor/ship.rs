@@ -18,7 +18,7 @@ pub fn player_ship(
 ) -> ActorBundle {
     return ActorBundle {
         actor: Actor {
-            speed: Vec2::new(8.0, 8.0),
+            speed: Vec2::new(6.0, 6.0),
         },
         scene_bundle: StarRustSceneBundle {
             scene: models.default_player.clone(),
@@ -159,6 +159,7 @@ pub struct Star;
 impl BundledAsset<AiActorBundle> for Star {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models).clone();
+        variant.actor_bundle.camera_shake_on_death.magnitude=0.0;
         variant.actor_bundle.scene_bundle.scene = models.powerup_star.clone();
         variant.actor_bundle.collider.damage = 0;
         variant.death_points_awarded.points = 1;
