@@ -22,8 +22,7 @@ pub struct SceneAssets{
 
 impl Plugin for ScenePlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_resources)
-        .add_system_set(SystemSet::on_enter(AppState::InGame));
+        app.add_startup_system(setup_resources);
     }
 }
 

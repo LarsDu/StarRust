@@ -12,8 +12,7 @@ use fastrand;
 pub mod lvl;
 use lvl::*;
 
-
-// FIXME: Use enum rather than bundle here to make this 
+// FIXME: Use enum rather than bundle here to make this
 // capable of spawning any type of bundle!
 pub struct LevelSpawnInfo<T: Bundle> {
     pub locations: Vec<Vec2>,
@@ -29,19 +28,14 @@ impl Plugin for LevelPlugin {
         app.add_startup_system(scene::setup_resources)
             .add_event::<LevelEndEvent>()
             .add_system_set(
-                SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
+                SystemSet::on_enter(AppState::InGame)
+                    .with_system(setup_level)
+                    
             )
             .add_system_set(
                 SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
             )
-            .add_system_set(
-                SystemSet::on_enter(AppState::InGame).with_system(setup_level), //.with_system(spawn_startup_bundles::<Spawn>)
-            )
-            .add_system_set(
-                SystemSet::new()
-                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                    .with_system(level_periodic_spawn),
-            )
+            .add_system(level_periodic_spawn)
             .add_system(level_ender);
     }
 }
@@ -51,13 +45,15 @@ fn setup_level(
     audio_clips: Res<AudioClipAssets>,
     models: Res<SceneAssets>,
 ) {
+    
     commands.spawn(AiActorSpawner::new(SpawnSequence::level0(
         &audio_clips,
         &models,
     )));
-    commands.spawn(AiActorSpawner::new(
-        SpawnSequence::level0_powerups(&audio_clips, &models)
-    ));
+    commands.spawn(AiActorSpawner::new(SpawnSequence::level0_powerups(
+        &audio_clips,
+        &models,
+    )));
 }
 
 fn level_periodic_spawn(

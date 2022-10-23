@@ -51,7 +51,6 @@ fn timed_oob_despawn(
         {
             despawner.timer.tick(time.delta());
             if despawner.timer.finished() {
-                //println!("Despawning {}", entity.id());
                 commands.entity(entity).despawn_recursive();
             }
         } else {
