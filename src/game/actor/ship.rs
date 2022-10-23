@@ -136,7 +136,7 @@ impl BundledAsset<AiActorBundle> for SpacePlatformBare {
         variant.actor_bundle.scene_bundle.scene = models.space_platform.clone();
         variant.actor_bundle.actor.speed = Vec2::new(2.0, 2.0);
         variant.actor_bundle.health.hp = 100;
-        variant.actor_bundle.collider.rect = Vec2::new(200.0, 40.0);
+        variant.actor_bundle.collider.rect = Vec2::new(210.0, 40.0);
         variant.ai.mode = AiMode::ChargeForward1;
         // Disable Weapon
         variant
