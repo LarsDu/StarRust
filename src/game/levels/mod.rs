@@ -14,11 +14,11 @@ use lvl::*;
 
 // FIXME: Use enum rather than bundle here to make this
 // capable of spawning any type of bundle!
-pub struct LevelSpawnInfo<T: Bundle> {
+pub struct LevelSpawnInfo{
     pub locations: Vec<Vec2>,
     pub ttl: f32,
     pub frequency: f32,
-    pub bundle: T,
+    pub spawn_func: fn(&mut Commands, &Res<AudioClipAssets>, &Res<SceneAssets>, Vec2),
 }
 
 pub struct LevelPlugin;
@@ -27,11 +27,7 @@ impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(scene::setup_resources)
             .add_event::<LevelEndEvent>()
-            .add_system_set(
-                SystemSet::on_enter(AppState::InGame)
-                    .with_system(setup_level)
-                    
-            )
+            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_level))
             .add_system_set(
                 SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
             )
@@ -45,7 +41,6 @@ fn setup_level(
     audio_clips: Res<AudioClipAssets>,
     models: Res<SceneAssets>,
 ) {
-    
     commands.spawn(AiActorSpawner::new(SpawnSequence::level0(
         &audio_clips,
         &models,
@@ -59,7 +54,8 @@ fn setup_level(
 fn level_periodic_spawn(
     mut commands: Commands,
     time: Res<Time>,
-    //mut menu_state: ResMut<State<MenuState<>>>,
+    models: Res<SceneAssets>,
+    audio_clips: Res<AudioClipAssets>,
     mut level_end_event: EventWriter<LevelEndEvent>,
     mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>,
 ) {
@@ -86,7 +82,6 @@ fn level_periodic_spawn(
 
                 spawner.ttl_timer.reset();
             } else {
-                //TODO: Level is over. Progress into success or failure states
                 spawner.index = 0;
                 level_end_event.send(LevelEndEvent {});
             }
@@ -94,19 +89,24 @@ fn level_periodic_spawn(
 
         if spawner.frequency_timer.finished() {
             let spawn_info = &spawner.spawn_infos[spawner.index as usize];
-            //commands.spawn(DefaultEnemyShip::get_bundle(&asset_server));
-            spawn_from_spawn_info(&mut commands, spawn_info);
+
+            spawn_from_spawn_info(&mut commands, spawn_info, &audio_clips, &models, );
         }
     }
 }
 
-fn spawn_from_spawn_info(commands: &mut Commands, spawn_info: &LevelSpawnInfo<AiActorBundle>) {
+fn spawn_from_spawn_info(
+    commands: &mut Commands,
+    spawn_info: &LevelSpawnInfo,
+    audio_clips: &Res<AudioClipAssets>,
+    models: &Res<SceneAssets>,
+) {
     // Read from spawn info
-    let mut bundle = spawn_info.bundle.clone();
     let rng = fastrand::Rng::new();
     let spawn_pos = spawn_info.locations[rng.usize(0..spawn_info.locations.len())];
-    bundle.actor_bundle.scene_bundle.transform.translation = spawn_pos.extend(0.0);
-    commands.spawn(bundle); // <--The bundle is behind a mutable reference
+    // Note: function must be wrapped in parenthesis
+    // ref: https://stackoverflow.com/questions/37370120/
+    (spawn_info.spawn_func)(commands, &audio_clips, &models, spawn_pos);
 }
 
 fn level_ender(

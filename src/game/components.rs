@@ -5,7 +5,6 @@ use super::ai::AiMode;
 use super::levels::LevelSpawnInfo;
 use super::ENEMY_HITMASK;
 
-use super::actor::*;
 #[derive(Component)]
 pub struct Player;
 
@@ -77,13 +76,13 @@ pub struct Wall;
 #[derive(Component)]
 pub struct AiActorSpawner {
     pub index: i32,
-    pub spawn_infos: Vec<LevelSpawnInfo<AiActorBundle>>,
+    pub spawn_infos: Vec<LevelSpawnInfo>,
     pub ttl_timer: Timer,       // init from spawn_infos
     pub frequency_timer: Timer, //init from spawn_infos
 }
 
 impl AiActorSpawner {
-    pub fn new(spawn_infos: Vec<LevelSpawnInfo<AiActorBundle>>) -> Self {
+    pub fn new(spawn_infos: Vec<LevelSpawnInfo>) -> Self {
         return AiActorSpawner {
             index: 0,
             ttl_timer: Timer::from_seconds(spawn_infos[0].ttl, TimerMode::Once),

@@ -11,14 +11,15 @@ use super::SceneAssets;
 use bevy::prelude::*;
 
 pub trait BundledAsset<T: Bundle> {
-    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>) -> T;
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>, spawn_pos: Vec2
+    ) -> T;
     fn spawn_bundle(
         commands: &mut Commands,
         audio_clips: &Res<AudioClipAssets>,
         models: &Res<SceneAssets>,
+        spawn_pos: Vec2
     ) {
-        let bundle = Self::get_bundle(audio_clips, models);
-        commands.spawn(bundle);
+        commands.spawn(Self::get_bundle(audio_clips, models, spawn_pos));
     }
 }
 

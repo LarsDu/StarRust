@@ -8,50 +8,50 @@ impl SpawnSequence {
     pub fn level0(
         audio_clips: &Res<AudioClipAssets>,
         models: &Res<game::SceneAssets>,
-    ) -> Vec<LevelSpawnInfo<AiActorBundle>> { // Note: To make this more flexible in type of item returned, would need to use heap
+    ) -> Vec<LevelSpawnInfo> { // Note: To make this more flexible in type of item returned, would need to use heap
         return vec![
             LevelSpawnInfo {
                 locations: vec![SPAWN_LOCATIONS[0], SPAWN_LOCATIONS[1], SPAWN_LOCATIONS[3]],
                 ttl: 10.0,
                 frequency: 3.0,
-                bundle: DefaultEnemyShip::get_bundle(audio_clips, models), // <--May store an enum here rather than a bundle
+                spawn_func: DefaultEnemyShip::spawn_bundle,
             },
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 15.0,
                 frequency: 1.0,
-                bundle: JetCharger::get_bundle(audio_clips, models),
+                spawn_func: JetCharger::spawn_bundle,
             },
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 15.0,
-                frequency: 1.0,
-                bundle: SpacePlatformBare::get_bundle(audio_clips, models),
+                frequency: 2.0,
+                spawn_func: SpacePlatformBare::spawn_bundle,
             },
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 30.0,
                 frequency: 1.0,
-                bundle: RaptorSineMovementVariant::get_bundle(audio_clips, models),
+                spawn_func: SpacePlatformBare::spawn_bundle,
             },
             LevelSpawnInfo {
                 locations: Vec::from(SPAWN_LOCATIONS),
                 ttl: 150.0,
                 frequency: 0.8,
-                bundle: RaptorSineMovementVariant::get_bundle(audio_clips, models),
+                spawn_func: RaptorSineMovementVariant::spawn_bundle,
             },
         ];
     }
 
     pub fn level0_powerups(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<game::SceneAssets>,
-    ) -> Vec<LevelSpawnInfo<AiActorBundle>> {
-        return vec![LevelSpawnInfo::<AiActorBundle> {
+        models: &Res<SceneAssets>,
+    ) -> Vec<LevelSpawnInfo> {
+        return vec![LevelSpawnInfo{
             locations: Vec::from(SPAWN_LOCATIONS),
             ttl: 300.0,
             frequency: 0.3,
-            bundle: Star::get_bundle(audio_clips, models),
+            spawn_func: Star::spawn_bundle,
         }];
     }
 }

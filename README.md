@@ -8,13 +8,13 @@ Currently very unstable
 
 TODO:
 
--   [ ] Rework spawning to use enums to allow for mixed lists of bundles for
+-   [x] Rework spawning to use enums to allow for mixed lists of bundles for
         each SpawnInfo.
--   [ ] Figure out how to get the 2d particle system to actually render
+-   [-] Figure out how to get the 2d particle system to actually render
+    -   Answer: Not possible in current version of bevy
 -   [ ] Set up PowerUps
     -   [ ] PowerUpBundle and PowerUpSystem
 -   [ ] Migrate to Bevy `stageless` RFC
-    -   [ ] Reintroduce FixedTimeStep
 -   [ ] Implement new enemies
     -   [ ] Platform with turret
     -   [ ] Boss with multiple turret
@@ -30,10 +30,9 @@ TODO:
     -   [ ] "Bombs"
     -   [ ] Missiles with sinusoidal trajectories
 -   [ ] Performance:
-    -   [ ] Replace all death triggering events (player, camera shake, etc) with
-            [removal detection](https://github.com/bevyengine/bevy/blob/main/examples/ecs/removal_detection.rs)
-    -   [ ] All materials in the game are the same for all 3d elements, but
-            these materials are almost certainly not being batched/shared.
+    -   [-] All materials in the game are the same for all 3d elements, but
+        these materials are almost certainly not being batched/shared.
+        -   Answer: Not possible in current version of Bevy (I think).
 -   [ ] Multiple levels
 
 ### [Contributor Guidlines](https://github.com/LarsDu/StarRust/blob/main/CONTRIBUTING.md)
