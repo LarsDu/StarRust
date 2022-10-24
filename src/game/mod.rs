@@ -19,9 +19,6 @@ use constants::*;
 mod player;
 use player::*;
 
-mod enemy;
-pub use enemy::*;
-
 mod collisions;
 pub use collisions::*;
 
@@ -80,7 +77,6 @@ impl Plugin for GamePlugin {
             .add_plugin(WeaponPlugin)
             .add_plugin(LevelPlugin)
             .add_plugin(DespawnerPlugin)
-            .add_plugin(EnemyPlugin)
             .add_plugin(VfxPlugin)
             .add_plugin(ActorPlugin); // currently for cleaning up entities
     }

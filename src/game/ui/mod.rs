@@ -13,12 +13,12 @@ pub struct UiPlugin;
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Scoreboard { score: 0 })
+            .add_event::<ScoreEvent>()
+            .add_event::<AudioEvent>()
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_scoreboard))
             .add_system_set(
                 SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<PlayerScoreBoard>),
             )
-            .add_event::<ScoreEvent>()
-            .add_event::<AudioEvent>()
             .add_system(on_score_event);
     }
 }

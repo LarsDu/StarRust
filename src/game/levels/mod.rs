@@ -14,7 +14,7 @@ use lvl::*;
 
 // FIXME: Use enum rather than bundle here to make this
 // capable of spawning any type of bundle!
-pub struct LevelSpawnInfo{
+pub struct LevelSpawnInfo {
     pub locations: Vec<Vec2>,
     pub ttl: f32,
     pub frequency: f32,
@@ -25,8 +25,7 @@ pub struct LevelPlugin;
 
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(scene::setup_resources)
-            .add_event::<LevelEndEvent>()
+        app.add_event::<LevelEndEvent>()
             .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_level))
             .add_system_set(
                 SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
@@ -90,7 +89,7 @@ fn level_periodic_spawn(
         if spawner.frequency_timer.finished() {
             let spawn_info = &spawner.spawn_infos[spawner.index as usize];
 
-            spawn_from_spawn_info(&mut commands, spawn_info, &audio_clips, &models, );
+            spawn_from_spawn_info(&mut commands, spawn_info, &audio_clips, &models);
         }
     }
 }
