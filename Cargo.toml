@@ -9,18 +9,8 @@ edition = "2021"
 fastrand = "1.7.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 
 [dependencies.bevy]
-git = "https://github.com/bevyengine/bevy.git"
-rev = "543465b721048355e34eb6078923645747c1d44b"
-
-#[dependencies.bevy_hanabi]
-#git = "https://github.com/LarsDu/bevy_hanabi.git"
-#branch = "larsdu/update_for_0.9"
-#rev = "82d9423"
-
-[dependencies.bevy_particle_systems]
-git = "https://github.com/LarsDu/bevy_particle_systems.git"
-rev = "9a5d33b"
-#branch = "larsdu/bevy-0.9-dev"
+git = "https://github.com/LarsDu/bevy.git"
+rev = "af13df71e7013313ada00efe037e890c8a9e3571"
 
 [workspace]
 resolver ="2"

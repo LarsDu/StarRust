@@ -57,7 +57,7 @@ fn sine_charge(
     amplitude: f32, frequency: f32){
     
     let forward = t.translation + forward_speed * t.forward();  
-    let up_down = t.up() * amplitude * (time.seconds_since_startup() as f32 * frequency).sin();
+    let up_down = t.up() * amplitude * (time.elapsed_seconds() as f32 * frequency).sin();
     t.translation = forward + up_down;
 
 }

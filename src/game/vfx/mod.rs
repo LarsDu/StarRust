@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use crate::constants::CAMERA_FAR;
 use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
-use bevy_particle_systems::*;
+//use bevy_particle_systems::*;
 
 //use bevy_hanabi::ParticleEffect;
 //use bevy_hanabi::ParticleLifetimeModifier;
@@ -72,7 +72,7 @@ fn on_explosion_event(
         return;
     }
 
-    for explosion_data in &mut events.iter(){
+    /*for explosion_data in &mut events.iter(){
         let particles = ParticleSystemBundle {
             particle_system: ParticleSystem {
                 max_particles: 1000,
@@ -96,7 +96,7 @@ fn on_explosion_event(
             particles
         ).insert(Playing).insert(Transform::from_translation(explosion_data.position));
 
-    }
+    }*/
 
 }
 
