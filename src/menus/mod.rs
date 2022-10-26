@@ -114,7 +114,7 @@ fn menu_action(
                 }
                 MenuButtonAction::Play => {
                     menu_state.overwrite_set(MenuState::Disabled).unwrap();
-                    game_state.overwrite_set(AppState::InGame).unwrap();
+                    game_state.overwrite_set(AppState::Loading).unwrap();
                 }
             }
         }

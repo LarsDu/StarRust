@@ -6,17 +6,17 @@ use crate::AppState;
 use super::super::utils::despawn_all;
 use super::ai::*;
 use super::components::*;
-use super::AudioClipAssets;
-use super::SceneAssets;
+use super::assets::AudioClipAssets;
+use super::assets::GltfAssets;
 use bevy::prelude::*;
 
 pub trait BundledAsset<T: Bundle> {
-    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>, spawn_pos: Vec2
+    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<GltfAssets>, spawn_pos: Vec2
     ) -> T;
     fn spawn_bundle(
         commands: &mut Commands,
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<GltfAssets>,
         spawn_pos: Vec2
     ) {
         commands.spawn(Self::get_bundle(audio_clips, models, spawn_pos));

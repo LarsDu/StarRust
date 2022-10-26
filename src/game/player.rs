@@ -9,7 +9,7 @@ use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
 use super::scene;
 use super::AudioClipAssets;
-use super::SceneAssets;
+use super::GltfAssets;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -45,7 +45,7 @@ impl Plugin for PlayerPlugin {
 // SYSTEMS
 
 // Player spawner system
-pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) {
+pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<GltfAssets>) {
     // note that we have to include the `Scene0` label
 
     let mut player_bundle = player_ship(Vec2::new(-150.0, 0.0), audio_clips, models);

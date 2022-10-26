@@ -53,19 +53,16 @@ pub use weapon::WeaponPlugin;
 mod vfx;
 pub use vfx::VfxPlugin;
 
-mod scene;
-pub use scene::SceneAssets;
+mod assets;
+pub use assets::AssetsPlugin;
 
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app//.add_plugin(ParticleSystemPlugin)
-            //.add_plugin(MenuPlugin)
-            .add_plugin(ScenePlugin)
-            //.add_plugin(HanabiPlugin) //Incompatible with WASM
-            //.add_plugin(ParticleSystemPlugin)
+        app
+            .add_plugin(AssetsPlugin)
             .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
             .add_plugin(AiPlugin)
@@ -78,6 +75,6 @@ impl Plugin for GamePlugin {
             .add_plugin(LevelPlugin)
             .add_plugin(DespawnerPlugin)
             .add_plugin(VfxPlugin)
-            .add_plugin(ActorPlugin); // currently for cleaning up entities
+            .add_plugin(ActorPlugin);
     }
 }

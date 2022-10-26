@@ -12,6 +12,10 @@ fastrand = "1.7.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 git = "https://github.com/LarsDu/bevy.git"
 rev = "af13df71e7013313ada00efe037e890c8a9e3571"
 
+[dependencies.bevy_asset_loader]
+git = "https://github.com/LarsDu/bevy_asset_loader.git"
+rev = "ccef2d75ff9e7ff68dba2c22ace0cb3386c84514"
+
 [workspace]
 resolver ="2"
 

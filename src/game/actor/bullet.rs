@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::game::constants::ASSET_SCALE;
 
-use super::super::scene::SceneAssets;
+use super::super::scene::GltfAssets;
 
 use super::super::components::*;
 use super::super::events::WeaponFiredEvent;
@@ -31,13 +31,13 @@ pub struct BulletActorBundle {
 
 
 pub trait AiBulletBundle {
-    fn get_bullet_bundle(models: &Res<SceneAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle;
+    fn get_bullet_bundle(models: &Res<GltfAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle;
 }
 
 pub struct StandardBullet;
 
 impl AiBulletBundle for StandardBullet {
-    fn get_bullet_bundle(models: &Res<SceneAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
+    fn get_bullet_bundle(models: &Res<GltfAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
         return BulletActorBundle {
             actor: Actor {
                 speed: Vec2::new(10.0, 10.0),
@@ -68,7 +68,7 @@ impl AiBulletBundle for StandardBullet {
 pub struct StandardEnemyBullet;
 
 impl AiBulletBundle for StandardEnemyBullet {
-    fn get_bullet_bundle(models: &Res<SceneAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
+    fn get_bullet_bundle(models: &Res<GltfAssets>, weapon_data: &WeaponFiredEvent) -> BulletActorBundle {
         let mut bullet = StandardBullet::get_bullet_bundle(models, weapon_data).clone();
         bullet.scene_bundle.scene = models.default_enemy_bullet.clone();
         return bullet;

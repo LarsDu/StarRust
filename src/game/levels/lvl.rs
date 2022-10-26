@@ -7,7 +7,7 @@ pub struct SpawnSequence;
 impl SpawnSequence {
     pub fn level0(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<game::SceneAssets>,
+        models: &Res<game::GltfAssets>,
     ) -> Vec<LevelSpawnInfo> { // Note: To make this more flexible in type of item returned, would need to use heap
         return vec![
             LevelSpawnInfo {
@@ -51,7 +51,7 @@ impl SpawnSequence {
 
     pub fn level0_powerups(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<GltfAssets>,
     ) -> Vec<LevelSpawnInfo> {
         return vec![LevelSpawnInfo{
             locations: Vec::from(SPAWN_LOCATIONS),

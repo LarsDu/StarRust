@@ -3,7 +3,7 @@ use bevy_asset_loader::prelude::{AssetCollection, LoadingState, LoadingStateAppE
 
 use crate::AppState;
 
-pub struct AssetsPlugin;
+pub struct AssetPlugin;
 
 impl Plugin for AssetPlugin {
     fn build(&self, app: &mut App) {

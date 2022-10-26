@@ -3,7 +3,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 
 use super::super::AppState;
 use super::actor::bullet::*;
-use super::scene::SceneAssets;
+use super::scene::GltfAssets;
 use super::events::WeaponFiredEvent;
 
 pub struct WeaponPlugin;
@@ -21,7 +21,7 @@ impl Plugin for WeaponPlugin {
 
 pub fn on_bullet_fired(
     mut commands: Commands,
-    models: Res<SceneAssets>,
+    models: Res<GltfAssets>,
     mut bullet_fired_events: EventReader<WeaponFiredEvent>,
 ) {
     for event in bullet_fired_events.iter() {
@@ -31,7 +31,7 @@ pub fn on_bullet_fired(
 
 fn spawn_bullet(
     commands: &mut Commands,
-    models: &Res<SceneAssets>,
+    models: &Res<GltfAssets>,
     weapon_data: &WeaponFiredEvent,
 ) {
     let bullet_bundle = match weapon_data.bullet_type {
