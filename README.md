@@ -8,8 +8,7 @@ Currently very unstable
 
 TODO:
 
--   [x] Rework spawning to use enums to allow for mixed lists of bundles for
-        each SpawnInfo.
+-   [x] Rework spawning to allow for arbritrary types to spawn.
 -   [-] Figure out how to get the 2d particle system to actually render
     -   Answer: Not possible in current version of bevy
 -   [ ] Set up PowerUps
@@ -29,7 +28,8 @@ TODO:
     -   [ ] 6x Cone shot
     -   [ ] "Bombs"
     -   [ ] Missiles with sinusoidal trajectories
--   [ ] Performance:
+-   [ ] Performance improvements:
+    -   [ ] Webassembly builds choke on asset loading (on pressing start button)
     -   [-] All materials in the game are the same for all 3d elements, but
         these materials are almost certainly not being batched/shared.
         -   Answer: Not possible in current version of Bevy (I think).
