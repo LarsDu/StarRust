@@ -5,7 +5,7 @@ use super::ai::AiMode;
 use super::levels::LevelSpawnInfo;
 use super::ENEMY_HITMASK;
 
-#[derive(Component)]
+#[derive(Component, Clone, Default)]
 pub struct Player;
 
 #[derive(Component)]

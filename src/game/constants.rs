@@ -1,5 +1,9 @@
 use bevy::prelude::*;
 
+// PLAYER
+pub const PLAYER_SPAWN_POS: Vec2 = Vec2::new(-150.0, 0.0);
+
+
 // TIME
 pub const TIME_STEP: f32 = 1.0 / 60.0;
 

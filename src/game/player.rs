@@ -1,10 +1,13 @@
 use crate::menus::MenuState;
 
 use super::super::AppState;
-use super::actor::ship::player_ship;
+use super::actor::ship::PlayerShipDefault;
+use super::actor::BundledActor;
+use super::actor::PlayerActorBundle;
 use super::collisions::check_collisions;
 use super::collisions::CollisionEvent;
 use super::components::*;
+use super::constants::PLAYER_SPAWN_POS;
 use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
 use super::scene;
@@ -26,7 +29,7 @@ impl Plugin for PlayerPlugin {
             .add_event::<CollisionEvent>()
             .add_event::<AudioEvent>()
             .add_event::<PlayerDeathEvent>()
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn))
+            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player))
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     //.with_run_criteria(FixedTimestep::step(TIMESTEPas f64))
@@ -43,16 +46,17 @@ impl Plugin for PlayerPlugin {
 }
 
 // SYSTEMS
-
 // Player spawner system
-pub fn spawn(mut commands: Commands, audio_clips: Res<AudioClipAssets>, models: Res<SceneAssets>) {
-    // note that we have to include the `Scene0` label
-
-    let mut player_bundle = player_ship(Vec2::new(-150.0, 0.0), audio_clips, models);
-
-    // Don't have the weapon start firing immediately
-    player_bundle.weapon.cooldown_timer.pause();
-    commands.spawn(player_bundle).insert(Player);
+pub fn spawn_player(
+    mut commands: Commands,
+    audio_clips: Res<AudioClipAssets>,
+    models: Res<SceneAssets>,
+) {
+    commands.spawn(PlayerShipDefault::get_bundle(
+        &audio_clips,
+        &models,
+        PLAYER_SPAWN_POS,
+    ));
 }
 
 // Player controller system

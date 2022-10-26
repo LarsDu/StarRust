@@ -10,7 +10,7 @@ use super::AudioClipAssets;
 use super::SceneAssets;
 use bevy::prelude::*;
 
-pub trait BundledAsset<T: Bundle> {
+pub trait BundledActor<T: Bundle> {
     fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>, spawn_pos: Vec2
     ) -> T;
     fn spawn_bundle(
@@ -40,6 +40,12 @@ pub struct ActorBundle {
     pub health: Health,
     pub weapon: Weapon,
     pub camera_shake_on_death: CameraShakeOnDeath,
+}
+
+#[derive(Bundle, Clone)]
+pub struct PlayerActorBundle {
+    pub player: Player,
+    pub actor_bundle: ActorBundle,
 }
 
 #[derive(Bundle, Clone)]

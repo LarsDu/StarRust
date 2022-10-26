@@ -3,7 +3,7 @@ use super::events::*;
 use bevy::prelude::*;
 
 #[derive(Resource)]
-pub struct AudioClipAssets{
+pub struct AudioClipAssets {
     pub no_sound: Handle<AudioSource>,
     pub laser_shot: Handle<AudioSource>,
     pub laser_shot_silenced: Handle<AudioSource>,
@@ -21,13 +21,12 @@ pub struct AudioPlugin;
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(setup_resources)
-        .add_system_set(SystemSet::on_enter(AppState::InGame))
             .add_event::<AudioEvent>()
             .add_system(on_audio_event);
     }
 }
-pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>){
-    let audio_clip_assets = AudioClipAssets{
+pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
+    let audio_clip_assets = AudioClipAssets {
         no_sound: asset_server.load(""),
         laser_shot: asset_server.load("audio/clips/laser_shot.ogg"),
         laser_shot_silenced: asset_server.load("audio/clips/laser_shot_silenced.ogg"),
