@@ -46,6 +46,6 @@ fn on_audio_event(audio: Res<Audio>, mut audio_events: EventReader<AudioEvent>) 
         return;
     }
     for event in audio_events.iter() {
-        audio.play(event.clip.clone());
+        //audio.play(event.clip.clone());
     }
 }

@@ -1,7 +1,7 @@
 // Adapted from https://github.com/bevyengine/bevy/blob/v0.8.1/examples/games/game_menu.rs
 use bevy::{app::AppExit, prelude::*};
 
-use crate::utils::despawn_all;
+use crate::{game::SceneAssets, utils::despawn_all};
 
 use super::AppState;
 
@@ -23,6 +23,8 @@ pub enum MenuState {
 }
 
 #[derive(Component)]
+pub struct MenuBackground;
+#[derive(Component)]
 pub struct OnMainMenuScreen;
 
 #[derive(Component)]
@@ -36,7 +38,11 @@ impl Plugin for MenuPlugin {
         app
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
             .add_state(MenuState::Main)
-            .add_system_set(SystemSet::on_enter(MenuState::Main).with_system(main_menu_setup))
+            .add_system_set(
+                SystemSet::on_enter(MenuState::Main)
+                    .with_system(main_menu_setup)
+                    .with_system(load_background_model),
+            )
             .add_system_set(
                 SystemSet::on_exit(MenuState::Main).with_system(despawn_all::<OnMainMenuScreen>),
             )
@@ -56,6 +62,8 @@ impl Plugin for MenuPlugin {
                 SystemSet::on_update(AppState::Menu)
                     .with_system(menu_action)
                     .with_system(button_system),
+            ).add_system_set(
+                SystemSet::on_exit(AppState::Menu).with_system(despawn_all::<MenuBackground>)
             );
     }
 }
@@ -89,6 +97,34 @@ fn button_system(
             (Interaction::None, None) => NORMAL_BUTTON.into(),
         }
     }
+}
+
+fn load_background_model(mut commands: Commands, models: Res<SceneAssets>) {
+    commands.spawn(SceneBundle {
+        scene: models.default_enemy.clone_weak(),
+        transform: Transform::from_xyz(0.0, 210.0, 20.0)
+            .with_scale(Vec3::splat(30.0))
+            .with_rotation(Quat::from_euler(EulerRot::XYZ, 20.0, 95.0, 0.0)),
+        ..default()
+    }).insert(MenuBackground);
+    /*
+    commands.spawn(SceneBundle {
+        scene: models.basic_boss.clone_weak(),
+        transform: Transform::from_xyz(0.0, 300.0, 20.0)
+            .with_scale(Vec3::splat(10.0))
+            .with_rotation(Quat::from_euler(EulerRot::XYZ, 0.0, 95.0, 0.0)),
+        ..default()
+    }).insert(MenuBackground);
+    */
+    commands.spawn(DirectionalLightBundle {
+        directional_light: DirectionalLight {
+            illuminance: 25000.0,
+            color: Color::WHITE,
+            ..default()
+        },
+        transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
+        ..default()
+    }).insert(MenuBackground);
 }
 
 fn menu_action(
@@ -306,7 +342,6 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         })
         .insert(OnPlayerDeathScreen)
         .with_children(|parent| {
-
             /*
             parent
                 .spawn(ButtonBundle {

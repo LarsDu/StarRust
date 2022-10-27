@@ -23,6 +23,7 @@ pub trait BundledActor<T: Bundle> {
     }
 }
 
+
 #[derive(Bundle, Clone, Default)]
 pub struct StarRustSceneBundle {
     pub scene: Handle<Scene>,

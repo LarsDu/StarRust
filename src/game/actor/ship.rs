@@ -71,7 +71,7 @@ impl BundledActor<AiActorBundle> for DefaultEnemyShip {
             },
             actor_bundle: ActorBundle {
                 actor: Actor {
-                    speed: Vec2::new(2.0, 2.0),
+                    speed: Vec2::new(1.5, 1.5),
                 },
                 scene_bundle: StarRustSceneBundle {
                     scene: models.default_enemy.clone(),

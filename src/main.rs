@@ -4,7 +4,7 @@ mod menus;
 use menus::MenuPlugin;
 
 mod game;
-use game::{components::CameraShaker, GamePlugin};
+use game::{components::CameraShaker, GamePlugin, SceneAssets};
 
 mod constants;
 use constants::{CAMERA_FAR, SCREEN_HEIGHT, SCREEN_WIDTH};
@@ -21,19 +21,22 @@ fn main() {
     App::new()
         .add_state(AppState::Menu)
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
-        .add_plugins(DefaultPlugins.set(WindowPlugin{ 
-                window: WindowDescriptor{
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
                 title: "StarRust".to_string(),
                 width: SCREEN_WIDTH,
                 height: SCREEN_HEIGHT,
                 ..default()
-            }, ..default()
+            },
+            ..default()
         }))
         .add_plugin(GamePlugin)
         .add_plugin(MenuPlugin)
         .add_startup_system(setup_camera)
         .run();
 }
+
+
 
 fn setup_camera(mut commands: Commands) {
     /*commands.spawn(Camera2dBundle{
