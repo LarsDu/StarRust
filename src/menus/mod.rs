@@ -62,8 +62,9 @@ impl Plugin for MenuPlugin {
                 SystemSet::on_update(AppState::Menu)
                     .with_system(menu_action)
                     .with_system(button_system),
-            ).add_system_set(
-                SystemSet::on_exit(AppState::Menu).with_system(despawn_all::<MenuBackground>)
+            )
+            .add_system_set(
+                SystemSet::on_exit(AppState::Menu).with_system(despawn_all::<MenuBackground>),
             );
     }
 }
@@ -100,13 +101,15 @@ fn button_system(
 }
 
 fn load_background_model(mut commands: Commands, models: Res<SceneAssets>) {
-    commands.spawn(SceneBundle {
-        scene: models.default_enemy.clone_weak(),
-        transform: Transform::from_xyz(0.0, 210.0, 20.0)
-            .with_scale(Vec3::splat(30.0))
-            .with_rotation(Quat::from_euler(EulerRot::XYZ, 20.0, 95.0, 0.0)),
-        ..default()
-    }).insert(MenuBackground);
+    commands
+        .spawn(SceneBundle {
+            scene: models.default_enemy.clone_weak(),
+            transform: Transform::from_xyz(0.0, 210.0, 20.0)
+                .with_scale(Vec3::splat(30.0))
+                .with_rotation(Quat::from_euler(EulerRot::XYZ, 20.0, 95.0, 0.0)),
+            ..default()
+        })
+        .insert(MenuBackground);
     /*
     commands.spawn(SceneBundle {
         scene: models.basic_boss.clone_weak(),
@@ -116,15 +119,17 @@ fn load_background_model(mut commands: Commands, models: Res<SceneAssets>) {
         ..default()
     }).insert(MenuBackground);
     */
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
-            illuminance: 25000.0,
-            color: Color::WHITE,
+    commands
+        .spawn(DirectionalLightBundle {
+            directional_light: DirectionalLight {
+                illuminance: 25000.0,
+                color: Color::WHITE,
+                ..default()
+            },
+            transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
-        },
-        transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    }).insert(MenuBackground);
+        })
+        .insert(MenuBackground);
 }
 
 fn menu_action(

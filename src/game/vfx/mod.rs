@@ -49,26 +49,29 @@ fn shake_camera(
         }
         // Tick the shaker
         shaker.timer.tick(time.delta());
-        
+
         // Shake time goes from higher to lower as the shake progresses and should land at around 0.0
         let shake_time = shaker.timer.duration().as_secs_f32() - shaker.timer.elapsed_secs();
-        
+
         if shake_time > 0.01 {
             let rng = fastrand::Rng::new();
-            let magnitude_at_time = shaker.magnitude * shake_time;            
+            let magnitude_at_time = shaker.magnitude * shake_time;
             let theta = rng.f32() * 2.0 * PI;
-            t.translation = Vec3::new(magnitude_at_time * theta.cos(), magnitude_at_time * theta.sin(), CAMERA_FAR);
+            t.translation = Vec3::new(
+                magnitude_at_time * theta.cos(),
+                magnitude_at_time * theta.sin(),
+                CAMERA_FAR,
+            );
         }
     }
 }
 
-
 fn on_explosion_event(
     mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
-    asset_server: Res<AssetServer>
+    asset_server: Res<AssetServer>,
 ) {
-    if events.is_empty(){
+    if events.is_empty() {
         return;
     }
 
@@ -97,7 +100,6 @@ fn on_explosion_event(
         ).insert(Playing).insert(Transform::from_translation(explosion_data.position));
 
     }*/
-
 }
 
 // TODO: Hanabi doesn't work with wasm
@@ -109,7 +111,7 @@ fn on_explosion_event(
     if events.is_empty() {
         return;
     }
-    
+
     for explosion_data in &mut events.iter() {
         // Define a color gradient
         let mut gradient = Gradient::new();

@@ -1,13 +1,12 @@
 use crate::game::events::AudioEvent;
 
 use super::super::super::AppState;
-use super::super::events::WeaponFiredEvent;
 use super::super::collisions::CollisionEvent;
-use super::super::components::{AutoFire, Weapon, Collider};
+use super::super::components::{AutoFire, Collider, Weapon};
+use super::super::events::WeaponFiredEvent;
 use bevy::{prelude::*, time::*};
 
 pub struct AutoFirePlugin;
-
 
 // Plugin definition
 impl Plugin for AutoFirePlugin {
@@ -23,13 +22,12 @@ impl Plugin for AutoFirePlugin {
     }
 }
 
-
 // Fire controller system
 pub fn fire_controller(
     time: Res<Time>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     mut audio_event: EventWriter<AudioEvent>,
-    mut query: Query<(&Transform, &Collider, &mut Weapon,), With<AutoFire>>,
+    mut query: Query<(&Transform, &Collider, &mut Weapon), With<AutoFire>>,
 ) {
     for (transform, collider, mut weapon) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
@@ -45,7 +43,9 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
-            audio_event.send(AudioEvent { clip: weapon.firing_audio_clip.clone()})
+            audio_event.send(AudioEvent {
+                clip: weapon.firing_audio_clip.clone(),
+            })
         }
     }
 }

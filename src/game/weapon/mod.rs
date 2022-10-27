@@ -3,8 +3,8 @@ use bevy::{prelude::*, time::FixedTimestep};
 
 use super::super::AppState;
 use super::actor::bullet::*;
-use super::scene::SceneAssets;
 use super::events::WeaponFiredEvent;
+use super::scene::SceneAssets;
 
 pub struct WeaponPlugin;
 
@@ -13,8 +13,7 @@ impl Plugin for WeaponPlugin {
         app.add_event::<WeaponFiredEvent>()
             .add_system(on_bullet_fired)
             .add_system_set(
-                SystemSet::on_update(AppState::InGame)
-                    //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64)),
+                SystemSet::on_update(AppState::InGame), //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64)),
             );
     }
 }
@@ -35,9 +34,7 @@ fn spawn_bullet(
     weapon_data: &WeaponFiredEvent,
 ) {
     let bullet_bundle = match weapon_data.bullet_type {
-        BulletType::StandardEnemy => {
-            StandardEnemyBullet::get_bullet_bundle(models, weapon_data)
-        },
+        BulletType::StandardEnemy => StandardEnemyBullet::get_bullet_bundle(models, weapon_data),
         _ => StandardBullet::get_bullet_bundle(models, weapon_data),
     };
     commands.spawn((bullet_bundle, NotShadowCaster, NotShadowReceiver));

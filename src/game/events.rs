@@ -1,20 +1,18 @@
-use bevy::prelude::*;
 use super::actor::bullet::BulletType;
-
+use bevy::prelude::*;
 
 pub struct LevelEndEvent;
 
 #[derive(Default)]
 pub struct PlayerDeathEvent;
 
-pub struct ScoreEvent{
+pub struct ScoreEvent {
     pub increment: i32,
 }
 
-pub struct AudioEvent{
+pub struct AudioEvent {
     pub clip: Handle<AudioSource>,
 }
-
 
 pub struct WeaponFiredEvent {
     pub bullet_type: BulletType,
@@ -23,13 +21,12 @@ pub struct WeaponFiredEvent {
     pub hitmask: u8,
 }
 
-pub struct ExplosionEvent{
+pub struct ExplosionEvent {
     pub position: Vec3,
-    pub lifetime: f32
+    pub lifetime: f32,
 }
 
-
-pub struct CameraShakeEvent{
+pub struct CameraShakeEvent {
     pub magnitude: f32,
-    pub duration_secs: f32
+    pub duration_secs: f32,
 }

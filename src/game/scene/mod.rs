@@ -4,7 +4,7 @@ use crate::AppState;
 pub struct ScenePlugin;
 
 #[derive(Resource)]
-pub struct SceneAssets{
+pub struct SceneAssets {
     pub default_player: Handle<Scene>,
     pub default_enemy: Handle<Scene>,
     pub jet_charger: Handle<Scene>,
@@ -16,8 +16,7 @@ pub struct SceneAssets{
     pub turret_base: Handle<Scene>,
     pub turret_barrel: Handle<Scene>,
     pub powerup_star: Handle<Scene>,
-    pub powerup_ico: Handle<Scene>
-
+    pub powerup_ico: Handle<Scene>,
 }
 
 impl Plugin for ScenePlugin {
@@ -26,8 +25,8 @@ impl Plugin for ScenePlugin {
     }
 }
 
-pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>){
-    let scene_assets = SceneAssets{
+pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
+    let scene_assets = SceneAssets {
         default_player: asset_server.load("models/basic_hero.glb#Scene0"),
         default_enemy: asset_server.load("models/basic_enemy.glb#Scene0"),
         jet_charger: asset_server.load("models/jet_charger.glb#Scene0"),

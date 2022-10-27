@@ -11,18 +11,20 @@ use super::SceneAssets;
 use bevy::prelude::*;
 
 pub trait BundledActor<T: Bundle> {
-    fn get_bundle(audio_clips: &Res<AudioClipAssets>, models: &Res<SceneAssets>, spawn_pos: Vec2
+    fn get_bundle(
+        audio_clips: &Res<AudioClipAssets>,
+        models: &Res<SceneAssets>,
+        spawn_pos: Vec2,
     ) -> T;
     fn spawn_bundle(
         commands: &mut Commands,
         audio_clips: &Res<AudioClipAssets>,
         models: &Res<SceneAssets>,
-        spawn_pos: Vec2
+        spawn_pos: Vec2,
     ) {
         commands.spawn(Self::get_bundle(audio_clips, models, spawn_pos));
     }
 }
-
 
 #[derive(Bundle, Clone, Default)]
 pub struct StarRustSceneBundle {
