@@ -10,7 +10,7 @@ fastrand = "1.7.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 
 [dependencies.bevy]
 git = "https://github.com/bevyengine/bevy.git"
-rev = "4bcf49b2ea6fb5f42388b0e15d204020053ee5c7"
+rev = "1914a3f288a812667f735ee9e7806cf1560dacc0"
 
 [workspace]
 resolver ="2"

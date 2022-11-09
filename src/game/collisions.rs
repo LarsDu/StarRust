@@ -59,7 +59,7 @@ pub fn check_collisions(
         ) in &mut b_query
         {
             // Skip self-collisions and identical hitmasks
-            if a_entity.id() == b_entity.id() || (a_collider.hitmask ^ b_collider.hitmask) == 0 {
+            if a_entity.index() == b_entity.index() || (a_collider.hitmask ^ b_collider.hitmask) == 0 {
                 continue;
             }
 
