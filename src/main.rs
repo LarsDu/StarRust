@@ -59,7 +59,7 @@ fn setup_camera(mut commands: Commands) {
                 scale: 1.0,
                 ..default()
             }),
-            transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR - 0.1)
+            transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR - 10f32)
                 .looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         })

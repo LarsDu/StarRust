@@ -60,7 +60,7 @@ fn shake_camera(
             t.translation = Vec3::new(
                 magnitude_at_time * theta.cos(),
                 magnitude_at_time * theta.sin(),
-                CAMERA_FAR,
+                CAMERA_FAR - 100f32,
             );
         }
     }

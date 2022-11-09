@@ -33,7 +33,17 @@ impl Plugin for PlayerPlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     //.with_run_criteria(FixedTimestep::step(TIMESTEPas f64))
-                    .with_system(player_controller.before(check_collisions))
+                    .with_system(player_controller)
+                    .with_system(
+                        actor_movement
+                            .after(player_controller)
+                            .before(check_collisions),
+                    )
+                    .with_system(
+                        actor_rotate_to_wanted_direction
+                            .after(player_controller)
+                            .before(check_collisions),
+                    )
                     .with_system(fire_controller)
                     .with_system(
                         reflect_from_wall
@@ -62,31 +72,73 @@ pub fn spawn_player(
 // Player controller system
 fn player_controller(
     keyboard_input: Res<Input<KeyCode>>,
-    mut ship_query: Query<(&mut Transform, &Actor), With<Player>>,
+    mut ship_query: Query<&mut WantedDirection, (With<Player>, With<Actor>)>,
 ) {
-    for (mut ship_transform, ship) in &mut ship_query {
-        let mut direction_x: f32 = 0.0;
-        let mut direction_y = 0.0;
-
-        if keyboard_input.pressed(KeyCode::Down) {
-            direction_y -= ship.speed.y;
+    for mut wanted_direction in &mut ship_query {
+        let (up, down) = (
+            keyboard_input.pressed(KeyCode::Up),
+            keyboard_input.pressed(KeyCode::Down),
+        );
+        if up ^ down {
+            if up {
+                wanted_direction.0.y = 1f32;
+            } else {
+                wanted_direction.0.y = -1f32;
+            }
+        } else {
+            wanted_direction.0.y = 0f32;
         }
-
-        if keyboard_input.pressed(KeyCode::Up) {
-            direction_y += ship.speed.y;
+        let (left, right) = (
+            keyboard_input.pressed(KeyCode::Left),
+            keyboard_input.pressed(KeyCode::Right),
+        );
+        if left ^ right {
+            if left {
+                wanted_direction.0.x = -1f32;
+            } else {
+                wanted_direction.0.x = 1f32;
+            }
+        } else {
+            wanted_direction.0.x = 0f32;
         }
+    }
+}
 
-        if keyboard_input.pressed(KeyCode::Left) {
-            direction_x -= ship.speed.x;
+fn actor_movement(
+    time: Res<Time>,
+    mut ship_query: Query<(&mut Transform, &Actor, &WantedDirection), With<Player>>,
+) {
+    for (mut ship_transform, ship, wanted_direction) in &mut ship_query {
+        // Calculate the new position based on wanted direction
+        ship_transform.translation.y +=
+            wanted_direction.0.y * ship.speed.y * 60f32 * time.delta_seconds();
+        ship_transform.translation.x +=
+            wanted_direction.0.x * ship.speed.x * 60f32 * time.delta_seconds();
+    }
+}
+
+fn actor_rotate_to_wanted_direction(
+    time: Res<Time>,
+    mut ship_query: Query<(&mut Transform, &WantedDirection), With<Player>>,
+) {
+    for (mut ship_transform, wanted_direction) in &mut ship_query {
+        // Calculate the new rotation based on wanted direction
+        let mut target_rotation = Quat::from_axis_angle(
+            Vec3::new(0f32, 1f32, 0f32),
+            -0.25f32 * std::f32::consts::TAU,
+        );
+        if wanted_direction.0.y != 0f32 {
+            target_rotation *= Quat::from_axis_angle(
+                Vec3::new(wanted_direction.0.y, 0f32, 0f32 * wanted_direction.0.y),
+                0.1 * std::f32::consts::TAU,
+            );
         }
-
-        if keyboard_input.pressed(KeyCode::Right) {
-            direction_x += ship.speed.x;
-        }
-
-        // Calculate the new position based on player input
-        ship_transform.translation.y = ship_transform.translation.y + direction_y;
-        ship_transform.translation.x = ship_transform.translation.x + direction_x;
+        let rotate_speed = 10f32;
+        ship_transform.rotation = Quat::lerp(
+            ship_transform.rotation,
+            target_rotation,
+            f32::min(1f32, rotate_speed * time.delta_seconds()),
+        );
     }
 }
 

@@ -15,6 +15,8 @@ pub struct Enemy;
 pub struct Actor {
     pub speed: Vec2,
 }
+#[derive(Component, Clone, Default)]
+pub struct WantedDirection(pub Vec2);
 
 #[derive(Component, Clone)]
 pub struct Health {

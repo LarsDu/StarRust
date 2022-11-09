@@ -38,6 +38,7 @@ pub struct StarRustSceneBundle {
 #[derive(Bundle, Clone)]
 pub struct ActorBundle {
     pub actor: Actor,
+    pub wanted_direction: WantedDirection,
     pub scene_bundle: StarRustSceneBundle,
     pub collider: Collider,
     pub health: Health,

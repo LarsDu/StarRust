@@ -25,6 +25,7 @@ impl BundledActor<PlayerActorBundle> for PlayerShipDefault {
                 actor: Actor {
                     speed: Vec2::new(6.0, 6.0),
                 },
+                wanted_direction: default(),
                 scene_bundle: StarRustSceneBundle {
                     scene: models.default_player.clone(),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
@@ -73,6 +74,7 @@ impl BundledActor<AiActorBundle> for DefaultEnemyShip {
                 actor: Actor {
                     speed: Vec2::new(1.5, 1.5),
                 },
+                wanted_direction: default(),
                 scene_bundle: StarRustSceneBundle {
                     scene: models.default_enemy.clone(),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
