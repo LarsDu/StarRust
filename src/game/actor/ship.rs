@@ -191,6 +191,8 @@ impl BundledActor<AiActorBundle> for Star {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
         variant.actor_bundle.camera_shake_on_death.magnitude = 0.0;
         variant.actor_bundle.scene_bundle.scene = models.powerup_star.clone();
+        // FIXME: Make a dedicated hitmask for player bullets and powerups
+        variant.actor_bundle.collider.hitmask = ENEMY_HITMASK;
         variant.actor_bundle.collider.damage = 0;
         variant.death_points_awarded.points = 1;
         variant.actor_bundle.actor.speed = Vec2::new(6.0, 6.0);

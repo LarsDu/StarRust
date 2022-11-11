@@ -16,8 +16,8 @@ pub const UI_COLOR: Color = Color::Rgba {
     alpha: 1.0,
 };
 
-pub const ALLY_HITMASK: u8 = 1; // 0b0001
-pub const ENEMY_HITMASK: u8 = 2; // 0b0010
+pub const ALLY_HITMASK: u8 = 1;     // 0b0001
+pub const ENEMY_HITMASK: u8 = 2;    // 0b0010
 
 pub const ASSET_SCALE: f32 = 20.0;
 
