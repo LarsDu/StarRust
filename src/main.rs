@@ -4,7 +4,7 @@ mod menus;
 use menus::MenuPlugin;
 
 mod game;
-use game::{components::CameraShaker, GamePlugin, SceneAssets};
+use game::{components::CameraShaker, GamePlugin, models::ModelsAssets};
 
 mod constants;
 use constants::{CAMERA_FAR, SCREEN_HEIGHT, SCREEN_WIDTH};
