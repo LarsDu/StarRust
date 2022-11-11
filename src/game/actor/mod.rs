@@ -3,11 +3,11 @@ pub mod ship;
 
 use crate::AppState;
 
-use super::super::utils::despawn_all;
-use super::ai::*;
-use super::components::*;
-use super::AudioClipAssets;
-use super::models::ModelsAssets;
+use crate::game::ai::*;
+use crate::game::audio::AudioClipAssets;
+use crate::game::components::*;
+use crate::game::models::ModelsAssets;
+use crate::utils::despawn_all;
 use bevy::prelude::*;
 
 pub trait BundledActor<T: Bundle> {

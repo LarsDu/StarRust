@@ -3,7 +3,7 @@ use bevy::{app::AppExit, prelude::*};
 
 use crate::{game::models::ModelsAssets, utils::despawn_all};
 
-use super::AppState;
+use crate::AppState;
 
 const TEXT_COLOR: Color = Color::rgb(0.9, 0.9, 0.9);
 const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);

@@ -1,7 +1,7 @@
-use super::super::AppState;
-use super::components::*;
-use super::constants::TIME_STEP;
-use super::events::*;
+use crate::game::components::*;
+use crate::game::constants::TIME_STEP;
+use crate::game::events::*;
+use crate::AppState;
 use bevy::{prelude::*, sprite::collide_aabb::collide, time::*};
 use std::cmp::max;
 
@@ -59,7 +59,9 @@ pub fn check_collisions(
         ) in &mut b_query
         {
             // Skip self-collisions and identical hitmasks
-            if a_entity.index() == b_entity.index() || (a_collider.hitmask ^ b_collider.hitmask) == 0 {
+            if a_entity.index() == b_entity.index()
+                || (a_collider.hitmask ^ b_collider.hitmask) == 0
+            {
                 continue;
             }
 

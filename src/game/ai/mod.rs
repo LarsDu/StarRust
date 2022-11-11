@@ -1,7 +1,9 @@
-use super::collisions::check_collisions;
-use super::components::*;
-use super::{super::AppState, constants::TIME_STEP};
+use crate::game::collisions::check_collisions;
+use crate::game::components::*;
+use crate::game::constants::TIME_STEP;
+use crate::AppState;
 use bevy::{prelude::*, time::FixedTimestep};
+
 pub mod autofire;
 use autofire::AutoFirePlugin;
 
@@ -19,7 +21,7 @@ impl Plugin for AiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(AutoFirePlugin).add_system_set(
             SystemSet::on_update(AppState::InGame)
-                //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(update_ai.before(check_collisions)),
         );
     }

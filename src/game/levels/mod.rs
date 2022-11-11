@@ -7,7 +7,7 @@ use super::actor::{ship::*, *};
 use super::components::*;
 use super::constants::*;
 use super::events::LevelEndEvent;
-use super::{super::*, AudioClipAssets, models::ModelsAssets};
+use super::{super::*, models::ModelsAssets, AudioClipAssets};
 use fastrand;
 pub mod lvl;
 use lvl::*;

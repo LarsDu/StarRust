@@ -1,13 +1,15 @@
 use bevy::prelude::Vec2;
 use std::time::Duration;
 
-use super::super::actor::bullet::BulletType;
-use super::super::actor::BundledActor;
-use super::super::components::*;
-use super::*;
+use crate::game::actor::bullet::BulletType;
+use crate::game::actor::{
+    ActorBundle, AiActorBundle, BundledActor, PlayerActorBundle, StarRustSceneBundle,
+};
+use crate::game::ai::AiMode;
+use crate::game::components::*;
 use crate::game::constants::ASSET_SCALE;
-use crate::game::AudioClipAssets;
 use crate::game::models::ModelsAssets;
+use crate::game::AudioClipAssets;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK};
 use bevy::prelude::*;
 
