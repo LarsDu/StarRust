@@ -41,10 +41,12 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
-            - name: Build WASM artifact to _site/
+            - name: Setup Rust toolchain
               uses: hecrj/setup-rust-action@v1.4.0
               with:
                 rust-version: stable
+
+            - name: Build WASM artifact to _site/
               run: make build-wasm
 
             - name: Copy assets to static folder
