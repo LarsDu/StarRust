@@ -1,9 +1,9 @@
 use bevy::{prelude::*, time::Timer};
 
-use super::actor::bullet::*;
-use super::ai::AiMode;
-use super::levels::LevelSpawnInfo;
-use super::ENEMY_HITMASK;
+use crate::game::actor::bullet::*;
+use crate::game::ai::AiMode;
+use crate::game::constants::ENEMY_HITMASK;
+use crate::game::levels::LevelSpawnInfo;
 
 #[derive(Component, Clone, Default)]
 pub struct Player;

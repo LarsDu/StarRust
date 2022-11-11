@@ -3,7 +3,6 @@ pub mod ship;
 
 use crate::AppState;
 
-use crate::game::ai::*;
 use crate::game::audio::AudioClipAssets;
 use crate::game::components::*;
 use crate::game::models::ModelsAssets;
