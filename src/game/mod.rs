@@ -51,15 +51,15 @@ pub use weapon::WeaponPlugin;
 mod vfx;
 pub use vfx::VfxPlugin;
 
-mod scene;
-pub use scene::SceneAssets;
+pub mod models;
+pub use models::ModelsPlugin;
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_plugin(ScenePlugin)
+            .add_plugin(ModelsPlugin)
             .add_plugin(BackgroundPlugin)
             .add_plugin(UiPlugin)
             .add_plugin(AiPlugin)
@@ -68,7 +68,6 @@ impl Plugin for GamePlugin {
             .add_plugin(PlayerPlugin)
             .add_plugin(WeaponPlugin)
             .add_plugin(CollisionPlugin)
-            .add_plugin(WeaponPlugin)
             .add_plugin(LevelPlugin)
             .add_plugin(DespawnerPlugin)
             .add_plugin(VfxPlugin)

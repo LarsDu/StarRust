@@ -3,16 +3,14 @@ use crate::menus::MenuState;
 use super::super::AppState;
 use super::actor::ship::PlayerShipDefault;
 use super::actor::BundledActor;
-use super::actor::PlayerActorBundle;
 use super::collisions::check_collisions;
 use super::collisions::CollisionEvent;
 use super::components::*;
 use super::constants::PLAYER_SPAWN_POS;
 use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
-use super::scene;
+use super::models::{ModelsAssets, setup_resources};
 use super::AudioClipAssets;
-use super::SceneAssets;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},
@@ -24,7 +22,7 @@ pub struct PlayerPlugin;
 // Plugin definition
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(scene::setup_resources) //why does this need to be explicitly specified?
+        app.add_startup_system(setup_resources) //why does this need to be explicitly specified?
             .add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<AudioEvent>()
@@ -50,7 +48,7 @@ impl Plugin for PlayerPlugin {
 pub fn spawn_player(
     mut commands: Commands,
     audio_clips: Res<AudioClipAssets>,
-    models: Res<SceneAssets>,
+    models: Res<ModelsAssets>,
 ) {
     commands.spawn(PlayerShipDefault::get_bundle(
         &audio_clips,

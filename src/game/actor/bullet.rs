@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::game::constants::ASSET_SCALE;
 
-use super::super::scene::SceneAssets;
+use super::super::models::ModelsAssets;
 
 use super::super::ai::AiMode;
 use super::super::components::*;
@@ -28,7 +28,7 @@ pub struct BulletActorBundle {
 
 pub trait AiBulletBundle {
     fn get_bullet_bundle(
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         weapon_data: &WeaponFiredEvent,
     ) -> BulletActorBundle;
 }
@@ -37,7 +37,7 @@ pub struct StandardBullet;
 
 impl AiBulletBundle for StandardBullet {
     fn get_bullet_bundle(
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         weapon_data: &WeaponFiredEvent,
     ) -> BulletActorBundle {
         return BulletActorBundle {
@@ -76,7 +76,7 @@ pub struct StandardEnemyBullet;
 
 impl AiBulletBundle for StandardEnemyBullet {
     fn get_bullet_bundle(
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         weapon_data: &WeaponFiredEvent,
     ) -> BulletActorBundle {
         let mut bullet = StandardBullet::get_bullet_bundle(models, weapon_data).clone();
