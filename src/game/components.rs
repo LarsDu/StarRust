@@ -3,7 +3,7 @@ use bevy::{prelude::*, time::Timer};
 use super::actor::bullet::*;
 use super::ai::AiMode;
 use super::levels::LevelSpawnInfo;
-use super::ENEMY_HITMASK;
+use super::constants::ENEMY_HITMASK;
 
 #[derive(Component, Clone, Default)]
 pub struct Player;

@@ -6,8 +6,8 @@ use crate::AppState;
 use super::super::utils::despawn_all;
 use super::ai::*;
 use super::components::*;
-use super::AudioClipAssets;
-use super::SceneAssets;
+use super::audio::AudioClipAssets;
+use super::scene::SceneAssets;
 use bevy::prelude::*;
 
 pub trait BundledActor<T: Bundle> {

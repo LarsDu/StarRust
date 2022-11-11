@@ -11,8 +11,8 @@ use super::constants::PLAYER_SPAWN_POS;
 use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
 use super::scene;
-use super::AudioClipAssets;
-use super::SceneAssets;
+use super::audio::AudioClipAssets;
+use super::scene::SceneAssets;
 use bevy::{
     prelude::*,
     sprite::collide_aabb::{collide, Collision},

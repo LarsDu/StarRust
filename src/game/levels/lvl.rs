@@ -1,13 +1,17 @@
 use bevy::prelude::*;
 
-use super::*;
+use super::LevelSpawnInfo;
+
+use crate::game::actor::{ship::*, BundledActor};
+use crate::game::constants::SPAWN_LOCATIONS;
+use crate::game::{audio::AudioClipAssets, scene::SceneAssets};
 
 pub struct SpawnSequence;
 
 impl SpawnSequence {
     pub fn level0(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<game::SceneAssets>,
+        models: &Res<SceneAssets>,
     ) -> Vec<LevelSpawnInfo> {
         // Note: To make this more flexible in type of item returned, would need to use heap
         return vec![

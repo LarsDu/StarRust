@@ -6,9 +6,9 @@ use super::super::actor::BundledActor;
 use super::super::components::*;
 use super::*;
 use crate::game::constants::ASSET_SCALE;
-use crate::game::AudioClipAssets;
-use crate::game::SceneAssets;
-use crate::game::{ALLY_HITMASK, ENEMY_HITMASK};
+use crate::game::audio::AudioClipAssets;
+use crate::game::scene::SceneAssets;
+use crate::game::constants::{ALLY_HITMASK, ENEMY_HITMASK};
 use bevy::prelude::*;
 
 pub struct PlayerShipDefault;

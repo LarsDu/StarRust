@@ -4,7 +4,19 @@ mod menus;
 use menus::MenuPlugin;
 
 mod game;
-use game::{components::CameraShaker, GamePlugin, SceneAssets};
+use game::components::CameraShaker;
+use game::ui::UiPlugin;
+use game::background::BackgroundPlugin;
+use game::audio::AudioPlugin;
+use game::ai::AiPlugin;
+use game::actor::ActorPlugin;
+use game::walls::WallPlugin;
+use game::player::PlayerPlugin;
+use game::weapon::WeaponPlugin;
+use game::collisions::CollisionPlugin;
+use game::despawner::DespawnerPlugin;
+use game::vfx::VfxPlugin;
+use game::levels::LevelPlugin;
 
 mod constants;
 use constants::{CAMERA_FAR, SCREEN_HEIGHT, SCREEN_WIDTH};
@@ -30,7 +42,18 @@ fn main() {
             },
             ..default()
         }))
-        .add_plugin(GamePlugin)
+        .add_plugin(BackgroundPlugin)
+        .add_plugin(UiPlugin)
+        .add_plugin(AiPlugin)
+        .add_plugin(AudioPlugin)
+        .add_plugin(WallPlugin)
+        .add_plugin(PlayerPlugin)
+        .add_plugin(CollisionPlugin)
+        .add_plugin(WeaponPlugin)
+        .add_plugin(LevelPlugin)
+        .add_plugin(DespawnerPlugin)
+        .add_plugin(VfxPlugin)
+        .add_plugin(ActorPlugin)
         .add_plugin(MenuPlugin)
         .add_startup_system(setup_camera)
         .run();

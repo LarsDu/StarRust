@@ -1,7 +1,7 @@
 // Adapted from https://github.com/bevyengine/bevy/blob/v0.8.1/examples/games/game_menu.rs
 use bevy::{app::AppExit, prelude::*};
 
-use crate::{game::SceneAssets, utils::despawn_all};
+use crate::{game::scene::SceneAssets, utils::despawn_all};
 
 use super::AppState;
 
