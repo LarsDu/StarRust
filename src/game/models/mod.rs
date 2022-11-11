@@ -1,10 +1,10 @@
 use bevy::prelude::*;
 
 use crate::AppState;
-pub struct ScenePlugin;
+pub struct ModelsPlugin;
 
 #[derive(Resource)]
-pub struct SceneAssets {
+pub struct ModelsAssets {
     pub default_player: Handle<Scene>,
     pub default_enemy: Handle<Scene>,
     pub jet_charger: Handle<Scene>,
@@ -19,14 +19,14 @@ pub struct SceneAssets {
     pub powerup_ico: Handle<Scene>,
 }
 
-impl Plugin for ScenePlugin {
+impl Plugin for ModelsPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(setup_resources);
     }
 }
 
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
-    let scene_assets = SceneAssets {
+    let scene_assets = ModelsAssets {
         default_player: asset_server.load("models/basic_hero.glb#Scene0"),
         default_enemy: asset_server.load("models/basic_enemy.glb#Scene0"),
         jet_charger: asset_server.load("models/jet_charger.glb#Scene0"),

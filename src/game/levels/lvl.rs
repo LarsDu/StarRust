@@ -1,13 +1,17 @@
 use bevy::prelude::*;
 
-use super::*;
+use super::game::models::ModelsAssets;
+use super::game::audio::AudioClipAssets;
+use super::game::constants::SPAWN_LOCATIONS;
+use super::LevelSpawnInfo;
+use super::super::actor::{ship::*, BundledActor};
 
 pub struct SpawnSequence;
 
 impl SpawnSequence {
     pub fn level0(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<game::SceneAssets>,
+        models: &Res<ModelsAssets>,
     ) -> Vec<LevelSpawnInfo> {
         // Note: To make this more flexible in type of item returned, would need to use heap
         return vec![
@@ -64,7 +68,7 @@ impl SpawnSequence {
 
     pub fn level0_powerups(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
     ) -> Vec<LevelSpawnInfo> {
         return vec![LevelSpawnInfo {
             locations: Vec::from(SPAWN_LOCATIONS),

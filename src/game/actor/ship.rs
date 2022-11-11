@@ -7,7 +7,7 @@ use super::super::components::*;
 use super::*;
 use crate::game::constants::ASSET_SCALE;
 use crate::game::AudioClipAssets;
-use crate::game::SceneAssets;
+use crate::game::models::ModelsAssets;
 use crate::game::{ALLY_HITMASK, ENEMY_HITMASK};
 use bevy::prelude::*;
 
@@ -16,7 +16,7 @@ pub struct PlayerShipDefault;
 impl BundledActor<PlayerActorBundle> for PlayerShipDefault {
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> PlayerActorBundle {
         let mut player_bundle = PlayerActorBundle {
@@ -61,7 +61,7 @@ pub struct DefaultEnemyShip;
 impl BundledActor<AiActorBundle> for DefaultEnemyShip {
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> AiActorBundle {
         return AiActorBundle {
@@ -111,7 +111,7 @@ pub struct RaptorSineMovementVariant;
 impl BundledActor<AiActorBundle> for RaptorSineMovementVariant {
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
@@ -125,7 +125,7 @@ pub struct JetCharger;
 impl BundledActor<AiActorBundle> for JetCharger {
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
@@ -153,7 +153,7 @@ impl BundledActor<AiActorBundle> for SpacePlatformBare {
     // FIXME: Create an WallAiActorBundle for this space platform
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
@@ -183,7 +183,7 @@ pub struct Star;
 impl BundledActor<AiActorBundle> for Star {
     fn get_bundle(
         audio_clips: &Res<AudioClipAssets>,
-        models: &Res<SceneAssets>,
+        models: &Res<ModelsAssets>,
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();

@@ -7,7 +7,7 @@ use super::actor::{ship::*, *};
 use super::components::*;
 use super::constants::*;
 use super::events::LevelEndEvent;
-use super::{super::*, scene, AudioClipAssets, SceneAssets};
+use super::{super::*, AudioClipAssets, models::ModelsAssets};
 use fastrand;
 pub mod lvl;
 use lvl::*;
@@ -18,7 +18,7 @@ pub struct LevelSpawnInfo {
     pub locations: Vec<Vec2>,
     pub ttl: f32,
     pub frequency: f32,
-    pub spawn_func: fn(&mut Commands, &Res<AudioClipAssets>, &Res<SceneAssets>, Vec2),
+    pub spawn_func: fn(&mut Commands, &Res<AudioClipAssets>, &Res<ModelsAssets>, Vec2),
 }
 
 pub struct LevelPlugin;
@@ -38,7 +38,7 @@ impl Plugin for LevelPlugin {
 fn setup_level(
     mut commands: Commands,
     audio_clips: Res<AudioClipAssets>,
-    models: Res<SceneAssets>,
+    models: Res<ModelsAssets>,
 ) {
     commands.spawn(AiActorSpawner::new(SpawnSequence::level0(
         &audio_clips,
@@ -53,7 +53,7 @@ fn setup_level(
 fn level_periodic_spawn(
     mut commands: Commands,
     time: Res<Time>,
-    models: Res<SceneAssets>,
+    models: Res<ModelsAssets>,
     audio_clips: Res<AudioClipAssets>,
     mut level_end_event: EventWriter<LevelEndEvent>,
     mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>,
@@ -98,7 +98,7 @@ fn spawn_from_spawn_info(
     commands: &mut Commands,
     spawn_info: &LevelSpawnInfo,
     audio_clips: &Res<AudioClipAssets>,
-    models: &Res<SceneAssets>,
+    models: &Res<ModelsAssets>,
 ) {
     // Read from spawn info
     let rng = fastrand::Rng::new();
