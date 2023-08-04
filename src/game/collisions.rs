@@ -15,7 +15,7 @@ impl Plugin for CollisionPlugin {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<PlayerDeathEvent>()
-            .add_systems( FixedUpdate, check_collisions)
+            .add_systems( FixedUpdate, check_collisions);
     }
 }
 
@@ -76,9 +76,9 @@ pub fn check_collisions(
 
                 // Play damage sound
                 if a_collider.damage > 0 {
-                    audio_event.send(AudioEvent {
-                        clip: b_health.damage_sound.clone(),
-                    });
+                    //audio_event.send(AudioEvent {
+                    //    clip: b_health.damage_sound.clone(),
+                    //});
                 }
 
                 if b_health.hp == 0 {
@@ -102,9 +102,9 @@ pub fn check_collisions(
                     }
 
                     // Play death sound
-                    audio_event.send(AudioEvent {
-                        clip: b_health.death_sound.clone(),
-                    });
+                    //audio_event.send(AudioEvent {
+                    //    clip: b_health.death_sound.clone(),
+                    //});
 
                     commands.entity(b_entity).despawn_recursive();
                 }

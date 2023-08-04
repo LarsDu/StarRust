@@ -21,9 +21,9 @@ pub struct AudioPlugin;
 
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_resources)
+        app.add_systems(Startup, setup_resources)
             .add_event::<AudioEvent>()
-            .add_system(on_audio_event);
+            .add_systems(Update, on_audio_event);
     }
 }
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
@@ -51,9 +51,9 @@ fn on_audio_event(mut commands: Commands, asset_server: Res<AssetServer>, mut au
     //    audio.play(event.clip.clone());
     //}
     for event in audio_events.iter(){
-        commands.spawn((AudioBundle{
-            source: asset_server.load(event.audioFile),
-            settings: PlaybackSettings { mode: PlaybackSettings::Once, ..default()}
-        }))
+        //commands.spawn((AudioBundle{
+        //    source: asset_server.load(event.audioFile),
+        //    settings: PlaybackSettings { mode: PlaybackSettings::Once, ..default()}
+        //}))
     }
 }

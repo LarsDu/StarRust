@@ -18,10 +18,10 @@ pub struct AiPlugin;
 
 impl Plugin for AiPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(AutoFirePlugin).
+        app.add_plugins(AutoFirePlugin).
         add_systems(
             FixedUpdate, update_ai.before(check_collisions).run_if(in_state(AppState::InGame))
-        )
+        );
     }
 }
 

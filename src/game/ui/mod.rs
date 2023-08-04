@@ -15,11 +15,11 @@ impl Plugin for UiPlugin {
         app.insert_resource(Scoreboard { score: 0 })
             .add_event::<ScoreEvent>()
             .add_event::<AudioEvent>()
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_scoreboard))
-            .add_system_set(
-                SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<PlayerScoreBoard>),
+            .add_systems(OnEnter(AppState::InGame), setup_scoreboard)
+            .add_systems(
+                OnExit(AppState::InGame), despawn_all::<PlayerScoreBoard>,
             )
-            .add_system(on_score_event);
+            .add_systems(Update, on_score_event);
     }
 }
 
@@ -51,11 +51,8 @@ fn setup_scoreboard(
             ])
             .with_style(Style {
                 position_type: PositionType::Absolute,
-                position: UiRect {
-                    top: Val::Px(SCOREBOARD_TEXT_PADDING),
-                    left: Val::Px(SCREEN_WIDTH * 0.10),
-                    ..default()
-                },
+                top: Val::Px(SCOREBOARD_TEXT_PADDING),
+                left: Val::Px(SCREEN_WIDTH * 0.10),
                 ..default()
             }),
         )

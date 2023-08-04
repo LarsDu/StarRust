@@ -27,7 +27,7 @@ impl Plugin for LevelPlugin {
         app.add_event::<LevelEndEvent>()
             .add_systems(OnEnter(AppState::InGame), setup_level)
             .add_systems(OnExit(AppState::InGame), despawn_all::<AiActorSpawner>)
-            .add_systems(Update(AppState::InGame), (level_periodic_spawn, level_ender));
+            .add_systems(Update, (level_periodic_spawn, level_ender)); // How do avoid running this update system when not in game?
     }
 }
 

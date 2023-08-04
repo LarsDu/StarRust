@@ -13,7 +13,7 @@ impl Plugin for AutoFirePlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
-            .add_systems(Update, fire_controller.run_if(in_state(AppState::InGame)))
+            .add_systems(Update, fire_controller.run_if(in_state(AppState::InGame)));
     }
 }
 
@@ -38,9 +38,6 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
-            audio_event.send(AudioEvent {
-                clip: weapon.firing_audio_clip.clone(),
-            })
         }
     }
 }

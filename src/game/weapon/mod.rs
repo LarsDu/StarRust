@@ -11,7 +11,7 @@ pub struct WeaponPlugin;
 impl Plugin for WeaponPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<WeaponFiredEvent>()
-            .add_systems(Update, on_bullet_fired.run_if(in_state(AppState::InGame)))
+            .add_systems(Update, on_bullet_fired.run_if(in_state(AppState::InGame)));
     }
 }
 

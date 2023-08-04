@@ -26,7 +26,7 @@ impl Plugin for PlayerPlugin {
             .add_event::<AudioEvent>()
             .add_event::<PlayerDeathEvent>()
             .add_systems(OnEnter(AppState::InGame), spawn_player)
-            .add_systems(Update(AppState::InGame), (
+            .add_systems(Update, (
                 player_controller.before(check_collisions),
                 fire_controller,
                 reflect_from_wall.before(check_collisions).after(player_controller),

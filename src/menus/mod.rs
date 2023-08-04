@@ -1,6 +1,7 @@
 // Adapted from https://github.com/bevyengine/bevy/blob/v0.8.1/examples/games/game_menu.rs
 use bevy::{app::AppExit, prelude::*};
 
+use crate::game::components::DeathPointsAwarded;
 use crate::{game::models::ModelsAssets, utils::despawn_all};
 
 use crate::AppState;
@@ -37,36 +38,19 @@ pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
-            //.add_state(MenuState::Main)
-            .add_systems(OnEnter(AppState::Menu), switch_to_main_menu)
-            .add_system_set(
-                SystemSet::on_enter(MenuState::Main)
-                    .with_system(main_menu_setup)
-                    .with_system(load_background_model),
+            //.add_systems(OnEnter(AppState::Menu), switch_to_main_menu)
+            .add_systems(OnExit(AppState::Menu), despawn_all::<MenuBackground>)
+            .add_systems(
+                OnEnter(MenuState::Main),
+                    (main_menu_setup, load_background_model)
+                    
             )
-            .add_system_set(
-                SystemSet::on_exit(MenuState::Main).with_system(despawn_all::<OnMainMenuScreen>),
-            )
-            .add_system_set(SystemSet::on_enter(MenuState::LevelEnd).with_system(level_end_setup))
-            .add_system_set(
-                SystemSet::on_exit(MenuState::LevelEnd)
-                    .with_system(despawn_all::<OnLevelEndScreen>),
-            )
-            .add_system_set(
-                SystemSet::on_enter(MenuState::PlayerDeath).with_system(player_death_setup),
-            )
-            .add_system_set(
-                SystemSet::on_exit(MenuState::PlayerDeath)
-                    .with_system(despawn_all::<OnPlayerDeathScreen>),
-            )
-            .add_system_set(
-                SystemSet::on_update(AppState::Menu)
-                    .with_system(menu_action)
-                    .with_system(button_system),
-            )
-            .add_system_set(
-                SystemSet::on_exit(AppState::Menu).with_system(despawn_all::<MenuBackground>),
+            .add_systems( OnExit(MenuState::Main), despawn_all::<OnMainMenuScreen>)
+            .add_systems(OnEnter(MenuState::LevelEnd), (level_end_setup, despawn_all::<OnLevelEndScreen>))
+            .add_systems(
+                OnEnter(MenuState::PlayerDeath), (player_death_setup, despawn_all::<OnPlayerDeathScreen>))
+            .add_systems(
+                Update, (menu_action, button_system)
             );
     }
 }
@@ -94,7 +78,7 @@ fn button_system(
 ) {
     for (interaction, mut color, selected) in &mut interaction_query {
         *color = match (*interaction, selected) {
-            (Interaction::Clicked, _) | (Interaction::None, Some(_)) => PRESSED_BUTTON.into(),
+            (Interaction::Pressed, _) | (Interaction::None, Some(_)) => PRESSED_BUTTON.into(),
             (Interaction::Hovered, Some(_)) => HOVERED_PRESSED_BUTTON.into(),
             (Interaction::Hovered, None) => HOVERED_BUTTON.into(),
             (Interaction::None, None) => NORMAL_BUTTON.into(),
@@ -140,24 +124,24 @@ fn menu_action(
         (Changed<Interaction>, With<Button>),
     >,
     mut app_exit_events: EventWriter<AppExit>,
-    mut menu_state: ResMut<State<MenuState>>,
-    mut game_state: ResMut<State<AppState>>,
+    mut menu_state: ResMut<NextState<MenuState>>,
+    mut game_state: ResMut<NextState<AppState>>,
 ) {
     for (interaction, menu_button_action) in &interaction_query {
-        if *interaction == Interaction::Clicked {
+        if *interaction == Interaction::Pressed {
             match menu_button_action {
                 MenuButtonAction::Quit => app_exit_events.send(AppExit),
                 MenuButtonAction::MainMenu => {
-                    menu_state.overwrite_set(MenuState::Main).unwrap();
+                    menu_state.set(MenuState::Main);
                     //game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
                 }
                 MenuButtonAction::Restart => {
-                    menu_state.overwrite_set(MenuState::Main).unwrap();
+                    menu_state.set(MenuState::Main);
                     //game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason
                 }
                 MenuButtonAction::Play => {
-                    menu_state.overwrite_set(MenuState::Disabled).unwrap();
-                    game_state.overwrite_set(AppState::InGame).unwrap();
+                    menu_state.set(MenuState::Disabled);
+                    game_state.set(AppState::InGame);
                 }
             }
         }
@@ -168,23 +152,23 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(250.0), Val::Px(65.0)),
+        width:  Val::Px(250.0),
+        height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,
         ..default()
     };
     let button_icon_style = Style {
-        size: Size::new(Val::Px(30.0), Val::Auto),
+        width: Val::Px(30.0),
+        height: Val::Px(30.0),
         // This takes the icons out of the flexbox flow, to be positioned exactly
         position_type: PositionType::Absolute,
         // The icon will be close to the left border of the button
-        position: UiRect {
-            left: Val::Px(10.0),
-            right: Val::Auto,
-            top: Val::Auto,
-            bottom: Val::Auto,
-        },
+        left: Val::Px(10.0),
+        right: Val::Auto,
+        top: Val::Auto,
+        bottom: Val::Auto,
         ..default()
     };
     let button_text_style = TextStyle {
@@ -213,10 +197,10 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 })
                 .insert(MenuButtonAction::Quit)
                 .with_children(|parent| {
-                    let icon = asset_server.load("textures/Game Icons/exitRight.png");
+                    let icon: Handle<Image> = asset_server.load("textures/Game Icons/exitRight.png");
                     parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
-                        image: UiImage(icon),
+                        image: UiImage{texture: icon, ..default()},
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("Quit", button_text_style.clone()));
@@ -232,7 +216,7 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     let icon = asset_server.load("textures/Game Icons/right.png");
                     parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
-                        image: UiImage(icon),
+                        image: UiImage{texture: icon, ..default()},
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("Play", button_text_style.clone()));
@@ -259,7 +243,8 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(315.0), Val::Px(65.0)),
+        width: Val::Px(315.0),
+        height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,
@@ -323,7 +308,8 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        size: Size::new(Val::Px(300.0), Val::Px(65.0)),
+        width: Val::Px(300.0),
+        height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
         align_items: AlignItems::Center,

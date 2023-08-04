@@ -62,7 +62,7 @@ pub struct AiActorBundle {
 pub struct ActorPlugin;
 impl Plugin for ActorPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(despawn_all::<Actor>))
-            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<Actor>));
+        app.add_systems(OnEnter(AppState::InGame), despawn_all::<Actor>)
+            .add_systems(OnExit(AppState::InGame), despawn_all::<Actor>);
     }
 }
