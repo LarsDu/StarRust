@@ -13,14 +13,14 @@ pub mod utils;
 
 #[derive(Default, Debug, Clone, Eq, PartialEq, Hash, States)]
 enum AppState {
-   #[default]
     InGame,
+    #[default]
     Menu,
     Paused,
 }
 fn main() {
     App::new()
-        //.add_state(AppState::Menu)
+        .add_state::<AppState>()
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
@@ -30,8 +30,7 @@ fn main() {
             }),
             ..default()
           }))
-        .add_plugin(GamePlugin)
-        .add_plugin(MenuPlugin)
+        .add_plugins((GamePlugin, MenuPlugin))
         .add_systems(Startup, setup_camera)
         .run();
 }

@@ -38,11 +38,11 @@ pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            //.add_systems(OnEnter(AppState::Menu), switch_to_main_menu)
-            .add_systems(OnExit(AppState::Menu), despawn_all::<MenuBackground>)
+            .add_state::<MenuState>()
+            .add_systems(OnExit(AppState::Menu), (despawn_all::<MenuBackground>, despawn_all::<OnPlayerDeathScreen>))
             .add_systems(
                 OnEnter(MenuState::Main),
-                    (main_menu_setup, load_background_model)
+                    (main_menu_setup, load_background_model, despawn_all::<OnPlayerDeathScreen>)
                     
             )
             .add_systems( OnExit(MenuState::Main), despawn_all::<OnMainMenuScreen>)
