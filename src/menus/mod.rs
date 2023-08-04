@@ -14,8 +14,9 @@ const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.06);
 const LEVEL_END_BOX_COLOR: Color = Color::rgba(0.0, 0.0, 0.8, 1.0);
 const PLAYER_DEATH_BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 1.0);
 
-#[derive(Clone, Eq, PartialEq, Debug, Hash)]
+#[derive(Clone, Default, Eq, PartialEq, Debug, Hash, States)]
 pub enum MenuState {
+    #[default]
     Main,
     LevelEnd,
     PlayerDeath,
@@ -37,7 +38,8 @@ impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
             //.add_system_set(SystemSet::on_enter(AppState::Menu).with_system(switch_to_main_menu))
-            .add_state(MenuState::Main)
+            //.add_state(MenuState::Main)
+            .add_systems(OnEnter(AppState::Menu), switch_to_main_menu)
             .add_system_set(
                 SystemSet::on_enter(MenuState::Main)
                     .with_system(main_menu_setup)

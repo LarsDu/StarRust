@@ -11,28 +11,28 @@ use constants::{CAMERA_FAR, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 pub mod utils;
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Default, Debug, Clone, Eq, PartialEq, Hash, States)]
 enum AppState {
+   #[default]
     InGame,
     Menu,
     Paused,
 }
 fn main() {
     App::new()
-        .add_state(AppState::Menu)
+        //.add_state(AppState::Menu)
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "StarRust".to_string(),
-                width: SCREEN_WIDTH,
-                height: SCREEN_HEIGHT,
+                resolution: (SCREEN_WIDTH, SCREEN_HEIGHT).into(),
                 ..default()
-            },
+            }),
             ..default()
-        }))
+          }))
         .add_plugin(GamePlugin)
         .add_plugin(MenuPlugin)
-        .add_startup_system(setup_camera)
+        .add_systems(Startup, setup_camera)
         .run();
 }
 
@@ -52,7 +52,7 @@ fn setup_camera(mut commands: Commands) {
         .spawn(Camera3dBundle {
             camera_3d: Camera3d { ..default() },
             camera: Camera {
-                priority: 0,
+                order: 0,
                 ..default()
             },
             projection: Projection::Orthographic(OrthographicProjection {

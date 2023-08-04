@@ -5,7 +5,7 @@ use crate::AppState;
 use bevy::{prelude::*, sprite::collide_aabb::collide, time::*};
 use std::cmp::max;
 
-#[derive(Default)]
+#[derive(Default, Event)]
 pub struct CollisionEvent;
 
 pub struct CollisionPlugin;
@@ -15,11 +15,7 @@ impl Plugin for CollisionPlugin {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<PlayerDeathEvent>()
-            .add_system_set(
-                SystemSet::on_update(AppState::InGame)
-                    .with_run_criteria(FixedTimestep::step(TIME_STEP as f64)) //FIXME: can potentially break WASM builds
-                    .with_system(check_collisions),
-            );
+            .add_systems( FixedUpdate, check_collisions)
     }
 }
 
