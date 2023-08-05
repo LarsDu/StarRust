@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.11"
-fastrand = ">=1.7.0" # ref: https://github.com/bevyengine/bevy/pull/3992
+fastrand = "1.9.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 
 [workspace]
 resolver ="2"
