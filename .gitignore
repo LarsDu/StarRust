@@ -1,3 +1,9 @@
+# *Nix builds
+star-rust
+
+# Windows builds
+star-rust.exe
+
 # Wasm output
 out/
 

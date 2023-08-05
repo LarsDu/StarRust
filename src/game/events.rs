@@ -14,8 +14,7 @@ pub struct ScoreEvent {
 
 #[derive(Event)]
 pub struct AudioEvent {
-    //pub clip: Handle<AudioSource>,
-    pub audio_file: String,
+    pub clip: Handle<AudioSource>,
 }
 
 #[derive(Event)]

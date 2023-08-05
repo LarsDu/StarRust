@@ -38,6 +38,10 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Hurt player only
             };
             bullet_fired_event.send(event);
+
+            audio_event.send(AudioEvent {
+                clip: weapon.firing_audio_clip.clone(),
+            })
         }
     }
 }

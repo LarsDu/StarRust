@@ -5,6 +5,9 @@ run:
 build:
 	cargo build
 
+build-release:
+	cargo build --release
+
 install-wasm-prereqs:
 	cargo install -f wasm-bindgen-cli
 	cargo install wasm-server-runner

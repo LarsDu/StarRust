@@ -1,6 +1,6 @@
-use super::super::AppState;
 use super::events::*;
 use bevy::prelude::*;
+use bevy::audio::*;
 
 #[derive(Resource)]
 pub struct AudioClipAssets {
@@ -26,6 +26,7 @@ impl Plugin for AudioPlugin {
             .add_systems(Update, on_audio_event);
     }
 }
+
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     let audio_clip_assets = AudioClipAssets {
         no_sound: asset_server.load(""),
@@ -43,17 +44,16 @@ pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>
     };
     commands.insert_resource(audio_clip_assets);
 }
-fn on_audio_event(mut commands: Commands, asset_server: Res<AssetServer>, mut audio_events: EventReader<AudioEvent>) {
+
+fn on_audio_event(mut commands: Commands, mut audio_events: EventReader<AudioEvent>) {
     if audio_events.is_empty() {
         return;
     }
-    //for event in audio_events.iter() {
-    //    audio.play(event.clip.clone());
-    //}
+
     for event in audio_events.iter(){
-        //commands.spawn((AudioBundle{
-        //    source: asset_server.load(event.audioFile),
-        //    settings: PlaybackSettings { mode: PlaybackSettings::Once, ..default()}
-        //}))
+        commands.spawn(AudioBundle{
+            source: event.clip.clone(),
+            settings: PlaybackSettings { mode: PlaybackMode::Once, ..default()}
+        });
     }
 }
