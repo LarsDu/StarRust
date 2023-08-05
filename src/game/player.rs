@@ -13,33 +13,25 @@ use super::models::{ModelsAssets, setup_resources};
 use super::AudioClipAssets;
 use bevy::{
     prelude::*,
-    sprite::collide_aabb::{collide, Collision},
-    time::FixedTimestep,
-};
+    sprite::collide_aabb::{collide, Collision}};
 
 pub struct PlayerPlugin;
 
 // Plugin definition
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_resources) //why does this need to be explicitly specified?
+        app.add_systems(Startup,  setup_resources)
             .add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<AudioEvent>()
             .add_event::<PlayerDeathEvent>()
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player))
-            .add_system_set(
-                SystemSet::on_update(AppState::InGame)
-                    //.with_run_criteria(FixedTimestep::step(TIMESTEPas f64))
-                    .with_system(player_controller.before(check_collisions))
-                    .with_system(fire_controller)
-                    .with_system(
-                        reflect_from_wall
-                            .before(check_collisions)
-                            .after(player_controller),
-                    ),
-            )
-            .add_system(on_player_death);
+            .add_systems(OnEnter(AppState::InGame), spawn_player)
+            .add_systems(Update, (
+                player_controller.before(check_collisions),
+                fire_controller,
+                reflect_from_wall.before(check_collisions).after(player_controller),
+                on_player_death,
+            ));
     }
 }
 
@@ -126,8 +118,8 @@ pub fn reflect_from_wall(
 pub fn fire_controller(
     time: Res<Time>,
     keyboard_input: Res<Input<KeyCode>>,
-    mut audio_event: EventWriter<AudioEvent>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
+    mut audio_event: EventWriter<AudioEvent>,
     mut query: Query<(&Transform, &mut Weapon, &Collider), With<Player>>,
 ) {
     for (transform, mut weapon, collider) in &mut query {
@@ -153,21 +145,20 @@ pub fn fire_controller(
             bullet_fired_event.send(event);
             audio_event.send(AudioEvent {
                 clip: weapon.firing_audio_clip.clone(),
-            })
+            }) // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
         }
     }
 }
 
 fn on_player_death(
-    death_events: EventReader<PlayerDeathEvent>,
-    mut menu_state: ResMut<State<MenuState>>,
-    mut game_state: ResMut<State<AppState>>,
-    //query: Query<Entity, With<Player>>
+    mut death_events: EventReader<PlayerDeathEvent>,
+    mut menu_state: ResMut<NextState<MenuState>>,
+    mut game_state: ResMut<NextState<AppState>>,
 ) {
     if !death_events.is_empty() {
-        // Currently panics
-        menu_state.overwrite_set(MenuState::PlayerDeath).unwrap();
-        game_state.overwrite_set(AppState::Menu).unwrap();
+        // See: https://bevyengine.org/examples/Games/game-menu/
+        menu_state.set(MenuState::PlayerDeath);
+        game_state.set(AppState::Menu);
         death_events.clear();
     }
 }

@@ -1,5 +1,5 @@
 use bevy::pbr::{NotShadowCaster, NotShadowReceiver};
-use bevy::{prelude::*, time::FixedTimestep};
+use bevy::prelude::*;
 
 use super::super::AppState;
 use super::actor::bullet::*;
@@ -11,10 +11,7 @@ pub struct WeaponPlugin;
 impl Plugin for WeaponPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<WeaponFiredEvent>()
-            .add_system(on_bullet_fired)
-            .add_system_set(
-                SystemSet::on_update(AppState::InGame), //.with_run_criteria(FixedTimestep::step(TIME_STEP as f64)),
-            );
+            .add_systems(Update, on_bullet_fired.run_if(in_state(AppState::InGame)));
     }
 }
 

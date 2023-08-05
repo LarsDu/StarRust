@@ -1,7 +1,7 @@
 use std::f32::consts::PI;
 
 use crate::constants::CAMERA_FAR;
-use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
+use bevy::{prelude::*, utils::Duration};
 //use bevy_particle_systems::*;
 
 //use bevy_hanabi::ParticleEffect;
@@ -15,20 +15,16 @@ use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
 
 use fastrand;
 
-use super::super::AppState;
 use super::components::*;
-use super::constants::*;
 use super::events::*;
 
 pub struct VfxPlugin;
 
 impl Plugin for VfxPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(AppState::InGame))
-            .add_event::<CameraShakeEvent>()
-            .add_event::<ExplosionEvent>()
-            //.add_system(on_explosion_event)
-            .add_system(shake_camera);
+        app.add_event::<CameraShakeEvent>()
+           .add_event::<ExplosionEvent>()
+            .add_systems(Update, shake_camera);
     }
 }
 

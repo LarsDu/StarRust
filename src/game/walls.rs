@@ -11,8 +11,8 @@ pub struct WallPlugin;
 
 impl Plugin for WallPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_walls))
-            .add_system_set(SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<Wall>));
+        app.add_systems(OnEnter(AppState::InGame), setup_walls)
+            .add_systems(OnExit(AppState::InGame), despawn_all::<Wall>);
     }
 }
 

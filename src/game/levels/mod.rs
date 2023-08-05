@@ -1,11 +1,10 @@
-use bevy::{prelude::*, time::FixedTimestep, utils::Duration};
+use bevy::{prelude::*, utils::Duration};
 
 use crate::utils::despawn_all;
 
 use super::super::menus::MenuState;
 use super::actor::{ship::*, *};
 use super::components::*;
-use super::constants::*;
 use super::events::LevelEndEvent;
 use super::{super::*, models::ModelsAssets, AudioClipAssets};
 use fastrand;
@@ -26,12 +25,9 @@ pub struct LevelPlugin;
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LevelEndEvent>()
-            .add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup_level))
-            .add_system_set(
-                SystemSet::on_exit(AppState::InGame).with_system(despawn_all::<AiActorSpawner>),
-            )
-            .add_system(level_periodic_spawn)
-            .add_system(level_ender);
+            .add_systems(OnEnter(AppState::InGame), setup_level)
+            .add_systems(OnExit(AppState::InGame), despawn_all::<AiActorSpawner>)
+            .add_systems(Update, (level_periodic_spawn.run_if(in_state(AppState::InGame)), level_ender.run_if(in_state(AppState::InGame)))); // How do avoid running this update system when not in game?
     }
 }
 
@@ -110,13 +106,13 @@ fn spawn_from_spawn_info(
 
 fn level_ender(
     mut events: EventReader<LevelEndEvent>,
-    mut game_state: ResMut<State<AppState>>,
-    mut menu_state: ResMut<State<MenuState>>,
+    mut game_state: ResMut<NextState<AppState>>,
+    mut menu_state: ResMut<NextState<MenuState>>,
 ) {
     if !events.is_empty() {
         // Use overwrite_set for events, since events may register over multiple frames
-        menu_state.overwrite_set(MenuState::LevelEnd).unwrap();
-        game_state.overwrite_set(AppState::Menu).unwrap();
+        menu_state.set(MenuState::LevelEnd);
+        game_state.set(AppState::Menu);
         events.clear();
     }
 }

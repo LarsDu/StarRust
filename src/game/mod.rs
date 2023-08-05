@@ -59,18 +59,22 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_plugin(ModelsPlugin)
-            .add_plugin(BackgroundPlugin)
-            .add_plugin(UiPlugin)
-            .add_plugin(AiPlugin)
-            .add_plugin(AudioPlugin)
-            .add_plugin(WallPlugin)
-            .add_plugin(PlayerPlugin)
-            .add_plugin(WeaponPlugin)
-            .add_plugin(CollisionPlugin)
-            .add_plugin(LevelPlugin)
-            .add_plugin(DespawnerPlugin)
-            .add_plugin(VfxPlugin)
-            .add_plugin(ActorPlugin); // currently for cleaning up entities
+            .add_plugins(
+                (
+                    ModelsPlugin,
+                    BackgroundPlugin,
+                    UiPlugin,
+                    AiPlugin,
+                    AudioPlugin,
+                    WallPlugin,
+                    PlayerPlugin,
+                    WeaponPlugin,
+                    CollisionPlugin,
+                    LevelPlugin,
+                    DespawnerPlugin,
+                    VfxPlugin,
+                    ActorPlugin
+                )
+            ); // currently for cleaning up entities
     }
 }
