@@ -102,9 +102,9 @@ pub fn check_collisions(
                     }
 
                     // Play death sound
-                    //audio_event.send(AudioEvent {
-                    //    clip: b_health.death_sound.clone(),
-                    //});
+                    audio_event.send(AudioEvent {
+                        clip: b_health.death_sound.clone(),
+                    });
 
                     commands.entity(b_entity).despawn_recursive();
                 }

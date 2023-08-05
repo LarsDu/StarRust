@@ -119,6 +119,7 @@ pub fn fire_controller(
     time: Res<Time>,
     keyboard_input: Res<Input<KeyCode>>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
+    mut audio_event: EventWriter<AudioEvent>,
     mut query: Query<(&Transform, &mut Weapon, &Collider), With<Player>>,
 ) {
     for (transform, mut weapon, collider) in &mut query {
@@ -142,6 +143,9 @@ pub fn fire_controller(
                 hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
             };
             bullet_fired_event.send(event);
+            audio_event.send(AudioEvent {
+                clip: weapon.firing_audio_clip.clone(),
+            }) // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
         }
     }
 }
