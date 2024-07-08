@@ -13,7 +13,8 @@ use super::models::{ModelsAssets, setup_resources};
 use super::AudioClipAssets;
 use bevy::{
     prelude::*,
-    sprite::collide_aabb::{collide, Collision}};
+    math::bounding::Aabb2d
+};
 
 pub struct PlayerPlugin;
 

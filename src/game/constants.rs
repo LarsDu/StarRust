@@ -9,12 +9,7 @@ pub const TIME_STEP: f32 = 1.0 / 60.0;
 // Models
 pub const SCOREBOARD_FONT_SIZE: f32 = 20.0;
 pub const SCOREBOARD_TEXT_PADDING: f32 = 5.0;
-pub const UI_COLOR: Color = Color::Rgba {
-    red: 1.0,
-    green: 1.0,
-    blue: 1.0,
-    alpha: 1.0,
-};
+pub const UI_COLOR: Color = Color::WHITE;
 
 pub const ALLY_HITMASK: u8 = 1;     // 0b0001
 pub const ENEMY_HITMASK: u8 = 2;    // 0b0010

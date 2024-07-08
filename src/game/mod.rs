@@ -1,4 +1,4 @@
-use bevy::{prelude::*, scene::ScenePlugin};
+use bevy::prelude::*;
 //use bevy_hanabi::prelude::HanabiPlugin; <-- No WASM support
 //use bevy_particle_systems::ParticleSystemPlugin;
 
@@ -21,10 +21,8 @@ mod collisions;
 pub use collisions::*;
 
 mod health;
-pub use health::*;
 
 pub mod components;
-pub use components::Player;
 
 mod events;
 

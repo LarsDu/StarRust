@@ -6,14 +6,14 @@ use crate::{game::models::ModelsAssets, utils::despawn_all};
 
 use crate::AppState;
 
-const TEXT_COLOR: Color = Color::rgb(0.9, 0.9, 0.9);
-const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
-const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
-const HOVERED_PRESSED_BUTTON: Color = Color::rgb(0.25, 0.65, 0.25);
-const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
-const BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 0.06);
-const LEVEL_END_BOX_COLOR: Color = Color::rgba(0.0, 0.0, 0.8, 1.0);
-const PLAYER_DEATH_BOX_COLOR: Color = Color::rgba(0.25, 0.0, 0.0, 1.0);
+const TEXT_COLOR: Color = Color::srgb(0.9, 0.9, 0.9);
+const NORMAL_BUTTON: Color = Color::srgb(0.15, 0.15, 0.15);
+const HOVERED_BUTTON: Color = Color::srgb(0.25, 0.25, 0.25);
+const HOVERED_PRESSED_BUTTON: Color = Color::srgb(0.25, 0.65, 0.25);
+const PRESSED_BUTTON: Color = Color::srgb(0.35, 0.75, 0.35);
+const BOX_COLOR: Color = Color::srgba(0.25, 0.0, 0.0, 0.06);
+const LEVEL_END_BOX_COLOR: Color = Color::srgba(0.0, 0.0, 0.8, 1.0);
+const PLAYER_DEATH_BOX_COLOR: Color = Color::srgba(0.25, 0.0, 0.0, 1.0);
 
 #[derive(Clone, Default, Eq, PartialEq, Debug, Hash, States)]
 pub enum MenuState {
@@ -96,15 +96,6 @@ fn load_background_model(mut commands: Commands, models: Res<ModelsAssets>) {
             ..default()
         })
         .insert(MenuBackground);
-    /*
-    commands.spawn(SceneBundle {
-        scene: models.basic_boss.clone_weak(),
-        transform: Transform::from_xyz(0.0, 300.0, 20.0)
-            .with_scale(Vec3::splat(10.0))
-            .with_rotation(Quat::from_euler(EulerRot::XYZ, 0.0, 95.0, 0.0)),
-        ..default()
-    }).insert(MenuBackground);
-    */
     commands
         .spawn(DirectionalLightBundle {
             directional_light: DirectionalLight {
