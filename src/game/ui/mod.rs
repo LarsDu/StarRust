@@ -16,9 +16,7 @@ impl Plugin for UiPlugin {
             .add_event::<ScoreEvent>()
             .add_event::<AudioEvent>()
             .add_systems(OnEnter(AppState::InGame), setup_scoreboard)
-            .add_systems(
-                OnExit(AppState::InGame), despawn_all::<PlayerScoreBoard>,
-            )
+            .add_systems(OnExit(AppState::InGame), despawn_all::<PlayerScoreBoard>)
             .add_systems(Update, on_score_event);
     }
 }

@@ -23,7 +23,7 @@ pub struct VfxPlugin;
 impl Plugin for VfxPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<CameraShakeEvent>()
-           .add_event::<ExplosionEvent>()
+            .add_event::<ExplosionEvent>()
             .add_systems(Update, shake_camera);
     }
 }
