@@ -96,8 +96,9 @@ pub fn check_collisions(
                         });
                     }
                    
-                    player_death_event.send(PlayerDeathEvent::default());
-                    
+                    if let Some(_) = b_player {
+                        player_death_event.send(PlayerDeathEvent::default());
+                    }                    
 
                     // Play death sound
                     audio_event.send(AudioEvent {

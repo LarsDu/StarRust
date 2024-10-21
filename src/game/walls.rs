@@ -82,7 +82,7 @@ impl WallBundle {
             },*/
             pbr_bundle: PbrBundle {
                 mesh: meshes.add(Mesh::from(Cuboid {
-                    half_size: location.size().extend(1.0) / 2.0,
+                    half_size: Vec3::new(0.5, 0.5, 0.5),
                 })),
                 material: materials.add(WALL_COLOR),
                 transform: Transform::from_translation(location.position().extend(1.0))
