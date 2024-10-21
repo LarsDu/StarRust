@@ -1,10 +1,10 @@
 use bevy::prelude::*;
 
-use super::game::models::ModelsAssets;
+use super::super::actor::{ship::*, BundledActor};
 use super::game::audio::AudioClipAssets;
 use super::game::constants::SPAWN_LOCATIONS;
+use super::game::models::ModelsAssets;
 use super::LevelSpawnInfo;
-use super::super::actor::{ship::*, BundledActor};
 
 pub struct SpawnSequence;
 

@@ -1,6 +1,6 @@
 use super::events::*;
-use bevy::prelude::*;
 use bevy::audio::*;
+use bevy::prelude::*;
 
 #[derive(Resource)]
 pub struct AudioClipAssets {
@@ -50,10 +50,13 @@ fn on_audio_event(mut commands: Commands, mut audio_events: EventReader<AudioEve
         return;
     }
 
-    for event in audio_events.read(){
-        commands.spawn(AudioBundle{
+    for event in audio_events.read() {
+        commands.spawn(AudioBundle {
             source: event.clip.clone(),
-            settings: PlaybackSettings { mode: PlaybackMode::Once, ..default()}
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
         });
     }
 }

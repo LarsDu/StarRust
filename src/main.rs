@@ -29,7 +29,7 @@ fn main() {
                 ..default()
             }),
             ..default()
-          }))
+        }))
         .add_plugins((GamePlugin, MenuPlugin))
         .add_systems(Startup, setup_camera)
         .run();

@@ -9,19 +9,11 @@ pub struct DespawnerPlugin;
 
 impl Plugin for DespawnerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-            Update, (
-                timed_oob_despawn,
-                timed_despawn
-            )
-        )
-        .add_systems(
-            OnExit(AppState::InGame),
-                (
-                    despawn_all::<TimedDespawn>, 
-                    despawn_all::<TimedOobDespawn>
-                )
-        );
+        app.add_systems(Update, (timed_oob_despawn, timed_despawn))
+            .add_systems(
+                OnExit(AppState::InGame),
+                (despawn_all::<TimedDespawn>, despawn_all::<TimedOobDespawn>),
+            );
     }
 }
 

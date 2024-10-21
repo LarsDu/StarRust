@@ -95,10 +95,10 @@ pub fn check_collisions(
                             lifetime: 0.25,
                         });
                     }
-                   
+
                     if let Some(_) = b_player {
                         player_death_event.send(PlayerDeathEvent::default());
-                    }                    
+                    }
 
                     // Play death sound
                     audio_event.send(AudioEvent {
@@ -142,7 +142,12 @@ impl CollisionBox {
 }
 
 // From https://github.com/bevyengine/bevy/blob/6a3b059db917999b15ca032a4cab8cd31569b896/crates/bevy_sprite/src/collide_aabb.rs
-pub fn check_aabb_collision(a_pos: Vec3, a_size: Vec2, b_pos: Vec3, b_size: Vec2) -> Option<Collision> {
+pub fn check_aabb_collision(
+    a_pos: Vec3,
+    a_size: Vec2,
+    b_pos: Vec3,
+    b_size: Vec2,
+) -> Option<Collision> {
     let a = CollisionBox::new(a_pos, a_size);
     let b = CollisionBox::new(b_pos, b_size);
 

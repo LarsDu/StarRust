@@ -37,21 +37,32 @@ pub struct OnPlayerDeathScreen;
 pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .init_state::<MenuState>()
-            .add_systems(OnExit(AppState::Menu), (despawn_all::<MenuBackground>, despawn_all::<OnPlayerDeathScreen>))
+        app.init_state::<MenuState>()
+            .add_systems(
+                OnExit(AppState::Menu),
+                (
+                    despawn_all::<MenuBackground>,
+                    despawn_all::<OnPlayerDeathScreen>,
+                ),
+            )
             .add_systems(
                 OnEnter(MenuState::Main),
-                    (main_menu_setup, load_background_model, despawn_all::<OnPlayerDeathScreen>)
-                    
+                (
+                    main_menu_setup,
+                    load_background_model,
+                    despawn_all::<OnPlayerDeathScreen>,
+                ),
             )
-            .add_systems( OnExit(MenuState::Main), despawn_all::<OnMainMenuScreen>)
-            .add_systems(OnEnter(MenuState::LevelEnd), (level_end_setup, despawn_all::<OnLevelEndScreen>))
+            .add_systems(OnExit(MenuState::Main), despawn_all::<OnMainMenuScreen>)
             .add_systems(
-                OnEnter(MenuState::PlayerDeath), (player_death_setup, despawn_all::<OnPlayerDeathScreen>))
+                OnEnter(MenuState::LevelEnd),
+                (level_end_setup, despawn_all::<OnLevelEndScreen>),
+            )
             .add_systems(
-                Update, (menu_action, button_system)
-            );
+                OnEnter(MenuState::PlayerDeath),
+                (player_death_setup, despawn_all::<OnPlayerDeathScreen>),
+            )
+            .add_systems(Update, (menu_action, button_system));
     }
 }
 
@@ -154,7 +165,7 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
     let button_style = Style {
-        width:  Val::Px(250.0),
+        width: Val::Px(250.0),
         height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
         justify_content: JustifyContent::Center,
@@ -199,10 +210,14 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 })
                 .insert(MenuButtonAction::Quit)
                 .with_children(|parent| {
-                    let icon: Handle<Image> = asset_server.load("textures/Game Icons/exitRight.png");
+                    let icon: Handle<Image> =
+                        asset_server.load("textures/Game Icons/exitRight.png");
                     parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
-                        image: UiImage{texture: icon, ..default()},
+                        image: UiImage {
+                            texture: icon,
+                            ..default()
+                        },
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("Quit", button_text_style.clone()));
@@ -218,7 +233,10 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     let icon = asset_server.load("textures/Game Icons/right.png");
                     parent.spawn(ImageBundle {
                         style: button_icon_style.clone(),
-                        image: UiImage{texture: icon, ..default()},
+                        image: UiImage {
+                            texture: icon,
+                            ..default()
+                        },
                         ..default()
                     });
                     parent.spawn(TextBundle::from_section("Play", button_text_style.clone()));

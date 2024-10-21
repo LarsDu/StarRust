@@ -1,7 +1,7 @@
 // Ripped straight from the breakout example https://bevyengine.org/examples/games/breakout/
 
-use bevy::prelude::*;
 use crate::utils::despawn_all;
+use bevy::prelude::*;
 
 use super::super::AppState;
 use super::components::{Collider, Wall};

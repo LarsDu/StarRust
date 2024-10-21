@@ -4,9 +4,7 @@ pub struct BackgroundPlugin;
 
 impl Plugin for BackgroundPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-           OnEnter(AppState::InGame), (setup_lights, setup_starfield)
-        );
+        app.add_systems(OnEnter(AppState::InGame), (setup_lights, setup_starfield));
     }
 }
 

@@ -4,12 +4,12 @@ use super::super::AppState;
 use super::actor::ship::PlayerShipDefault;
 use super::actor::BundledActor;
 use super::collisions::check_collisions;
-use super::collisions::{ Collision, CollisionEvent, check_aabb_collision};
+use super::collisions::{check_aabb_collision, Collision, CollisionEvent};
 use super::components::*;
 use super::constants::PLAYER_SPAWN_POS;
 use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
-use super::models::{ModelsAssets, setup_resources};
+use super::models::{setup_resources, ModelsAssets};
 
 use super::AudioClipAssets;
 use bevy::prelude::*;
@@ -19,18 +19,23 @@ pub struct PlayerPlugin;
 // Plugin definition
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup,  setup_resources)
+        app.add_systems(Startup, setup_resources)
             .add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<AudioEvent>()
             .add_event::<PlayerDeathEvent>()
             .add_systems(OnEnter(AppState::InGame), spawn_player)
-            .add_systems(Update, (
-                player_controller.before(check_collisions),
-                fire_controller,
-                reflect_from_wall.before(check_collisions).after(player_controller),
-                on_player_death,
-            ));
+            .add_systems(
+                Update,
+                (
+                    player_controller.before(check_collisions),
+                    fire_controller,
+                    reflect_from_wall
+                        .before(check_collisions)
+                        .after(player_controller),
+                    on_player_death,
+                ),
+            );
     }
 }
 
