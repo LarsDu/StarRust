@@ -38,7 +38,7 @@ pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_state::<MenuState>()
+            .init_state::<MenuState>()
             .add_systems(OnExit(AppState::Menu), (despawn_all::<MenuBackground>, despawn_all::<OnPlayerDeathScreen>))
             .add_systems(
                 OnEnter(MenuState::Main),
@@ -130,7 +130,9 @@ fn menu_action(
     for (interaction, menu_button_action) in &interaction_query {
         if *interaction == Interaction::Pressed {
             match menu_button_action {
-                MenuButtonAction::Quit => app_exit_events.send(AppExit),
+                MenuButtonAction::Quit => {
+                    app_exit_events.send(AppExit);
+                }
                 MenuButtonAction::MainMenu => {
                     menu_state.set(MenuState::Main);
                     //game_state.overwrite_set(AppState::Menu).unwrap();// PANICS for some reason

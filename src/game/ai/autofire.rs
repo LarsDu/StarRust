@@ -41,7 +41,7 @@ pub fn fire_controller(
 
             audio_event.send(AudioEvent {
                 clip: weapon.firing_audio_clip.clone(),
-            })
+            });
         }
     }
 }

@@ -4,16 +4,15 @@ use super::super::AppState;
 use super::actor::ship::PlayerShipDefault;
 use super::actor::BundledActor;
 use super::collisions::check_collisions;
-use super::collisions::CollisionEvent;
+use super::collisions::{ Collision, CollisionEvent, check_aabb_collision};
 use super::components::*;
 use super::constants::PLAYER_SPAWN_POS;
 use super::events::WeaponFiredEvent;
 use super::events::{AudioEvent, PlayerDeathEvent};
 use super::models::{ModelsAssets, setup_resources};
+
 use super::AudioClipAssets;
-use bevy::{
-    prelude::*,
-    sprite::collide_aabb::{collide, Collision}};
+use bevy::prelude::*;
 
 pub struct PlayerPlugin;
 
@@ -51,26 +50,26 @@ pub fn spawn_player(
 
 // Player controller system
 fn player_controller(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut ship_query: Query<(&mut Transform, &Actor), With<Player>>,
 ) {
     for (mut ship_transform, ship) in &mut ship_query {
         let mut direction_x: f32 = 0.0;
         let mut direction_y = 0.0;
 
-        if keyboard_input.pressed(KeyCode::Down) {
+        if keyboard_input.pressed(KeyCode::ArrowDown) {
             direction_y -= ship.speed.y;
         }
 
-        if keyboard_input.pressed(KeyCode::Up) {
+        if keyboard_input.pressed(KeyCode::ArrowUp) {
             direction_y += ship.speed.y;
         }
 
-        if keyboard_input.pressed(KeyCode::Left) {
+        if keyboard_input.pressed(KeyCode::ArrowLeft) {
             direction_x -= ship.speed.x;
         }
 
-        if keyboard_input.pressed(KeyCode::Right) {
+        if keyboard_input.pressed(KeyCode::ArrowRight) {
             direction_x += ship.speed.x;
         }
 
@@ -91,7 +90,7 @@ pub fn reflect_from_wall(
             let mut direction_x: f32 = 0.0;
             let mut direction_y = 0.0;
 
-            let collision = collide(
+            let collision = check_aabb_collision(
                 wall_transform.translation,
                 wall_transform.scale.truncate(),
                 ship_transform.translation,
@@ -117,7 +116,7 @@ pub fn reflect_from_wall(
 // Fire controller system
 pub fn fire_controller(
     time: Res<Time>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
     mut audio_event: EventWriter<AudioEvent>,
     mut query: Query<(&Transform, &mut Weapon, &Collider), With<Player>>,
@@ -145,7 +144,7 @@ pub fn fire_controller(
             bullet_fired_event.send(event);
             audio_event.send(AudioEvent {
                 clip: weapon.firing_audio_clip.clone(),
-            }) // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
+            }); // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
         }
     }
 }

@@ -20,7 +20,7 @@ enum AppState {
 }
 fn main() {
     App::new()
-        .add_state::<AppState>()
+        .init_state::<AppState>()
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {

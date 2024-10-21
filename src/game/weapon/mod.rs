@@ -20,7 +20,7 @@ pub fn on_bullet_fired(
     models: Res<ModelsAssets>,
     mut bullet_fired_events: EventReader<WeaponFiredEvent>,
 ) {
-    for event in bullet_fired_events.iter() {
+    for event in bullet_fired_events.read() {
         spawn_bullet(&mut commands, &models, event)
     }
 }

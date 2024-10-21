@@ -31,6 +31,7 @@ pub struct StarRustSceneBundle {
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,
+    pub inherited_visibility: InheritedVisibility,
 }
 
 #[derive(Bundle, Clone)]
