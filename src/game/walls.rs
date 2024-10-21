@@ -1,7 +1,6 @@
 // Ripped straight from the breakout example https://bevyengine.org/examples/games/breakout/
 
 use bevy::prelude::*;
-
 use crate::utils::despawn_all;
 
 use super::super::AppState;
@@ -82,8 +81,10 @@ impl WallBundle {
                 ..default()
             },*/
             pbr_bundle: PbrBundle {
-                mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
-                material: materials.add(WALL_COLOR.into()),
+                mesh: meshes.add(Mesh::from(Cuboid {
+                    half_size: location.size().extend(1.0) / 2.0,
+                })),
+                material: materials.add(WALL_COLOR),
                 transform: Transform::from_translation(location.position().extend(1.0))
                     .with_scale(location.size().extend(1.0)),
                 ..default()

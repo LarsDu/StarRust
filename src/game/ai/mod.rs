@@ -37,7 +37,7 @@ fn update_ai(time: Res<Time>, mut query: Query<(&mut Transform, &Actor, &mut Ai)
 }
 
 fn charge_forward(mut t: Mut<Transform>, speed: f32) {
-    t.translation = t.translation + speed * t.forward();
+    t.translation = t.translation + t.forward() * speed;
 }
 
 fn sine_charge(
@@ -47,7 +47,7 @@ fn sine_charge(
     amplitude: f32,
     frequency: f32,
 ) {
-    let forward = t.translation + forward_speed * t.forward();
+    let forward = t.translation + t.forward() * forward_speed;
     let up_down = t.up() * amplitude * (time.elapsed_seconds() as f32 * frequency).sin();
     t.translation = forward + up_down;
 }
