@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 
-use crate::AppState;
 pub struct ModelsPlugin;
 
 #[derive(Resource)]
@@ -21,7 +20,7 @@ pub struct ModelsAssets {
 
 impl Plugin for ModelsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_resources);
+        app.add_systems( Startup, setup_resources);
     }
 }
 

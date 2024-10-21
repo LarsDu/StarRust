@@ -35,7 +35,7 @@ fn shake_camera(
 ) {
     for (mut shaker, mut t) in &mut camera_query {
         if !shake_events.is_empty() {
-            for shake_event in shake_events.iter() {
+            for shake_event in shake_events.read() {
                 shaker.timer.reset();
                 shaker
                     .timer

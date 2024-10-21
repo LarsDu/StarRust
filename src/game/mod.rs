@@ -1,6 +1,5 @@
-use bevy::{prelude::*, scene::ScenePlugin};
-//use bevy_hanabi::prelude::HanabiPlugin; <-- No WASM support
-//use bevy_particle_systems::ParticleSystemPlugin;
+use bevy::prelude::*;
+//use bevy_hanabi::prelude::HanabiPlugin; <-- TODO: Add this back in
 
 mod ai;
 pub use ai::AiPlugin;

@@ -1,8 +1,7 @@
 use crate::game::components::*;
-use crate::game::constants::TIME_STEP;
 use crate::game::events::*;
-use crate::AppState;
-use bevy::{prelude::*, sprite::collide_aabb::collide, time::*};
+use bevy::prelude::*;
+use bevy::sprite::collide_aabb;
 use std::cmp::max;
 
 #[derive(Default, Event)]
@@ -15,7 +14,7 @@ impl Plugin for CollisionPlugin {
         app.add_event::<WeaponFiredEvent>()
             .add_event::<CollisionEvent>()
             .add_event::<PlayerDeathEvent>()
-            .add_systems( FixedUpdate, check_collisions);
+            .add_systems(FixedUpdate, check_collisions);
     }
 }
 
@@ -61,7 +60,7 @@ pub fn check_collisions(
                 continue;
             }
 
-            let collision = collide(
+            let collision = check_aabb_collision(
                 a_transform.translation,
                 a_collider.rect,
                 b_transform.translation,
@@ -112,5 +111,68 @@ pub fn check_collisions(
                 collision_event.send_default();
             }
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+enum Collision {
+    Left,
+    Right,
+    Top,
+    Bottom,
+    Inside,
+}
+
+struct CollisionBox {
+    pub top: f32,
+    pub bottom: f32,
+    pub left: f32,
+    pub right: f32,
+}
+
+impl CollisionBox {
+    pub fn new(pos: Vec3, size: Vec2) -> Self {
+        Self {
+            top: pos.y + size.y / 2.,
+            bottom: pos.y - size.y / 2.,
+            left: pos.x - size.x / 2.,
+            right: pos.x + size.x / 2.,
+        }
+    }
+}
+
+// From https://github.com/bevyengine/bevy/blob/6a3b059db917999b15ca032a4cab8cd31569b896/crates/bevy_sprite/src/collide_aabb.rs
+fn check_aabb_collision(a_pos: Vec3, a_size: Vec2, b_pos: Vec3, b_size: Vec2) -> Option<Collision> {
+    let a = CollisionBox::new(a_pos, a_size);
+    let b = CollisionBox::new(b_pos, b_size);
+
+    // check to see if the two rectangles are intersecting
+    if a.left < b.right && a.right > b.left && a.bottom < b.top && a.top > b.bottom {
+        // check to see if we hit on the left or right side
+        let (x_collision, x_depth) = if a.left < b.left && a.right > b.left && a.right < b.right {
+            (Collision::Left, b.left - a.right)
+        } else if a.left > b.left && a.left < b.right && a.right > b.right {
+            (Collision::Right, a.left - b.right)
+        } else {
+            (Collision::Inside, -f32::INFINITY)
+        };
+
+        // check to see if we hit on the top or bottom side
+        let (y_collision, y_depth) = if a.bottom < b.bottom && a.top > b.bottom && a.top < b.top {
+            (Collision::Bottom, b.bottom - a.top)
+        } else if a.bottom > b.bottom && a.bottom < b.top && a.top > b.top {
+            (Collision::Top, a.bottom - b.top)
+        } else {
+            (Collision::Inside, -f32::INFINITY)
+        };
+
+        // if we had an "x" and a "y" collision, pick the "primary" side using penetration depth
+        if y_depth.abs() < x_depth.abs() {
+            Some(y_collision)
+        } else {
+            Some(x_collision)
+        }
+    } else {
+        None
     }
 }

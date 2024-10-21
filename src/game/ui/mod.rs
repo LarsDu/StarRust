@@ -64,7 +64,7 @@ fn on_score_event(
     mut scoreboard: ResMut<Scoreboard>,
     mut text_query: Query<&mut Text, With<PlayerScoreBoard>>,
 ) {
-    for score_event in score_events.iter() {
+    for score_event in score_events.read() {
         scoreboard.score += score_event.increment;
         let mut player_score_text = text_query.single_mut();
         player_score_text.sections[1].value = scoreboard.score.to_string();
