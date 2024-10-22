@@ -42,7 +42,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Setup Rust toolchain
-              uses: hecrj/setup-rust-action@v1.4.1
+              uses: hecrj/setup-rust-action@v2.0.1
               with:
                 rust-version: stable
 
@@ -54,10 +54,10 @@ jobs:
                   cp -r $GITHUB_WORKSPACE/assets/ _site/assets
 
             - name: Setup Pages
-              uses: actions/configure-pages@v2
+              uses: actions/configure-pages@v5
 
             - name: Upload GitHub Pages artifact
-              uses: actions/upload-pages-artifact@v1.0.4
+              uses: actions/upload-pages-artifact@v3.0.0
               with:
                   # Path of the directory containing the static assets.
                   path: _site/
@@ -65,4 +65,4 @@ jobs:
                   retention-days: 30
 
             - name: Deploy GitHub Pages site
-              uses: actions/deploy-pages@v1
+              uses: actions/deploy-pages@v4.0.5
