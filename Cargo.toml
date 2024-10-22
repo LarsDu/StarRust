@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.14"
+bevy = "0.14.2"
 fastrand = "1.9.0" # ref: https://github.com/bevyengine/bevy/pull/3992
 
 [workspace]
