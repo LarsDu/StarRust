@@ -3,7 +3,6 @@ use bevy::{prelude::*, utils::Duration};
 use crate::utils::despawn_all;
 
 use super::super::menus::MenuState;
-use super::actor::{ship::*, *};
 use super::components::*;
 use super::events::LevelEndEvent;
 use super::{super::*, models::ModelsAssets, AudioClipAssets};
