@@ -2,6 +2,12 @@ use bevy::prelude::*;
 
 pub struct ModelsPlugin;
 
+// NOTE: Make sure to run in PreStartup to make available to other plugins like MenuPlugin
+impl Plugin for ModelsPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(PreStartup, setup_resources);
+    }
+}
 #[derive(Resource)]
 pub struct ModelsAssets {
     pub default_player: Handle<Scene>,
@@ -18,11 +24,7 @@ pub struct ModelsAssets {
     pub powerup_ico: Handle<Scene>,
 }
 
-impl Plugin for ModelsPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_resources);
-    }
-}
+
 
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     let scene_assets = ModelsAssets {

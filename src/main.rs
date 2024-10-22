@@ -20,8 +20,7 @@ enum AppState {
 }
 fn main() {
     App::new()
-        .init_state::<AppState>()
-        .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.27)))
+        .insert_resource(ClearColor(Color::srgb(0.1, 0.1, 0.27)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "StarRust".to_string(),
@@ -31,6 +30,8 @@ fn main() {
             ..default()
         }))
         .add_plugins((GamePlugin, MenuPlugin))
+        .init_state::<AppState>() //https://github.com/bevyengine/bevy/issues/14151
+
         .add_systems(Startup, setup_camera)
         .run();
 }
@@ -64,3 +65,4 @@ fn setup_camera(mut commands: Commands) {
         })
         .insert(CameraShaker { ..default() });
 }
+
