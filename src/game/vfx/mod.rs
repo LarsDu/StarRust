@@ -46,9 +46,8 @@ fn shake_camera(
         let shake_time = shaker.timer.duration().as_secs_f32() - shaker.timer.elapsed_secs();
 
         if shake_time > 0.01 {
-            let rng = fastrand::Rng::new();
             let magnitude_at_time = shaker.magnitude * shake_time;
-            let theta = rng.f32() * 2.0 * PI;
+            let theta = fastrand::f32() * 2.0 * PI;
             t.translation = Vec3::new(
                 magnitude_at_time * theta.cos(),
                 magnitude_at_time * theta.sin(),
