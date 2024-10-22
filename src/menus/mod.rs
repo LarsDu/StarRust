@@ -374,7 +374,6 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         });
 }
 
-
 fn load_background_model(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     commands
         .spawn(SceneBundle {

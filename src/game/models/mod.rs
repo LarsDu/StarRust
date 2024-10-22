@@ -24,8 +24,6 @@ pub struct ModelsAssets {
     pub powerup_ico: Handle<Scene>,
 }
 
-
-
 pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     let scene_assets = ModelsAssets {
         default_player: asset_server.load("models/basic_hero.glb#Scene0"),

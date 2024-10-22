@@ -31,7 +31,6 @@ fn main() {
         }))
         .add_plugins((GamePlugin, MenuPlugin))
         .init_state::<AppState>() //https://github.com/bevyengine/bevy/issues/14151
-
         .add_systems(Startup, setup_camera)
         .run();
 }
@@ -65,4 +64,3 @@ fn setup_camera(mut commands: Commands) {
         })
         .insert(CameraShaker { ..default() });
 }
-

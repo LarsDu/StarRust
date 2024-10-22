@@ -11,6 +11,7 @@ mod audio;
 pub use audio::*;
 
 mod constants;
+use bevy_hanabi::HanabiPlugin;
 use constants::*;
 
 mod player;
@@ -20,10 +21,8 @@ mod collisions;
 pub use collisions::*;
 
 mod health;
-pub use health::*;
 
 pub mod components;
-pub use components::Player;
 
 mod events;
 
@@ -58,6 +57,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+            HanabiPlugin,
             ModelsPlugin,
             BackgroundPlugin,
             UiPlugin,

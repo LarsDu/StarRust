@@ -11,7 +11,9 @@ NOTE (8/4/2023): This project is generally shelved until Bevy is more mature. Na
 TODO:
 
 - [x] Rework spawning to allow for arbritrary types to spawn.
-- [ ] Adopt Bevy Hanabi particle system once [WASM compatibility is implemented](https://github.com/djeedai/bevy_hanabi/issues/41)
+- [x] Adopt Bevy Hanabi particle system once [WASM compatibility is implemented](https://github.com/djeedai/bevy_hanabi/issues/41)
+  - [ ] Explosions should have a velocity
+  - [ ] Explosions should have a dedicated component.
 - [ ] Setup Shader instancing for 3d Models
 - [ ] UI
   - [ ] Player Healthbar
