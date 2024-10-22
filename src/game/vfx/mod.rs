@@ -6,7 +6,7 @@ use bevy::{prelude::*, utils::Duration};
 use bevy_hanabi::{
     AccelModifier, Attribute, ColorOverLifetimeModifier, EffectAsset, Gradient, Module,
     ParticleEffect, ParticleEffectBundle, SetAttributeModifier, SetPositionCircleModifier,
-    ShapeDimension, SizeOverLifetimeModifier, Spawner, SetVelocityCircleModifier
+    SetVelocityCircleModifier, ShapeDimension, SizeOverLifetimeModifier, Spawner,
 };
 
 use fastrand;
@@ -80,14 +80,13 @@ fn on_explosion_event(
             axis: module.lit(Vec3::new(0.0, 0.0, 1.0)),
         };
 
-          // Also initialize a radial initial velocity
+        // Also initialize a radial initial velocity
         // away from the (same) sphere center.
         let init_vel = SetVelocityCircleModifier {
             center: module.lit(Vec3::ZERO),
             axis: module.lit(Vec3::new(0., 0., 1.)),
             speed: module.lit(1000.0),
         };
-
 
         // Initialize the total lifetime of the particle, that is
         // the time for which it's simulated and rendered. This modifier
@@ -103,7 +102,7 @@ fn on_explosion_event(
         size_gradient.add_key(0.0, Vec2::new(3.0, 3.0));
         //size_gradient.add_key(0.8, Vec2::new(0.4,0.4));
         size_gradient.add_key(1.0, Vec2::new(0.05, 0.05));
-        let effect = EffectAsset::new(vec![2048], Spawner::rate(40.0.into()), module)// This rate is the count
+        let effect = EffectAsset::new(vec![2048], Spawner::rate(40.0.into()), module) // This rate is the count
             .with_name("Blast")
             .init(init_pos)
             .init(init_vel)
@@ -125,7 +124,7 @@ fn on_explosion_event(
             .insert(TimedDespawn {
                 timer: Timer::new(
                     Duration::from_secs_f32(explosion_data.lifetime),
-                    TimerMode::Once
+                    TimerMode::Once,
                 ),
             });
     }
