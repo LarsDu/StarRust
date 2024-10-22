@@ -6,9 +6,10 @@ use super::super::menus::MenuState;
 use super::components::*;
 use super::events::LevelEndEvent;
 use super::{super::*, models::ModelsAssets, AudioClipAssets};
-use fastrand;
 pub mod lvl;
 use lvl::*;
+
+use fastrand;
 
 // FIXME: Use enum rather than bundle here to make this
 // capable of spawning any type of bundle!
@@ -103,7 +104,7 @@ fn spawn_from_spawn_info(
 ) {
     // Read from spawn info
     let rng = fastrand::Rng::new();
-    let spawn_pos = spawn_info.locations[rng.usize(0..spawn_info.locations.len())];
+    let spawn_pos = spawn_info.locations[fastrand::usize(0..spawn_info.locations.len())];
     // Note: function must be wrapped in parenthesis
     // ref: https://stackoverflow.com/questions/37370120/
     (spawn_info.spawn_func)(commands, &audio_clips, &models, spawn_pos);
