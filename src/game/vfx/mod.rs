@@ -86,7 +86,7 @@ fn on_explosion_event(
         let init_vel = SetVelocityCircleModifier {
             center: module.lit(Vec3::ZERO),
             axis: module.lit(Vec3::new(0., 0., 1.)),
-            speed: module.lit(400.0),
+            speed: module.lit(1000.0),
         };
 
 

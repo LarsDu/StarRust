@@ -92,7 +92,7 @@ pub fn check_collisions(
                         });
                         explosion_event.send(ExplosionEvent {
                             position: b_transform.translation,
-                            lifetime: 1.0, // TODO: Add this param to a component
+                            lifetime: 0.3, // TODO: Add this param to a component
                         });
                     }
 
