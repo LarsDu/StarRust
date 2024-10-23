@@ -128,7 +128,13 @@ pub fn fire_controller(
 ) {
     for (transform, mut weapon, collider) in &mut query {
         if keyboard_input.just_pressed(KeyCode::Space) {
-            send_projectile_spawn_event(transform, collider, &weapon, &mut bullet_fired_event, &mut audio_event);
+            send_projectile_spawn_event(
+                transform,
+                collider,
+                &weapon,
+                &mut bullet_fired_event,
+                &mut audio_event,
+            );
             weapon.cooldown_timer.reset();
             weapon.cooldown_timer.set_mode(TimerMode::Repeating);
             weapon.cooldown_timer.unpause();
@@ -137,7 +143,13 @@ pub fn fire_controller(
         }
         weapon.cooldown_timer.tick(time.delta());
         if weapon.cooldown_timer.just_finished() {
-            send_projectile_spawn_event(transform, collider, &weapon, &mut bullet_fired_event, &mut audio_event);
+            send_projectile_spawn_event(
+                transform,
+                collider,
+                &weapon,
+                &mut bullet_fired_event,
+                &mut audio_event,
+            );
         }
     }
 }
@@ -148,7 +160,7 @@ fn send_projectile_spawn_event(
     weapon: &Weapon,
     bullet_fired_event: &mut EventWriter<WeaponFiredEvent>,
     audio_event: &mut EventWriter<AudioEvent>,
-){
+) {
     let event = WeaponFiredEvent {
         bullet_type: weapon.bullet_type.clone(),
         translation: Vec2::new(
