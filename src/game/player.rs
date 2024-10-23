@@ -128,6 +128,7 @@ pub fn fire_controller(
 ) {
     for (transform, mut weapon, collider) in &mut query {
         if keyboard_input.just_pressed(KeyCode::Space) {
+            send_projectile_spawn_event(transform, collider, &weapon, &mut bullet_fired_event, &mut audio_event);
             weapon.cooldown_timer.reset();
             weapon.cooldown_timer.set_mode(TimerMode::Repeating);
             weapon.cooldown_timer.unpause();
@@ -135,23 +136,32 @@ pub fn fire_controller(
             weapon.cooldown_timer.pause()
         }
         weapon.cooldown_timer.tick(time.delta());
-
         if weapon.cooldown_timer.just_finished() {
-            let event = WeaponFiredEvent {
-                bullet_type: weapon.bullet_type.clone(),
-                translation: Vec2::new(
-                    transform.translation.x + weapon.offset.x * transform.forward().x,
-                    transform.translation.y + weapon.offset.y * transform.forward().y,
-                ),
-                rotation: transform.rotation,
-                hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
-            };
-            bullet_fired_event.send(event);
-            audio_event.send(AudioEvent {
-                clip: weapon.firing_audio_clip.clone(),
-            }); // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
+            send_projectile_spawn_event(transform, collider, &weapon, &mut bullet_fired_event, &mut audio_event);
         }
     }
+}
+
+fn send_projectile_spawn_event(
+    transform: &Transform,
+    collider: &Collider,
+    weapon: &Weapon,
+    bullet_fired_event: &mut EventWriter<WeaponFiredEvent>,
+    audio_event: &mut EventWriter<AudioEvent>,
+){
+    let event = WeaponFiredEvent {
+        bullet_type: weapon.bullet_type.clone(),
+        translation: Vec2::new(
+            transform.translation.x + weapon.offset.x * transform.forward().x,
+            transform.translation.y + weapon.offset.y * transform.forward().y,
+        ),
+        rotation: transform.rotation,
+        hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
+    };
+    bullet_fired_event.send(event);
+    audio_event.send(AudioEvent {
+        clip: weapon.firing_audio_clip.clone(),
+    }); // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
 }
 
 fn on_player_death(
