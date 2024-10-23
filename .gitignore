@@ -1,3 +1,9 @@
+# Webassembly build artifacts
+_site/star-rust.d.ts
+_site/star-rust.js
+_site/star-rust_bg.wasm
+_site/star-rust_bg.wasm.d.ts
+
 # *Nix builds
 star-rust
 
