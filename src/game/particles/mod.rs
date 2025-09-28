@@ -27,7 +27,7 @@ fn update_emitter(
     for (entity, emitter) in &mut query{
         emitter.lifetime_timer.tick(time.delta());
         if emitter.lifetime_timer.just_finished(){
-            commands.entity(entity).despawn_recursive();
+            commands.entity(entity).despawn();
         }
     }
 }
