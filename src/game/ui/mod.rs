@@ -28,32 +28,21 @@ fn setup_scoreboard(
 ) {
     scoreboard.score = 0;
     commands
-        .spawn(
-            TextBundle::from_sections([
-                TextSection::new(
-                    "SCORE: ",
-                    TextStyle {
-                        font: asset_server.load("fonts/Arame-Bold.ttf"),
-                        font_size: SCOREBOARD_FONT_SIZE,
-                        color: UI_COLOR,
-                    },
-                ),
-                TextSection::new(
-                    "0",
-                    TextStyle {
-                        font: asset_server.load("fonts/Arame-Bold.ttf"),
-                        font_size: SCOREBOARD_FONT_SIZE,
-                        color: UI_COLOR,
-                    },
-                ),
-            ])
-            .with_style(Style {
+        .spawn((
+            Text::new("SCORE: 0"),
+            TextFont {
+                font: asset_server.load("fonts/Arame-Bold.ttf"),
+                font_size: SCOREBOARD_FONT_SIZE,
+                ..default()
+            },
+            TextColor(UI_COLOR),
+            Node {
                 position_type: PositionType::Absolute,
                 top: Val::Px(SCOREBOARD_TEXT_PADDING),
                 left: Val::Px(SCREEN_WIDTH * 0.10),
                 ..default()
-            }),
-        )
+            },
+        ))
         .insert(PlayerScoreBoard);
 }
 
@@ -65,7 +54,7 @@ fn on_score_event(
     for score_event in score_events.read() {
         scoreboard.score += score_event.increment;
         let mut player_score_text = text_query.single_mut();
-        player_score_text.sections[1].value = scoreboard.score.to_string();
+        **player_score_text = format!("SCORE: {}", scoreboard.score);
     }
     score_events.clear(); // Clear buffer to prevent double registration of scoring events (???)
 }

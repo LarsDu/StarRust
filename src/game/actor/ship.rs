@@ -28,7 +28,7 @@ impl BundledActor<PlayerActorBundle> for PlayerShipDefault {
                     speed: Vec2::new(6.0, 6.0),
                 },
                 scene_bundle: StarRustSceneBundle {
-                    scene: models.default_player.clone(),
+                    scene: SceneRoot(models.default_player.clone()),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                         .with_scale(Vec3::splat(ASSET_SCALE))
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 1.5)),
@@ -76,7 +76,7 @@ impl BundledActor<AiActorBundle> for DefaultEnemyShip {
                     speed: Vec2::new(1.5, 1.5),
                 },
                 scene_bundle: StarRustSceneBundle {
-                    scene: models.default_enemy.clone(),
+                    scene: SceneRoot(models.default_enemy.clone()),
                     transform: Transform::from_xyz(spawn_position.x, spawn_position.y, 2.0)
                         .with_scale(Vec3::splat(23.0))
                         .with_rotation(Quat::from_rotation_y(std::f32::consts::PI * 0.5)),
@@ -131,7 +131,7 @@ impl BundledActor<AiActorBundle> for JetCharger {
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
-        variant.actor_bundle.scene_bundle.scene = models.jet_charger.clone();
+        variant.actor_bundle.scene_bundle.scene = SceneRoot(models.jet_charger.clone());
         variant.actor_bundle.actor.speed = Vec2::new(8.0, 8.0);
         variant.ai.mode = AiMode::ChargeForward1;
         // Disable Weapon
@@ -159,7 +159,7 @@ impl BundledActor<AiActorBundle> for SpacePlatformBare {
         spawn_position: Vec2,
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
-        variant.actor_bundle.scene_bundle.scene = models.space_platform.clone();
+        variant.actor_bundle.scene_bundle.scene = SceneRoot(models.space_platform.clone());
         variant.actor_bundle.actor.speed = Vec2::new(2.0, 2.0);
         variant.actor_bundle.health.hp = 100;
         variant.actor_bundle.collider.rect = Vec2::new(210.0, 40.0);
@@ -190,7 +190,7 @@ impl BundledActor<AiActorBundle> for Star {
     ) -> AiActorBundle {
         let mut variant = DefaultEnemyShip::get_bundle(audio_clips, models, spawn_position).clone();
         variant.actor_bundle.camera_shake_on_death.magnitude = 0.0;
-        variant.actor_bundle.scene_bundle.scene = models.powerup_star.clone();
+        variant.actor_bundle.scene_bundle.scene = SceneRoot(models.powerup_star.clone());
         // FIXME: Make a dedicated hitmask for player bullets and powerups
         variant.actor_bundle.collider.hitmask = ENEMY_HITMASK;
         variant.actor_bundle.collider.damage = 0;

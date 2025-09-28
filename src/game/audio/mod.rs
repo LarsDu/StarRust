@@ -51,12 +51,6 @@ fn on_audio_event(mut commands: Commands, mut audio_events: EventReader<AudioEve
     }
 
     for event in audio_events.read() {
-        commands.spawn(AudioBundle {
-            source: event.clip.clone(),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
-        });
+        commands.spawn((AudioPlayer(event.clip.clone()), PlaybackSettings::DESPAWN));
     }
 }

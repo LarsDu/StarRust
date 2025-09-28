@@ -45,7 +45,7 @@ impl AiBulletBundle for StandardBullet {
                 speed: Vec2::new(10.0, 10.0),
             },
             scene_bundle: StarRustSceneBundle {
-                scene: models.default_bullet.clone(),
+                scene: SceneRoot(models.default_bullet.clone()),
                 transform: Transform::from_xyz(
                     weapon_data.translation.x,
                     weapon_data.translation.y,
@@ -80,7 +80,7 @@ impl AiBulletBundle for StandardEnemyBullet {
         weapon_data: &WeaponFiredEvent,
     ) -> BulletActorBundle {
         let mut bullet = StandardBullet::get_bullet_bundle(models, weapon_data).clone();
-        bullet.scene_bundle.scene = models.default_enemy_bullet.clone();
+        bullet.scene_bundle.scene = SceneRoot(models.default_enemy_bullet.clone());
         return bullet;
     }
 }
