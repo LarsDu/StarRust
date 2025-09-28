@@ -1,4 +1,5 @@
-use bevy::{prelude::*, utils::Duration};
+use bevy::prelude::*;
+use std::time::Duration;
 
 use crate::utils::despawn_all;
 
@@ -84,7 +85,7 @@ fn level_periodic_spawn(
                 spawner.ttl_timer.reset();
             } else {
                 spawner.index = 0;
-                level_end_event.send(LevelEndEvent {});
+                level_end_event.write(LevelEndEvent {});
             }
         }
 

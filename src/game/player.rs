@@ -170,8 +170,8 @@ fn send_projectile_spawn_event(
         rotation: transform.rotation,
         hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
     };
-    bullet_fired_event.send(event);
-    audio_event.send(AudioEvent {
+    bullet_fired_event.write(event);
+    audio_event.write(AudioEvent {
         clip: weapon.firing_audio_clip.clone(),
     }); // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
 }

@@ -1,7 +1,8 @@
 use std::f32::consts::PI;
 
 use crate::constants::CAMERA_FAR;
-use bevy::{prelude::*, utils::Duration};
+use bevy::prelude::*;
+use std::time::Duration;
 
 use fastrand;
 

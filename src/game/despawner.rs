@@ -25,7 +25,7 @@ fn timed_despawn(
     for (entity, mut despawner) in &mut query {
         despawner.timer.tick(time.delta());
         if despawner.timer.finished() {
-            commands.entity(entity).despawn_recursive();
+            commands.entity(entity).despawn();
         }
     }
 }
@@ -45,7 +45,7 @@ fn timed_oob_despawn(
         {
             despawner.timer.tick(time.delta());
             if despawner.timer.finished() {
-                commands.entity(entity).despawn_recursive();
+                commands.entity(entity).despawn();
             }
         } else {
             despawner.timer.reset();

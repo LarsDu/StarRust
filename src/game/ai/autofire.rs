@@ -37,9 +37,9 @@ pub fn fire_controller(
                 rotation: transform.rotation,
                 hitmask: collider.hitmask, // Hurt player only
             };
-            bullet_fired_event.send(event);
+            bullet_fired_event.write(event);
 
-            audio_event.send(AudioEvent {
+            audio_event.write(AudioEvent {
                 clip: weapon.firing_audio_clip.clone(),
             });
         }

@@ -53,8 +53,9 @@ fn on_score_event(
 ) {
     for score_event in score_events.read() {
         scoreboard.score += score_event.increment;
-        let mut player_score_text = text_query.single_mut();
-        **player_score_text = format!("SCORE: {}", scoreboard.score);
+        if let Ok(mut player_score_text) = text_query.single_mut() {
+            **player_score_text = format!("SCORE: {}", scoreboard.score);
+        }
     }
     score_events.clear(); // Clear buffer to prevent double registration of scoring events (???)
 }
