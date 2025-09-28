@@ -128,8 +128,7 @@ fn menu_action(
 
 fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
-    // Common style for all buttons on the screen
-    let button_style = Style {
+    let button_node = Node {
         width: Val::Px(250.0),
         height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
@@ -137,97 +136,80 @@ fn main_menu_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         align_items: AlignItems::Center,
         ..default()
     };
-    let button_icon_style = Style {
+    let button_icon_node = Node {
         width: Val::Px(30.0),
         height: Val::Px(30.0),
-        // This takes the icons out of the flexbox flow, to be positioned exactly
         position_type: PositionType::Absolute,
-        // The icon will be close to the left border of the button
         left: Val::Px(10.0),
         right: Val::Auto,
         top: Val::Auto,
         bottom: Val::Auto,
         ..default()
     };
-    let button_text_style = TextStyle {
+    let button_font = TextFont {
         font: font.clone(),
         font_size: 40.0,
-        color: TEXT_COLOR,
+        ..default()
     };
 
     commands
-        .spawn(NodeBundle {
-            style: Style {
+        .spawn((
+            Node {
                 margin: UiRect::all(Val::Auto),
                 flex_direction: FlexDirection::ColumnReverse,
                 align_items: AlignItems::Center,
                 ..default()
             },
-            background_color: BOX_COLOR.into(),
-            ..default()
-        })
+            BackgroundColor(BOX_COLOR),
+        ))
         .insert(OnMainMenuScreen)
         .with_children(|parent| {
             parent
-                .spawn(ButtonBundle {
-                    style: button_style.clone(),
-                    ..default()
-                })
+                .spawn((Button, button_node.clone(), BackgroundColor(NORMAL_BUTTON)))
                 .insert(MenuButtonAction::Quit)
                 .with_children(|parent| {
                     let icon: Handle<Image> =
                         asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style.clone(),
-                        image: UiImage {
-                            texture: icon,
-                            ..default()
-                        },
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("Quit", button_text_style.clone()));
+                    parent.spawn((button_icon_node.clone(), ImageNode::new(icon)));
+                    parent.spawn((
+                        Text::new("Quit"),
+                        button_font.clone(),
+                        TextColor(TEXT_COLOR),
+                    ));
                 });
 
             parent
-                .spawn(ButtonBundle {
-                    style: button_style.clone(),
-                    ..default()
-                })
+                .spawn((Button, button_node.clone(), BackgroundColor(NORMAL_BUTTON)))
                 .insert(MenuButtonAction::Play)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/right.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style.clone(),
-                        image: UiImage {
-                            texture: icon,
-                            ..default()
-                        },
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("Play", button_text_style.clone()));
+                    parent.spawn((button_icon_node.clone(), ImageNode::new(icon)));
+                    parent.spawn((
+                        Text::new("Play"),
+                        button_font.clone(),
+                        TextColor(TEXT_COLOR),
+                    ));
                 });
 
-            parent.spawn(
-                TextBundle::from_section(
-                    "Star Rust",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 80.0,
-                        color: TEXT_COLOR,
-                    },
-                )
-                .with_style(Style {
+            parent.spawn((
+                Text::new("Star Rust"),
+                TextFont {
+                    font: font.clone(),
+                    font_size: 80.0,
+                    ..default()
+                },
+                TextColor(TEXT_COLOR),
+                Node {
                     margin: UiRect::all(Val::Px(50.0)),
                     ..default()
-                }),
-            );
+                },
+            ));
         });
 }
 
 fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
-    // Common style for all buttons on the screen
-    let button_style = Style {
+    let button_node = Node {
         width: Val::Px(315.0),
         height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
@@ -235,55 +217,50 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         align_items: AlignItems::Center,
         ..default()
     };
-
-    let button_text_style = TextStyle {
+    let button_font = TextFont {
         font: font.clone(),
         font_size: 40.0,
-        color: TEXT_COLOR,
+        ..default()
     };
 
     commands
-        .spawn(NodeBundle {
-            style: Style {
+        .spawn((
+            Node {
                 margin: UiRect::all(Val::Auto),
                 flex_direction: FlexDirection::ColumnReverse,
                 align_items: AlignItems::Center,
                 ..default()
             },
-            background_color: LEVEL_END_BOX_COLOR.into(),
-            ..default()
-        })
+            BackgroundColor(LEVEL_END_BOX_COLOR),
+        ))
         .insert(OnLevelEndScreen)
         .with_children(|parent| {
             // Display the game name
-            parent.spawn(
-                TextBundle::from_section(
-                    "LEVEL END",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 80.0,
-                        color: TEXT_COLOR,
-                    },
-                )
-                .with_style(Style {
+            parent.spawn((
+                Text::new("LEVEL END"),
+                TextFont {
+                    font: font.clone(),
+                    font_size: 80.0,
+                    ..default()
+                },
+                TextColor(TEXT_COLOR),
+                Node {
                     margin: UiRect::all(Val::Px(50.0)),
                     ..default()
-                }),
-            );
+                },
+            ));
 
             // Display
             // - MAIN MENU
             // - RESTART
             parent
-                .spawn(ButtonBundle {
-                    style: button_style.clone(),
-                    ..default()
-                })
+                .spawn((Button, button_node.clone(), BackgroundColor(NORMAL_BUTTON)))
                 .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
-                    parent.spawn(TextBundle::from_section(
-                        "MAIN MENU",
-                        button_text_style.clone(),
+                    parent.spawn((
+                        Text::new("MAIN MENU"),
+                        button_font.clone(),
+                        TextColor(TEXT_COLOR),
                     ));
                 });
         });
@@ -292,7 +269,7 @@ fn level_end_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/Arame-Bold.ttf");
     // Common style for all buttons on the screen
-    let button_style = Style {
+    let button_node = Node {
         width: Val::Px(300.0),
         height: Val::Px(65.0),
         margin: UiRect::all(Val::Px(20.0)),
@@ -301,98 +278,81 @@ fn player_death_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         ..default()
     };
 
-    let button_text_style = TextStyle {
+    let button_font = TextFont {
         font: font.clone(),
         font_size: 40.0,
-        color: TEXT_COLOR,
+        ..default()
     };
 
     commands
-        .spawn(NodeBundle {
-            style: Style {
+        .spawn((
+            Node {
                 margin: UiRect::all(Val::Auto),
                 flex_direction: FlexDirection::ColumnReverse,
                 align_items: AlignItems::Center,
                 ..default()
             },
-            background_color: PLAYER_DEATH_BOX_COLOR.into(),
-            ..default()
-        })
+            BackgroundColor(PLAYER_DEATH_BOX_COLOR),
+        ))
         .insert(OnPlayerDeathScreen)
         .with_children(|parent| {
             /*
             parent
-                .spawn(ButtonBundle {
-                    style: button_style,
-                    ..default()
-                })
+                .spawn((Button, button_node.clone(), BackgroundColor(NORMAL_BUTTON)))
                 .insert(MenuButtonAction::Restart)
                 .with_children(|parent| {
                     let icon = asset_server.load("textures/Game Icons/exitRight.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style,
-                        image: UiImage(icon),
-                        ..default()
-                    });
-                    parent.spawn(TextBundle::from_section("RESTART", button_text_style));
+                    parent.spawn((button_icon_node.clone(), ImageNode::new(icon)));
+                    parent.spawn((Text::new("RESTART"), button_font.clone(), TextColor(TEXT_COLOR)));
                 });*/
 
             parent
-                .spawn(ButtonBundle {
-                    style: button_style.clone(),
-                    ..default()
-                })
+                .spawn((Button, button_node.clone(), BackgroundColor(NORMAL_BUTTON)))
                 .insert(MenuButtonAction::MainMenu)
                 .with_children(|parent| {
                     /*let icon = asset_server.load("textures/Game Icons/right.png");
-                    parent.spawn(ImageBundle {
-                        style: button_icon_style.clone(),
-                        image: UiImage(icon),
-                        ..default()
-                    });*/
-                    parent.spawn(TextBundle::from_section(
-                        "MAIN MENU",
-                        button_text_style.clone(),
+                    parent.spawn((button_icon_node.clone(), ImageNode::new(icon)));*/
+                    parent.spawn((
+                        Text::new("MAIN MENU"),
+                        button_font.clone(),
+                        TextColor(TEXT_COLOR),
                     ));
                 });
 
             // Display the game name
-            parent.spawn(
-                TextBundle::from_section(
-                    "GAME OVER",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 80.0,
-                        color: TEXT_COLOR,
-                    },
-                )
-                .with_style(Style {
+            parent.spawn((
+                Text::new("GAME OVER"),
+                TextFont {
+                    font: font.clone(),
+                    font_size: 80.0,
+                    ..default()
+                },
+                TextColor(TEXT_COLOR),
+                Node {
                     margin: UiRect::all(Val::Px(50.0)),
                     ..default()
-                }),
-            );
+                },
+            ));
         });
 }
 
 fn load_background_model(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     commands
-        .spawn(SceneBundle {
-            scene: asset_server.load("models/basic_enemy.glb#Scene0"),
-            transform: Transform::from_xyz(0.0, 210.0, 20.0)
+        .spawn((
+            SceneRoot(asset_server.load("models/basic_enemy.glb#Scene0")),
+            Transform::from_xyz(0.0, 210.0, 20.0)
                 .with_scale(Vec3::splat(30.0))
                 .with_rotation(Quat::from_euler(EulerRot::XYZ, 20.0, 95.0, 0.0)),
-            ..default()
-        })
+        ))
         .insert(MenuBackground);
     commands
-        .spawn(DirectionalLightBundle {
-            directional_light: DirectionalLight {
+        .spawn((
+            DirectionalLight {
                 illuminance: 25000.0,
                 color: Color::WHITE,
                 ..default()
             },
-            transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        })
+            Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
+        ))
         .insert(MenuBackground);
 }

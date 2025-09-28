@@ -45,11 +45,9 @@ fn setup_walls(
 // This bundle is a collection of the components that define a "wall" in our game
 #[derive(Bundle)]
 struct WallBundle {
-    // You can nest bundles inside of other bundles like this
-    // Allowing you to compose their functionality
-    //#[bundle]
-    //sprite_bundle: SpriteBundle,
-    pbr_bundle: PbrBundle,
+    mesh: Mesh3d,
+    material: MeshMaterial3d<StandardMaterial>,
+    transform: Transform,
     collider: Collider,
     wall: Wall,
 }
@@ -62,33 +60,15 @@ impl WallBundle {
         materials: &mut ResMut<Assets<StandardMaterial>>,
     ) -> WallBundle {
         WallBundle {
-            /*
-            sprite_bundle: SpriteBundle {
-                transform: Transform {
-                    // We need to convert our Vec2 into a Vec3, by giving it a z-coordinate
-                    // This is used to determine the order of our sprites
-                    translation: location.position().extend(0.0),
-                    // The z-scale of 2D objects must always be 1.0,
-                    // or their ordering will be affected in surprising ways.
-                    // See https://github.com/bevyengine/bevy/issues/4149
-                    scale: location.size().extend(1.0),
-                    ..default()
-                },
-                sprite: Sprite {
-                    color: WALL_COLOR,
-                    ..default()
-                },
+            mesh: Mesh3d(meshes.add(Mesh::from(Cuboid {
+                half_size: Vec3::new(0.5, 0.5, 0.5),
+            }))),
+            material: MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: WALL_COLOR,
                 ..default()
-            },*/
-            pbr_bundle: PbrBundle {
-                mesh: meshes.add(Mesh::from(Cuboid {
-                    half_size: Vec3::new(0.5, 0.5, 0.5),
-                })),
-                material: materials.add(WALL_COLOR),
-                transform: Transform::from_translation(location.position().extend(1.0))
-                    .with_scale(location.size().extend(1.0)),
-                ..default()
-            },
+            })),
+            transform: Transform::from_translation(location.position().extend(1.0))
+                .with_scale(location.size().extend(1.0)),
             collider: Collider {
                 rect: location.size(),
                 damage: 0,

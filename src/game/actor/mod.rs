@@ -27,7 +27,7 @@ pub trait BundledActor<T: Bundle> {
 
 #[derive(Bundle, Clone, Default)]
 pub struct StarRustSceneBundle {
-    pub scene: Handle<Scene>,
+    pub scene: SceneRoot,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,

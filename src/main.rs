@@ -48,19 +48,18 @@ fn setup_camera(mut commands: Commands) {
     ); // FIXME: this does not render at all*/
     // Bevy 2d camera is at Z=999.9
     commands
-        .spawn(Camera3dBundle {
-            camera_3d: Camera3d { ..default() },
-            camera: Camera {
+        .spawn((
+            Camera3d::default(),
+            Camera {
                 order: 0,
                 ..default()
             },
-            projection: Projection::Orthographic(OrthographicProjection {
+            Projection::from(OrthographicProjection {
                 scale: 1.0,
-                ..default()
+                far: CAMERA_FAR,
+                ..OrthographicProjection::default_3d()
             }),
-            transform: Transform::from_xyz(0.0, 0.0, CAMERA_FAR - 0.1)
-                .looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        })
+            Transform::from_xyz(0.0, 0.0, CAMERA_FAR - 0.1).looking_at(Vec3::ZERO, Vec3::Y),
+        ))
         .insert(CameraShaker { ..default() });
 }

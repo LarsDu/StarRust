@@ -22,15 +22,14 @@ pub fn setup_lights(mut commands: Commands) {
     });*/
 
     // Directional Light
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
+    commands.spawn((
+        DirectionalLight {
             illuminance: 25000.0,
             color: Color::WHITE,
             ..default()
         },
-        transform: Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    });
+        Transform::from_xyz(0.0, 5.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
+    ));
 }
 
 pub fn setup_starfield(commands: Commands) {}
