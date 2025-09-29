@@ -3,28 +3,28 @@ use crate::game::events::*;
 use bevy::prelude::*;
 use std::cmp::max;
 
-#[derive(Default, Event)]
+#[derive(Default, Message)]
 pub struct CollisionEvent;
 
 pub struct CollisionPlugin;
 
 impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<WeaponFiredEvent>()
-            .add_event::<CollisionEvent>()
-            .add_event::<PlayerDeathEvent>()
+        app.add_message::<WeaponFiredEvent>()
+            .add_message::<CollisionEvent>()
+            .add_message::<PlayerDeathEvent>()
             .add_systems(FixedUpdate, check_collisions);
     }
 }
 
 pub fn check_collisions(
     mut commands: Commands,
-    mut audio_event: EventWriter<AudioEvent>,
-    mut collision_event: EventWriter<CollisionEvent>,
-    mut camera_shake_event: EventWriter<CameraShakeEvent>,
-    mut explosion_event: EventWriter<ExplosionEvent>,
-    mut player_death_event: EventWriter<PlayerDeathEvent>,
-    mut score_event: EventWriter<ScoreEvent>,
+    mut audio_event: MessageWriter<AudioEvent>,
+    mut collision_event: MessageWriter<CollisionEvent>,
+    mut camera_shake_event: MessageWriter<CameraShakeEvent>,
+    mut explosion_event: MessageWriter<ExplosionEvent>,
+    mut player_death_event: MessageWriter<PlayerDeathEvent>,
+    mut score_event: MessageWriter<ScoreEvent>,
     a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>)>,
     mut b_query: Query<
         (
@@ -68,47 +68,47 @@ pub fn check_collisions(
             if collision.is_some() {
                 if let Some(_) = a_bullet {
                     // If a is a bullet, despawn it on impact
-                    commands.entity(a_entity).despawn_recursive();
+                    commands.entity(a_entity).despawn();
                 }
                 b_health.hp = max(b_health.hp - a_collider.damage, 0);
 
                 // Play damage sound
                 if a_collider.damage > 0 {
-                    //audio_event.send(AudioEvent {
+                    //audio_event.write(AudioEvent {
                     //    clip: b_health.damage_sound.clone(),
                     //});
                 }
 
                 if b_health.hp == 0 {
                     if let Some(d) = b_death_points {
-                        score_event.send(ScoreEvent {
+                        score_event.write(ScoreEvent {
                             increment: d.points,
                         });
                     }
                     if let Some(s) = b_camera_shake {
-                        camera_shake_event.send(CameraShakeEvent {
+                        camera_shake_event.write(CameraShakeEvent {
                             magnitude: s.magnitude,
                             duration_secs: s.duration_secs,
                         });
-                        explosion_event.send(ExplosionEvent {
+                        explosion_event.write(ExplosionEvent {
                             position: b_transform.translation,
                             lifetime: 0.25,
                         });
                     }
 
                     if let Some(_) = b_player {
-                        player_death_event.send(PlayerDeathEvent::default());
+                        player_death_event.write(PlayerDeathEvent::default());
                     }
 
                     // Play death sound
-                    audio_event.send(AudioEvent {
+                    audio_event.write(AudioEvent {
                         clip: b_health.death_sound.clone(),
                     });
 
-                    commands.entity(b_entity).despawn_recursive();
+                    commands.entity(b_entity).despawn();
                 }
 
-                collision_event.send_default();
+                collision_event.write_default();
             }
         }
     }

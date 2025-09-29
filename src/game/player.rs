@@ -20,10 +20,10 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_resources)
-            .add_event::<WeaponFiredEvent>()
-            .add_event::<CollisionEvent>()
-            .add_event::<AudioEvent>()
-            .add_event::<PlayerDeathEvent>()
+            .add_message::<WeaponFiredEvent>()
+            .add_message::<CollisionEvent>()
+            .add_message::<AudioEvent>()
+            .add_message::<PlayerDeathEvent>()
             .add_systems(OnEnter(AppState::InGame), spawn_player)
             .add_systems(
                 Update,
@@ -122,8 +122,8 @@ pub fn reflect_from_wall(
 pub fn fire_controller(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
-    mut audio_event: EventWriter<AudioEvent>,
+    mut bullet_fired_event: MessageWriter<WeaponFiredEvent>,
+    mut audio_event: MessageWriter<AudioEvent>,
     mut query: Query<(&Transform, &mut Weapon, &Collider), With<Player>>,
 ) {
     for (transform, mut weapon, collider) in &mut query {
@@ -158,8 +158,8 @@ fn send_projectile_spawn_event(
     transform: &Transform,
     collider: &Collider,
     weapon: &Weapon,
-    bullet_fired_event: &mut EventWriter<WeaponFiredEvent>,
-    audio_event: &mut EventWriter<AudioEvent>,
+    bullet_fired_event: &mut MessageWriter<WeaponFiredEvent>,
+    audio_event: &mut MessageWriter<AudioEvent>,
 ) {
     let event = WeaponFiredEvent {
         bullet_type: weapon.bullet_type.clone(),
@@ -170,14 +170,14 @@ fn send_projectile_spawn_event(
         rotation: transform.rotation,
         hitmask: collider.hitmask, // Bullets have the same hitmask as the collider attached to the firer
     };
-    bullet_fired_event.send(event);
-    audio_event.send(AudioEvent {
+    bullet_fired_event.write(event);
+    audio_event.write(AudioEvent {
         clip: weapon.firing_audio_clip.clone(),
     }); // TODO: Perhaps tie this audio event to the bullet fired event rather than with the player controls!
 }
 
 fn on_player_death(
-    mut death_events: EventReader<PlayerDeathEvent>,
+    mut death_events: MessageReader<PlayerDeathEvent>,
     mut menu_state: ResMut<NextState<MenuState>>,
     mut game_state: ResMut<NextState<AppState>>,
 ) {

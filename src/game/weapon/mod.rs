@@ -1,5 +1,4 @@
-use bevy::pbr::{NotShadowCaster, NotShadowReceiver};
-use bevy::prelude::*;
+use bevy::{light::{NotShadowCaster, NotShadowReceiver}, prelude::*};
 
 use super::super::AppState;
 use super::actor::bullet::*;
@@ -10,7 +9,7 @@ pub struct WeaponPlugin;
 
 impl Plugin for WeaponPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<WeaponFiredEvent>()
+        app.add_message::<WeaponFiredEvent>()
             .add_systems(Update, on_bullet_fired.run_if(in_state(AppState::InGame)));
     }
 }
@@ -18,7 +17,7 @@ impl Plugin for WeaponPlugin {
 pub fn on_bullet_fired(
     mut commands: Commands,
     models: Res<ModelsAssets>,
-    mut bullet_fired_events: EventReader<WeaponFiredEvent>,
+    mut bullet_fired_events: MessageReader<WeaponFiredEvent>,
 ) {
     for event in bullet_fired_events.read() {
         spawn_bullet(&mut commands, &models, event)
