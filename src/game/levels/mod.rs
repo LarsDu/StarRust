@@ -25,7 +25,7 @@ pub struct LevelPlugin;
 
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<LevelEndEvent>()
+        app.add_message::<LevelEndEvent>()
             .add_systems(OnEnter(AppState::InGame), setup_level)
             .add_systems(OnExit(AppState::InGame), despawn_all::<AiActorSpawner>)
             .add_systems(
@@ -58,7 +58,7 @@ fn level_periodic_spawn(
     time: Res<Time>,
     models: Res<ModelsAssets>,
     audio_clips: Res<AudioClipAssets>,
-    mut level_end_event: EventWriter<LevelEndEvent>,
+    mut level_end_event: MessageWriter<LevelEndEvent>,
     mut query: Query<&mut AiActorSpawner, With<AiActorSpawner>>,
 ) {
     // Run logic for each Spawner Component
@@ -89,7 +89,7 @@ fn level_periodic_spawn(
             }
         }
 
-        if spawner.frequency_timer.finished() {
+        if spawner.frequency_timer.is_finished() {
             let spawn_info = &spawner.spawn_infos[spawner.index as usize];
 
             spawn_from_spawn_info(&mut commands, spawn_info, &audio_clips, &models);
@@ -112,7 +112,7 @@ fn spawn_from_spawn_info(
 }
 
 fn level_ender(
-    mut events: EventReader<LevelEndEvent>,
+    mut events: MessageReader<LevelEndEvent>,
     mut game_state: ResMut<NextState<AppState>>,
     mut menu_state: ResMut<NextState<MenuState>>,
 ) {

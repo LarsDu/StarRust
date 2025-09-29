@@ -22,7 +22,7 @@ pub struct AudioPlugin;
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_resources)
-            .add_event::<AudioEvent>()
+            .add_message::<AudioEvent>()
             .add_systems(Update, on_audio_event);
     }
 }
@@ -45,7 +45,7 @@ pub fn setup_resources(mut commands: Commands, asset_server: ResMut<AssetServer>
     commands.insert_resource(audio_clip_assets);
 }
 
-fn on_audio_event(mut commands: Commands, mut audio_events: EventReader<AudioEvent>) {
+fn on_audio_event(mut commands: Commands, mut audio_events: MessageReader<AudioEvent>) {
     if audio_events.is_empty() {
         return;
     }

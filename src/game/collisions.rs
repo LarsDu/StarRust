@@ -3,28 +3,28 @@ use crate::game::events::*;
 use bevy::prelude::*;
 use std::cmp::max;
 
-#[derive(Default, Event)]
+#[derive(Default, Message)]
 pub struct CollisionEvent;
 
 pub struct CollisionPlugin;
 
 impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<WeaponFiredEvent>()
-            .add_event::<CollisionEvent>()
-            .add_event::<PlayerDeathEvent>()
+        app.add_message::<WeaponFiredEvent>()
+            .add_message::<CollisionEvent>()
+            .add_message::<PlayerDeathEvent>()
             .add_systems(FixedUpdate, check_collisions);
     }
 }
 
 pub fn check_collisions(
     mut commands: Commands,
-    mut audio_event: EventWriter<AudioEvent>,
-    mut collision_event: EventWriter<CollisionEvent>,
-    mut camera_shake_event: EventWriter<CameraShakeEvent>,
-    mut explosion_event: EventWriter<ExplosionEvent>,
-    mut player_death_event: EventWriter<PlayerDeathEvent>,
-    mut score_event: EventWriter<ScoreEvent>,
+    mut audio_event: MessageWriter<AudioEvent>,
+    mut collision_event: MessageWriter<CollisionEvent>,
+    mut camera_shake_event: MessageWriter<CameraShakeEvent>,
+    mut explosion_event: MessageWriter<ExplosionEvent>,
+    mut player_death_event: MessageWriter<PlayerDeathEvent>,
+    mut score_event: MessageWriter<ScoreEvent>,
     a_query: Query<(Entity, &Transform, &Collider, Option<&Bullet>)>,
     mut b_query: Query<
         (
@@ -74,7 +74,7 @@ pub fn check_collisions(
 
                 // Play damage sound
                 if a_collider.damage > 0 {
-                    //audio_event.send(AudioEvent {
+                    //audio_event.write(AudioEvent {
                     //    clip: b_health.damage_sound.clone(),
                     //});
                 }

@@ -22,7 +22,7 @@ impl Plugin for BasicParticlesPlugin{
 fn update_emitter(
     time: Res<Time>,
     mut commands: Commands,
-    mut query: Query<(Entity, &mut BasicParticleEmitter)>
+    mut query: Query<(Entity, &mut BasicParticleEmitter)>,
 ) {
     for (entity, emitter) in &mut query{
         emitter.lifetime_timer.tick(time.delta());

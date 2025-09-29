@@ -24,7 +24,7 @@ pub fn setup_lights(mut commands: Commands) {
     // Directional Light
     commands.spawn((
         DirectionalLight {
-            illuminance: 25000.0,
+            illuminance: 10000.0,
             color: Color::WHITE,
             ..default()
         },

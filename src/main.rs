@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, window::WindowResolution};
 //use bevy_hanabi::prelude::*;
 mod menus;
 use menus::MenuPlugin;
@@ -24,7 +24,10 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "StarRust".to_string(),
-                resolution: (SCREEN_WIDTH, SCREEN_HEIGHT).into(),
+                resolution: WindowResolution::new(
+                    SCREEN_WIDTH as u32,
+                    SCREEN_HEIGHT as u32,
+                ),
                 ..default()
             }),
             ..default()

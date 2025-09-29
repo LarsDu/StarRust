@@ -13,8 +13,8 @@ pub struct UiPlugin;
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Scoreboard { score: 0 })
-            .add_event::<ScoreEvent>()
-            .add_event::<AudioEvent>()
+            .add_message::<ScoreEvent>()
+            .add_message::<AudioEvent>()
             .add_systems(OnEnter(AppState::InGame), setup_scoreboard)
             .add_systems(OnExit(AppState::InGame), despawn_all::<PlayerScoreBoard>)
             .add_systems(Update, on_score_event);
@@ -47,15 +47,20 @@ fn setup_scoreboard(
 }
 
 fn on_score_event(
-    mut score_events: EventReader<ScoreEvent>,
+    mut score_events: MessageReader<ScoreEvent>,
     mut scoreboard: ResMut<Scoreboard>,
     mut text_query: Query<&mut Text, With<PlayerScoreBoard>>,
 ) {
+    let mut score_increase = 0;
     for score_event in score_events.read() {
-        scoreboard.score += score_event.increment;
-        if let Ok(mut player_score_text) = text_query.single_mut() {
-            **player_score_text = format!("SCORE: {}", scoreboard.score);
-        }
+        score_increase += score_event.increment;
     }
-    score_events.clear(); // Clear buffer to prevent double registration of scoring events (???)
+
+    if score_increase != 0 {
+        scoreboard.score += score_increase;
+        if let Some(mut player_score_text) = text_query.iter_mut().next() {
+            player_score_text.0 = format!("SCORE: {}", scoreboard.score);
+        }
+        score_events.clear();
+    }
 }

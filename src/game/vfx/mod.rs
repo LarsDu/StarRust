@@ -13,15 +13,15 @@ pub struct VfxPlugin;
 
 impl Plugin for VfxPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<CameraShakeEvent>()
-            .add_event::<ExplosionEvent>()
+        app.add_message::<CameraShakeEvent>()
+            .add_message::<ExplosionEvent>()
             .add_systems(Update, shake_camera);
     }
 }
 
 fn shake_camera(
     time: Res<Time>,
-    mut shake_events: EventReader<CameraShakeEvent>,
+    mut shake_events: MessageReader<CameraShakeEvent>,
     mut camera_query: Query<(&mut CameraShaker, &mut Transform), With<Camera>>,
 ) {
     for (mut shaker, mut t) in &mut camera_query {
@@ -53,7 +53,7 @@ fn shake_camera(
 }
 
 fn on_explosion_event(
-    mut events: EventReader<ExplosionEvent>,
+    mut events: MessageReader<ExplosionEvent>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {

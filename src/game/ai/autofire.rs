@@ -11,8 +11,8 @@ pub struct AutoFirePlugin;
 // Plugin definition
 impl Plugin for AutoFirePlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<WeaponFiredEvent>()
-            .add_event::<CollisionEvent>()
+        app.add_message::<WeaponFiredEvent>()
+            .add_message::<CollisionEvent>()
             .add_systems(Update, fire_controller.run_if(in_state(AppState::InGame)));
     }
 }
@@ -20,14 +20,14 @@ impl Plugin for AutoFirePlugin {
 // Fire controller system
 pub fn fire_controller(
     time: Res<Time>,
-    mut bullet_fired_event: EventWriter<WeaponFiredEvent>,
-    mut audio_event: EventWriter<AudioEvent>,
+    mut bullet_fired_event: MessageWriter<WeaponFiredEvent>,
+    mut audio_event: MessageWriter<AudioEvent>,
     mut query: Query<(&Transform, &Collider, &mut Weapon), With<AutoFire>>,
 ) {
     for (transform, collider, mut weapon) in &mut query {
         // ref: https://bevy-cheatbook.github.io/features/time.html
         weapon.cooldown_timer.tick(time.delta());
-        if weapon.cooldown_timer.finished() {
+        if weapon.cooldown_timer.is_finished() {
             let event = WeaponFiredEvent {
                 bullet_type: weapon.bullet_type.clone(),
                 translation: Vec2::new(

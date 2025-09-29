@@ -101,7 +101,7 @@ fn menu_action(
         (&Interaction, &MenuButtonAction),
         (Changed<Interaction>, With<Button>),
     >,
-    mut app_exit_events: EventWriter<AppExit>,
+    mut app_exit_events: MessageWriter<AppExit>,
     mut menu_state: ResMut<NextState<MenuState>>,
     mut game_state: ResMut<NextState<AppState>>,
 ) {
