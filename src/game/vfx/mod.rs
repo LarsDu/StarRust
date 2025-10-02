@@ -9,13 +9,19 @@ use fastrand;
 use super::components::*;
 use super::events::*;
 
+use bevy_hanabi::{
+    AccelModifier, Attribute, ColorOverLifetimeModifier, EffectAsset, Gradient, Module,
+    ParticleEffect, ParticleEffectBundle, SetAttributeModifier, SetPositionCircleModifier,
+    SetVelocityCircleModifier, ShapeDimension, SizeOverLifetimeModifier, Spawner,
+};
+
 pub struct VfxPlugin;
 
 impl Plugin for VfxPlugin {
     fn build(&self, app: &mut App) {
         app.add_message::<CameraShakeEvent>()
             .add_message::<ExplosionEvent>()
-            .add_systems(Update, shake_camera);
+            .add_systems(Update, shake_camera, on_explosion_event);
     }
 }
 
@@ -53,11 +59,74 @@ fn shake_camera(
 }
 
 fn on_explosion_event(
-    mut events: MessageReader<ExplosionEvent>,
+    mut events: EventReader<ExplosionEvent>,
     mut commands: Commands,
-    asset_server: Res<AssetServer>,
+    mut effects: ResMut<Assets<EffectAsset>>,
 ) {
     if events.is_empty() {
         return;
+    }
+
+    for explosion_data in &mut events.read() {
+        // Define a color gradient
+        let mut gradient = Gradient::new();
+        gradient.add_key(0.0, Vec4::new(1., 0.8, 0., 1.)); // Orange
+        gradient.add_key(1.0, Vec4::ZERO); // Transparent black
+        let mut module = Module::default();
+
+        let init_pos = SetPositionCircleModifier {
+            center: module.lit(Vec3::ZERO),
+            radius: module.lit(0.5),
+            dimension: ShapeDimension::Surface,
+            axis: module.lit(Vec3::new(0.0, 0.0, 1.0)),
+        };
+
+        // Also initialize a radial initial velocity
+        // away from the (same) sphere center.
+        let init_vel = SetVelocityCircleModifier {
+            center: module.lit(Vec3::ZERO),
+            axis: module.lit(Vec3::new(0., 0., 1.)),
+            speed: module.lit(1000.0),
+        };
+
+        // Initialize the total lifetime of the particle, that is
+        // the time for which it's simulated and rendered. This modifier
+        // is almost always required, otherwise the particles won't show.
+        let lifetime = module.lit(explosion_data.lifetime); // literal value "10.0"
+        let init_lifetime = SetAttributeModifier::new(Attribute::LIFETIME, lifetime);
+
+        // Every frame, add a gravity-like acceleration downward
+        let accel = module.lit(Vec3::new(0., -1., 0.));
+        let update_accel = AccelModifier::new(accel);
+
+        let mut size_gradient = Gradient::new();
+        size_gradient.add_key(0.0, Vec2::new(3.0, 3.0));
+        //size_gradient.add_key(0.8, Vec2::new(0.4,0.4));
+        size_gradient.add_key(1.0, Vec2::new(0.05, 0.05));
+        let effect = EffectAsset::new(vec![2048], Spawner::rate(40.0.into()), module) // This rate is the count
+            .with_name("Blast")
+            .init(init_pos)
+            .init(init_vel)
+            .init(init_lifetime)
+            .update(update_accel)
+            .render(ColorOverLifetimeModifier { gradient })
+            .render(SizeOverLifetimeModifier {
+                gradient: size_gradient,
+                ..default()
+            });
+
+        let effect_handle = effects.add(effect);
+        commands
+            .spawn(ParticleEffectBundle {
+                effect: ParticleEffect::new(effect_handle),
+                transform: Transform::from_translation(explosion_data.position),
+                ..Default::default()
+            })
+            .insert(TimedDespawn {
+                timer: Timer::new(
+                    Duration::from_secs_f32(explosion_data.lifetime),
+                    TimerMode::Once,
+                ),
+            });
     }
 }

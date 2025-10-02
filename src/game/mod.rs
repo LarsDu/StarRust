@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-//use bevy_hanabi::prelude::HanabiPlugin; <-- TODO: Add this back in
+use bevy_hanabi::prelude::HanabiPlugin; <-- TODO: Add this back in
 
 mod ai;
 pub use ai::AiPlugin;
@@ -58,6 +58,8 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+            DefaultPlugins,
+            HanabiPlugin,
             ModelsPlugin,
             BackgroundPlugin,
             UiPlugin,
