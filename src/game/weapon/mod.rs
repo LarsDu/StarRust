@@ -1,4 +1,7 @@
-use bevy::{light::{NotShadowCaster, NotShadowReceiver}, prelude::*};
+use bevy::{
+    light::{NotShadowCaster, NotShadowReceiver},
+    prelude::*,
+};
 
 use super::super::AppState;
 use super::actor::bullet::*;
