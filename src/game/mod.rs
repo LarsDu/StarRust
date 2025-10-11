@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-//use bevy_hanabi::prelude::HanabiPlugin; <-- TODO: Add this back in
+use bevy_hanabi::prelude::HanabiPlugin;
 
 mod ai;
 pub use ai::AiPlugin;
@@ -69,6 +69,7 @@ impl Plugin for GamePlugin {
             CollisionPlugin,
             LevelPlugin,
             DespawnerPlugin,
+            HanabiPlugin,
             VfxPlugin,
             ActorPlugin,
         )); // currently for cleaning up entities
